@@ -1,0 +1,2 @@
+# Phase 01 runtime uses Python 3.11+ standard library only.
+# No package installation is required to run the CLI.

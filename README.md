@@ -1,3 +1,62 @@
+# GHOSTTRACE — Phase 01
+
+Phase 01 implements the contract compiler, independent structural validator,
+synthetic end-to-end demonstration, request diagnostics, and development-only
+public sample comparator. It does **not** yet audit deletion evidence or produce
+supported predictions for the 518 real requests. The original starter guidance
+is preserved below.
+
+## Current setup and commands
+
+Use Python 3.11+; the runtime has no third-party dependencies. Tests use pytest
+(the development runner is recorded in `code/requirements-dev.txt`). No model
+provider or credentials are required in this phase.
+
+For a fresh test environment, install the declared test-only dependency with
+`python -m pip install -r code/requirements-dev.txt`. Runtime commands need no
+package installation. This implementation session used the existing runner.
+
+From the repository root:
+
+```text
+python code/main.py --validate-inputs-only
+python code/main.py
+python code/main.py --demo
+python code/main.py --validate-output dataset/sample_output.csv --requests dataset/sample_deletion_requests.csv
+python code/evaluation/main.py --inspect-samples
+python -B -m pytest -q -p no:cacheprovider code/tests
+```
+
+- Input-only mode checks request schemas and reports the count; it writes no predictions.
+- The normal runner exits **3** and reports unresolved real cases. Missing engines
+  never become fabricated COMPLETE/INCOMPLETE/NOT_APPLICABLE values.
+- `--demo` compiles **synthetic premises**, writes `.ghosttrace/phase01-demo.csv`,
+  and cannot overwrite the official dataset or root submission. It is not a
+  production prediction or evidence of challenge accuracy.
+- Output validation checks structure, plan relationships, ID existence, and
+  metadata cutoff eligibility. Its `semantic_support=NOT_CHECKED` remains explicit:
+  citation meaning, subject linkage, policy safety, and evidence completeness
+  need later engines.
+- Sample inspection describes the public reference format; it is not prediction
+  evaluation. It is isolated from the normal runner.
+
+To compare a future candidate with public reference answers:
+
+```text
+python code/evaluation/main.py --predictions <candidate.csv> --expected dataset/sample_output.csv --requests dataset/sample_deletion_requests.csv
+```
+
+Exit codes: **0** successful requested check/demo; **1** invalid output or a
+comparison with differences; **2** malformed input, invalid invocation, or I/O
+failure; **3** unresolved production decisions. The emitter writes only after
+validation and rechecks staged CSV bytes before atomic replacement.
+
+See `DECISIONS.md` for the architecture boundary and
+`code/evaluation/evaluation_report.md` for actual Phase 01 measurements.
+The event deadline is not configured; no deadline or ranking is assumed.
+
+---
+
 # HackerRank Orchestrate - October 2026
 
 ## Ghost Data Still Exists
