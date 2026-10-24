@@ -1,4 +1,16 @@
-# GHOSTTRACE usage status through Phase 02
+# GHOSTTRACE usage status through Phase 03
+
+## Phase 03 runtime
+
+Historical ownership, resource linking and temporal replay use only the standard
+library and the Phase 02 in-memory evidence index. Two final full reconstruction
+diagnostic runs each processed 518 requests. For those executions, provider
+calls/input tokens/output tokens were 0/0/0; model service cost was zero. No
+packages were installed. This is not a final prediction-run usage report and
+does not measure Codex development-session tokens or local compute cost.
+
+No production decisions or root output.csv were generated. The required final
+run fields below remain unavailable until the output-producing run occurs.
 
 ## Phase 02 runtime
 

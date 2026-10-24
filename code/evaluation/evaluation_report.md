@@ -1,4 +1,133 @@
-# GHOSTTRACE Phase 02 evaluation report
+# GHOSTTRACE Phase 03 evaluation report
+
+## Current phase and measured gate
+
+Phase 03 implements historical identifier ownership, account/resource links,
+audit-cutoff replay, and explicit conflicts. It makes no policy/risk decision and
+produces no real prediction CSV. Runtime never reads sample_output.csv or private
+labels. The historical Phase 01/02 reports below retain their original scope.
+
+Final command: `python -B -m pytest -q -p no:cacheprovider code/tests`.
+**209 passed in 12.35 seconds**, retaining all 149 Phase 01/02 regression tests
+and adding 60 Phase 03 checks. Windows, CPython 3.14.3, existing pytest 9.1.1;
+no dependencies installed and no runtime model calls.
+
+## Full participant-data reconstruction diagnostics
+
+Command: `python -B code/main.py --reconstruct-evidence`.
+Both final executions processed all 518 requests, exited 0, and reported no
+ingestion errors. The CLI was invoked by absolute path from outside the repo.
+
+| Measurement | Observed result | Interpretation |
+|---|---:|---|
+| Requests processed | 518 | Every selected request has diagnostics |
+| RESOLVED subject identities | 101 | Time-qualified identity evidence, not labeled accuracy |
+| CONTEXT_ONLY subject candidates | 417 | Snapshot availability unknown; kept provisional |
+| LINKED resource associations | 680 | Grounded to a candidate subject, independently of request identity certainty |
+| PROVISIONAL resource associations | 523 | Context/catalog linkage requires corroboration |
+| Source-specific copy/instance state scopes | 2,046 | Includes claim-only scopes; not proven distinct storage replicas |
+| Cases with STATE_NOT_ESTABLISHED | 285 | At least one scope has claims without a recognized readback |
+| Cases with provisional resource links | 258 | May overlap other uncertainty counts |
+| Cases with no linked resources | 10 | Does not establish absence |
+| Equal-time conflicting extracted dimensions | 0 | Supported adapters/scopes only; does not prove all evidence agrees |
+| Deferred PDF/PNG evidence | 15 | Four PDFs and eleven PNGs still require Phase 05 |
+| Root output.csv written | No | All production decisions remain unresolved |
+
+The same Phase 02 corpus has 9,736 observations from 94 manifest files and four
+context CSVs. Counts above are engineering coverage, not correctness metrics.
+No challenge identity, temporal-state, retrieval, deletion-status, step, field,
+sequence or hidden-case prediction accuracy has been measured in Phase 03.
+Existing Phase 01 synthetic compiler metrics below remain synthetic only.
+
+## Independent synthetic cases and actual results
+
+The expected outcomes are handwritten under code/tests; none comes from public
+reference labels. Each listed behavior passed its dedicated regression check.
+
+| Custom case | Expected | Actual |
+|---|---|---|
+| Shared email leaves A and joins B at day 10 | Request on day 9 resolves A; day 10 resolves B; no union | PASS |
+| Old email after retirement, unique owner | Recover the historical subject and older resource links | PASS |
+| Claimed DELETE/RESTORE SUCCESS after a positive readback | Preserve observed presence; retain operations as claims | PASS |
+| Primary absent, replica still present | Separate scopes preserve both states | PASS |
+| SQL and JSON disagree at the same time/copy | Unknown with both values and all proof IDs | PASS |
+| File captured after cutoff, earlier internal timestamp | Exclude it; existing proof fingerprint unchanged | PASS |
+| Later snapshot omits email | Unknown field; distinct from explicit null/redaction | PASS |
+| Reused trace in another file/service/instance | No subject propagation | PASS |
+| Later identity registry event | Cannot reinterpret an earlier reference before cutoff | PASS |
+| Envelope user with unrelated nested sender email | No cross-object alias ownership | PASS |
+
+Additional controls cover half-open interval boundaries, both endpoint proofs,
+broken/duplicate/equal-time history, current snapshot uncertainty, phone/hash
+normalization, opaque subject/resource/case IDs, input order, same resource ID
+across systems, stale aliases after reassignment, causal trace direction,
+catalog-link claims, unknown clocks, null-versus-unknown, malformed Boolean/count
+facts, bounded long numeric counts, scoped query absence, conflicting query
+counts/documents, later recreation, and CLI preservation of an existing output.
+
+## Reproducibility and timing boundary
+
+Two fresh processes used PYTHONHASHSEED=0 and PYTHONHASHSEED=12345. Their entire
+parsed diagnostic reports matched, including every case's proof fingerprint.
+Observed runtimes including Python startup: **18.9388** and **21.2317 seconds**.
+These are individual observations, not statistical benchmarks or speedup claims.
+The test suite also retains a small cross-process/hash-seed regression.
+
+Aggregate proof SHA-256:
+`a20a38e5f79b5d464c8886d5e1080f527163aabb6b3bbf9114d32d31f8d90116`.
+
+This guarantee covers offline replay of these fixed input bytes/metadata and
+the current adapters. Provenance hashes deliberately change when source bytes
+or manifest metadata change. Reversing observation input order does not change
+proofs; changing source file row order changes provenance even when semantics
+remain the same. No hosted model/provider determinism is claimed.
+
+## Review corrections and alternatives
+
+The first implemented ownership/replay suite passed 202 tests. Review then added
+controls for interval endpoint provenance, stopped-query ownership, current-field
+omission, alias assignment leaking backwards, unrelated nested aliases, future
+registry interpretation, cross-process determinism, and long numeric counts.
+Resource links now retain ownership and trace proof IDs as well as record IDs.
+The final suite passed 209 tests; these are review improvements, not measured
+before/after challenge-answer improvements.
+
+Unconditional alias union was rejected because it merges reassigned addresses.
+Latest-operation-wins was rejected because SUCCESS can contradict a direct
+readback. Format ranking was rejected because two copies can legitimately differ.
+The selected alternatives are temporal ownership, claim-specific readbacks, and
+per-copy equal-time conflict preservation. Synthetic counterexamples validate
+these mechanisms; no model-strategy A/B run or causal skill experiment was done.
+
+Applied skills: orchestrate-build for typed recovery boundaries;
+hackerrank-orchestrate-design for explicit unknowns/output ownership;
+orchestrate-test-fix and its coupling/determinism references for counterfactual,
+opaque-ID, ordering and fresh-process controls. The current contract overrides
+generic skill fallback labels and historical scoring claims.
+
+## Remaining limitations and next gate
+
+- Snapshot identity candidates remain provisional where no eligible time-qualified
+  corroboration exists. This affects 417 request-to-subject matches.
+- Untyped references, resource aliases, source categories and physical-copy
+  equivalence are not inferred from naming conventions. Provisional/catalog
+  links and ownership ambiguity must block unsupported decisions.
+- Supported readbacks can prove only their explicit resource/copy/time scope.
+  Latest observed does not prove continuous coverage to audit_at. Missing lookup
+  hits, claim-only scopes and ingestion deferrals cannot establish completeness.
+- Fifteen PDF/PNG files remain deferred; unsupported log event names remain
+  claims, not direct state. Broader semantic recall is NOT_MEASURED.
+- Phase 04 applicability/policy/retention/tombstone/risk decisions, derivation
+  validation and remediation planning remain unimplemented. No final output or
+  submission artifacts were generated; final-run usage is unavailable.
+
+The default runner exits 3 with 518 unresolved decisions and
+POLICY_ENGINE_NOT_IMPLEMENTED. Official dataset and instruction files are
+unchanged. Phase 04 requires explicit user approval and has not started.
+
+---
+
+# Historical Phase 02 evaluation report
 
 ## Current phase and measured gate
 

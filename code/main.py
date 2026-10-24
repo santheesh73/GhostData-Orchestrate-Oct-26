@@ -1,4 +1,4 @@
-"""GHOSTTRACE contract and Phase 02 ingestion CLI; defaults resolve from this repo."""
+"""GHOSTTRACE contract, ingestion and Phase 03 reconstruction diagnostics."""
 
 import argparse
 import json
@@ -19,6 +19,7 @@ def main(argv=None) -> int:
     modes.add_argument("--validate-output", type=Path, metavar="CSV")
     modes.add_argument("--demo", action="store_true", help="compile synthetic decisions only")
     modes.add_argument("--ingest-evidence", action="store_true", help="parse/index evidence and report coverage only")
+    modes.add_argument("--reconstruct-evidence", action="store_true", help="resolve identity/history and report audit-time state coverage; no predictions")
     parser.add_argument("--requests", type=Path, default=ROOT / "dataset/deletion_requests.csv")
     parser.add_argument("--dataset-root", type=Path, default=ROOT / "dataset")
     parser.add_argument("--output", type=Path, help="demo CSV, restricted to repository .ghosttrace/")
@@ -50,6 +51,12 @@ def main(argv=None) -> int:
             report = validate_file(args.validate_output, requests, load_evidence_catalog(args.dataset_root))
             print(json.dumps(report.as_dict(), indent=2))
             return 0 if report.valid else 1
+        if args.reconstruct_evidence:
+            from ghosttrace.ingest.corpus import ingest_dataset
+            from ghosttrace.resolve.engine import reconstruction_summary
+            bundle = ingest_dataset(args.dataset_root)
+            print(json.dumps(reconstruction_summary(bundle, requests), indent=2))
+            return 1 if bundle.has_errors else 0
         print(json.dumps(diagnose_requests(requests), indent=2))
         return 3
     except (InputError, ValueError, OSError) as exc:

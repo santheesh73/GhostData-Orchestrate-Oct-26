@@ -157,3 +157,88 @@ isolation, and `hackerrank-orchestrate-evidence` for source hashes, genuine test
 evidence, and explicit unknowns. No skill-effectiveness experiment was run.
 No packages, model providers, new services, or submission artifacts were added.
 Phase 03 has not started.
+
+## Phase 03 — temporal identity engine (approved and completed)
+
+The user approved this phase with “Start Phase 3”. The historical statements above
+record earlier phase boundaries; this section describes the current state.
+Stage 2 now consumes Stage 1 observations without changing the frozen compiler,
+the official inputs, the output schema, or the exclusive emitter boundary.
+
+### Ownership and account/resource links
+
+`resolve/identity_graph.py` builds an ownership graph rather than a union-find
+merge of identifiers. Audit old/new transitions define half-open intervals, with
+both boundary events retained in the proof. Equal-time contradictory changes and
+broken old/new chains remain uncertain. Exact current/historical aliases stay
+separate by email, phone, and hash namespace; names do not resolve a subject.
+
+Request matching prefers an owner supported at requested_at. A uniquely owned
+historical email remains usable after retirement, while competing historical
+owners remain ambiguous. Audit events and their availability must be at or before
+audit_at. A future registry entry cannot reinterpret an earlier untyped reference.
+
+An identity snapshot has no capture clock in the supplied contract. Its update
+time is not used as availability. Snapshot matches therefore remain CONTEXT_ONLY
+unless audit history or an eligible stable-reference/identifier pair corroborates
+them. A pair must be present in one object, not assembled across unrelated nested
+messages. Such a pair establishes a point observation, not lifelong ownership.
+
+`resource_links.py` links exact identifiers/stable references to scoped resources.
+Multiple accounts may link to one stable subject, without merging resources or
+people. Historical links can retrieve later redacted/absent readbacks. A later
+alias assignment cannot propagate backwards; after reuse, a stale alias alone
+cannot disambiguate ownership. Resource ownership conflicts remain AMBIGUOUS.
+Dedicated catalog-link messages remain PROVISIONAL until corroborated. Their
+schema adapter accepts opaque IDs and does not trust reported_result.
+
+Trace lookup continuation requires the same evidence file, system and physical
+instance, and a preceding/equal-time identity-bearing event. All contributing
+trace and ownership observation IDs survive in the link proof. Resource IDs in
+different systems stay separate; logical aliases or copy equivalence are not
+invented from similar names.
+
+### Replay and conflicts
+
+`temporal_replay.py` extracts scoped presence readbacks, named process flags,
+identifier fields, and source-supported scan matches. Named event adapters are
+schema interpretations, not sample-label or case-family rules. Unknown event
+names remain timeline claims with no direct state extraction. Operation SUCCESS,
+cache misses, started queries, and missing inventory rows cannot prove deletion.
+
+`conflict_resolver.py` selects the newest eligible observation for each dimension
+within system/resource/copy. Equal-time incompatible values retain every proof
+and return unknown. There is no SQL/JSON/log priority or evidence-ID tie breaker.
+Explicit JSON null is distinct from unknown; a later omission/absence invalidates
+an older identifier as current-state evidence. Categories with competing raw
+names remain unknown pending policy normalization.
+
+Facts carry their observation times; latest observed is not a guarantee of
+continuous coverage up to audit_at. A source-specific instance/table scope is
+not automatically a distinct physical storage copy or a globally complete search.
+No absence is inferred outside an explicitly scoped readback.
+
+### Integration, validation and remaining work
+
+`--reconstruct-evidence` ingests once and reconstructs all selected requests. Its
+PII-free summary contains counts, uncertainty codes and source-bound hashes.
+The default runner still returns exit 3 with all 518 decisions unresolved because
+policy is not implemented. It never writes a provisional official status.
+
+209 tests passed. Two full runs in separate processes/hash seeds returned the
+same diagnostics and proof hash. The evaluation report records actual coverage,
+timings, synthetic cases and review corrections; no accuracy claim is inferred
+from these counts. No packages, providers, services or model calls were added.
+
+Skills applied: orchestrate-build (typed proof boundaries),
+hackerrank-orchestrate-design (explicit unknowns and output ownership), and
+orchestrate-test-fix with dataset-coupling/determinism references (opaque-ID,
+ordering, temporal counterfactual and cross-process controls). Historical score
+claims, generic escalation output labels, goal mode and later-phase directions
+are not adopted. No skill-effectiveness experiment was run.
+
+Remaining: 417 provisional request identities; some provisional resource links
+and claim-only state scopes; 15 deferred documents/images; unmeasured semantic
+recall/identity/state accuracy; policy/category normalization and decisions;
+semantic citation enforcement; remediation ordering; production output and final
+submission. Phase 04 is not started.

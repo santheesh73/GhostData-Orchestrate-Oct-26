@@ -1,11 +1,49 @@
-# GHOSTTRACE — Phase 02
+# GHOSTTRACE — Phase 03
 
-Structured evidence ingestion is implemented. It accounts for every manifest
-source, normalizes observations with source hashes/locations, and builds exact
-identifier/resource/trace indexes. Identity ownership, temporal state replay,
-policy judgments, and production predictions remain deferred.
+Historical identity ownership, resource linkage, audit-cutoff replay, and
+conflict handling are implemented on top of structured ingestion. Policy/risk
+judgments and production predictions remain deferred to later approved phases.
 
-## Evidence ingestion and coverage
+## Identity and historical-state diagnostics
+
+```text
+python code/main.py --reconstruct-evidence
+```
+
+This reads the selected requests and evidence, then prints a JSON coverage report
+with case IDs, uncertainty codes, counts, and proof fingerprints. It writes no
+predictions and makes no model/network calls. `--requests` and `--dataset-root`
+select other participant datasets. Exit 0 means diagnostics completed without
+ingestion errors, not that every identity or deletion has been established.
+
+- Audit history defines half-open ownership intervals. Exact stable references
+  can connect multiple accounts; shared/reassigned aliases never union people.
+- An undated current snapshot supplies provisional identity candidates. It does
+  not acquire an availability time from its `updated_at` field.
+- Resource links retain ownership evidence, trace proofs, and ambiguous owners.
+  Trace continuation is confined to one file/service/instance and causal order.
+- Replay filters both source availability and observation time at `audit_at`.
+  It keeps operation SUCCESS claims separate from direct state readbacks.
+- Copies/instances remain separate. Equal-time contradictions remain unresolved;
+  omitted fields remain unknown, distinct from explicit JSON null/redaction.
+- Facts represent the latest eligible observation of a dimension, with its own
+  time and source proof. They do not establish continuous coverage through audit
+  time, complete evidence discovery, or compliance with deletion policy.
+
+Measured full-run coverage: 101 time-qualified subject resolutions, 417
+provisional snapshot matches, 680 grounded resource links, and 523 provisional
+links. Link support is independent of request-to-subject certainty. The 2,046
+source-specific copy/instance scopes are not a count of proven distinct storage
+replicas. No-hit searches never prove deletion. Fifteen PDF/PNG files remain
+deferred to Phase 05.
+
+All **209 tests** pass, including the previous 149 regressions. Full diagnostics
+were identical across fresh processes with hash seeds 0 and 12345 on these fixed
+inputs. Identity, temporal-state and deletion accuracy remain unmeasured.
+See `code/evaluation/evaluation_report.md` for commands, fingerprint and limits.
+Phase 04 requires the user's next approval.
+
+## Phase 02 ingestion baseline
 
 ```text
 python code/main.py --ingest-evidence
@@ -31,7 +69,8 @@ operational claims; this is not a count of proven privacy violations.
 
 Runtime remains standard-library-only and requires Python with SQLite support.
 See `code/evaluation/evaluation_report.md` and `DECISIONS.md` for actual results,
-parser boundaries, safety limits, and remaining risks. Phase 03 requires approval.
+parser boundaries, safety limits, and remaining risks. Phase 03 consumes this
+index without treating lookup results as proof of absence.
 
 ## Phase 01 contract baseline
 
