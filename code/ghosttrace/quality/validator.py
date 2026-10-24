@@ -181,9 +181,11 @@ def validate_rows(rows: Iterable[dict], requests: Iterable[Request],
                     source = catalog.get(evidence_id)
                     if source is None:
                         problem(case_id, "CITATION_UNKNOWN", f"step {number} cites an unknown ID")
+                    elif not source.citeable:
+                        problem(case_id, "CITATION_ROLE", f"step {number} cites context rather than permitted evidence")
                     elif case_id in expected:
                         try:
-                            if source.available_at.tzinfo is None or source.available_at > expected[case_id].audit_at:
+                            if source.available_at is None or source.available_at.tzinfo is None or source.available_at > expected[case_id].audit_at:
                                 problem(case_id, "CITATION_TIME", f"step {number} evidence is not eligible at audit time")
                         except TypeError:
                             problem(case_id, "CITATION_TIME", f"step {number} evidence time metadata is invalid")

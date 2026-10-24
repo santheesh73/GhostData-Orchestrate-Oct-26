@@ -64,19 +64,26 @@ class Resource:
 @dataclass(frozen=True, slots=True)
 class EvidenceSource:
     evidence_id: str
-    available_at: datetime
+    available_at: datetime | None
     source_kind: str
     path: str = ""
+    citeable: bool = True
 
 
 @dataclass(frozen=True, slots=True)
 class Observation:
     resource: Resource
     evidence: EvidenceSource
-    observed_at: datetime
+    observed_at: datetime | None
     claim_kind: str
     facts: tuple[tuple[str, str], ...]
     location: str
+    observation_id: str = ""
+    source_sha256: str = ""
+    payload_json: str = "{}"
+    identifiers: tuple[Identifier, ...] = ()
+    time_basis: str = "unknown"
+    trace_id: str = ""
 
 
 @dataclass(frozen=True, slots=True)

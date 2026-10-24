@@ -1,4 +1,4 @@
-"""Phase 01 orchestration. No identity, temporal, or policy inference is hidden here."""
+"""Contract orchestration. Identity, temporal, and policy inference remain deferred."""
 
 from pathlib import Path
 from typing import Mapping
@@ -11,9 +11,9 @@ from .models import Authorization, Decision, EvidenceSource, Request, Uncertaint
 def diagnose_requests(requests: tuple[Request, ...]) -> dict:
     decisions = tuple(Decision(request, Authorization.UNRESOLVED,
                               uncertainties=(Uncertainty("ENGINES_NOT_IMPLEMENTED",
-                                  "Evidence, identity, temporal, and policy stages are deferred"),))
+                                  "Identity, temporal, and policy decision engines are deferred"),))
                       for request in requests)
-    return {"phase": "01", "status": "UNRESOLVED", "request_count": len(requests),
+    return {"phase": "02", "status": "UNRESOLVED", "request_count": len(requests),
             "unresolved_count": len(decisions),
             "unresolved_case_ids": sorted(d.request.case_id for d in decisions),
             "reason": "ENGINES_NOT_IMPLEMENTED", "output_written": False}

@@ -1,4 +1,39 @@
-# GHOSTTRACE — Phase 01
+# GHOSTTRACE — Phase 02
+
+Structured evidence ingestion is implemented. It accounts for every manifest
+source, normalizes observations with source hashes/locations, and builds exact
+identifier/resource/trace indexes. Identity ownership, temporal state replay,
+policy judgments, and production predictions remain deferred.
+
+## Evidence ingestion and coverage
+
+```text
+python code/main.py --ingest-evidence
+python code/evaluation/main.py --ingestion-coverage
+```
+
+The supplied corpus has 79 structured evidence files (28 JSON, 24 SQL, 26 logs,
+1 text) and 15 documents/images explicitly pending Phase 05 extraction. Four
+context CSV sources are also loaded. A generic CSV evidence adapter is available.
+The current measured run indexes 9,736 observations, including scope metadata and
+operational claims; this is not a count of proven privacy violations.
+
+- Exit 0 means ingestion has no failed/partial/empty structured sources. Expected
+  PDF/image deferrals remain explicit and do not imply a complete audit.
+- Exit 1 reports ingestion gaps; exit 2 indicates an invalid invocation/manifest.
+- No predictions are written. The normal runner still exits 3 for unresolved cases.
+- Candidate lookup retains competing copies and reports excluded future/unknown
+  timestamps. No lookup result establishes absence or identity ownership.
+- Identity snapshots/policies are non-citeable context; actual file/activity/audit
+  IDs remain separate. Source capture and observation clocks remain distinct.
+- SQL is processed only in bounded, restricted in-memory SQLite. Evidence files
+  and any supplied database paths are never opened for writing.
+
+Runtime remains standard-library-only and requires Python with SQLite support.
+See `code/evaluation/evaluation_report.md` and `DECISIONS.md` for actual results,
+parser boundaries, safety limits, and remaining risks. Phase 03 requires approval.
+
+## Phase 01 contract baseline
 
 Phase 01 implements the contract compiler, independent structural validator,
 synthetic end-to-end demonstration, request diagnostics, and development-only

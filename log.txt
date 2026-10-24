@@ -100,3 +100,36 @@ Phase 01 completion (2026-10-24T21:04:19+05:30):
 * Recorded decisions, scope, skill use, open risks, reproducibility commands, actual evaluation results, and a clearly preliminary usage report. Runtime provider calls were zero; final-run cost/tokens remain unavailable because no final prediction run exists. No dependencies installed.
 * git diff --check succeeded; every Python source parsed. Official AGENTS.md, CLAUDE.md, problem statement, trace instructions, and dataset are unchanged. No root output.csv or submission archives were created.
 * Preparing the Phase 01 source, tests, documentation, and mandatory log commit/push to the existing GhostData origin/main under standing authorization. Phase 02 is not started.
+
+## [2026-10-24T21:08:40+05:30] GHOSTTRACE Phase 02 structured evidence ingestion
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 2
+
+Agent Response Summary:
+The user approved Phase 02. Rechecked the existing Phase 01 baseline, official instructions, and selected build/evidence skills. Implementing structured evidence readers, provenance-preserving normalization, indexing, and explicit per-source coverage diagnostics. Historical identity resolution, temporal replay, policy decisions, model extraction, and production predictions remain deferred.
+
+Actions:
+* Verified main was clean and tracks the requested GhostData repository at Phase 01 commit 8641a49.
+* Read repository instructions, current interfaces, and relevant installed skills.
+* Began schema/family inspection before changing ingestion logic.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 02 completion (2026-10-24T22:04:01+05:30):
+* Added structured manifest routing, generic evidence CSV, nested JSON, restricted in-memory SQLite dump, six log-envelope families, handover text, and context CSV adapters. Every source receives explicit PARSED/PARTIAL/FAILED/EMPTY/DEFERRED accounting; PDFs/images are pending Phase 05.
+* Normalized observations retain canonical typed payloads, exact source IDs, source SHA-256, relative locators, physical copy, raw log envelopes, snapshot scopes, independent availability/observation clocks, and metadata-bound deterministic observation IDs. Identity/policy snapshots are non-citeable context.
+* Added exact candidate indexes by identifier/resource/evidence and same-file/service/instance trace linkage, with future/unknown-time counters. Lookup results never establish absence; no identities, temporal states, policies, or deletion verdicts are resolved.
+* Initial development ingestion rejected 24 SQL sources because primary-key autoindexes were denied; 11 then still required explicit CREATE INDEX support. The corrected memory-only SQL boundary supports those dump schemas while denying external/unsupported operations and rejecting uncommitted snapshot transactions.
+* Final test command python -B -m pytest -q -p no:cacheprovider code/tests: 149 passed in 11.21 seconds, retaining all 89 Phase 01 regression cases. New cases cover format families, value preservation, replicas, safe SQL, malformed/partial data, path containment, metadata binding, conflicts, cutoff eligibility, and file accounting.
+* Actual corpus gate: all 94 evidence manifest entries accounted for; 79 structured files PARSED (28 JSON, 24 SQL, 26 log, 1 text), 15 document/image files DEFERRED (4 PDF, 11 PNG). Four context CSVs PARSED with 5182 observations. Evidence observations: JSON 1182, SQL 1120, logs 2211, text 41. Total indexed observations: 9736. No ingestion errors or cross-source ID collisions were observed.
+* Actual CLI smoke runs: ingestion exited 0 in 2.2225 seconds; coverage exited 0 in 2.2803 seconds. These are single process-startup-inclusive observations, not statistical benchmarks. Two complete ingestions matched fingerprint c88f7fc84e428792d86b0b121312b928bb7e640130984a48b428eb582337bd3e.
+* The normal runner exited 3 with 518 unresolved cases; no root output.csv or submission archive was produced. Identity accuracy, evidence recall, temporal/policy accuracy, deletion accuracy, hidden accuracy, and peak memory remain NOT_MEASURED.
+* Applied orchestrate-build and hackerrank-orchestrate-evidence guidance; documented actual tests, parser safety limits, provenance, coverage definitions, SQL corrections, remaining risks, and preliminary usage status in Markdown. No packages were installed or runtime model calls made.
+* Every Python file parses. Preparing source/docs/log publication to the existing GhostData origin/main; Phase 03 remains unstarted pending explicit approval.

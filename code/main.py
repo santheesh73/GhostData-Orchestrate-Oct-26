@@ -1,4 +1,4 @@
-"""GHOSTTRACE Phase 01 CLI. Run from any directory; paths default to this repo."""
+"""GHOSTTRACE contract and Phase 02 ingestion CLI; defaults resolve from this repo."""
 
 import argparse
 import json
@@ -18,6 +18,7 @@ def main(argv=None) -> int:
     modes.add_argument("--validate-inputs-only", action="store_true")
     modes.add_argument("--validate-output", type=Path, metavar="CSV")
     modes.add_argument("--demo", action="store_true", help="compile synthetic decisions only")
+    modes.add_argument("--ingest-evidence", action="store_true", help="parse/index evidence and report coverage only")
     parser.add_argument("--requests", type=Path, default=ROOT / "dataset/deletion_requests.csv")
     parser.add_argument("--dataset-root", type=Path, default=ROOT / "dataset")
     parser.add_argument("--output", type=Path, help="demo CSV, restricted to repository .ghosttrace/")
@@ -35,6 +36,11 @@ def main(argv=None) -> int:
             return 0
         if args.output is not None:
             raise InputError("--output is supported only with --demo in Phase 01")
+        if args.ingest_evidence:
+            from ghosttrace.ingest.corpus import ingest_dataset
+            bundle = ingest_dataset(args.dataset_root)
+            print(json.dumps(bundle.summary(), indent=2))
+            return 1 if bundle.has_errors else 0
         requests = load_requests(args.requests)
         if args.validate_inputs_only:
             print(json.dumps({"input_valid": True, "requests": len(requests),

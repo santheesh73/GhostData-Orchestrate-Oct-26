@@ -1,4 +1,117 @@
-# GHOSTTRACE Phase 01 evaluation report
+# GHOSTTRACE Phase 02 evaluation report
+
+## Current phase and measured gate
+
+Phase 02 adds structured evidence ingestion, exact candidate indexing, source
+provenance, and per-file parsing diagnostics. It does not resolve historical
+identity, reconstruct final state, evaluate policy, or produce predictions.
+
+Final command: `python -B -m pytest -q -p no:cacheprovider code/tests`.
+**149 passed in 11.21 seconds**, including the 89 Phase 01 regression tests.
+Environment: Windows, CPython 3.14.3, existing pytest 9.1.1, SQLite 3.50.4.
+No packages were installed and no model calls were made.
+
+## Actual corpus coverage
+
+| Source | Files | Normalized observations | Status |
+|---|---:|---:|---|
+| JSON evidence | 28 | 1,182 | PARSED |
+| SQL evidence | 24 | 1,120 | PARSED |
+| Log evidence | 26 | 2,211 | PARSED |
+| Handover text | 1 | 41 | PARSED |
+| PDF evidence | 4 | 0 | DEFERRED to Phase 05 |
+| PNG evidence | 11 | 0 | DEFERRED to Phase 05 |
+| Identity/audit/activity/policy CSV context | 4 | 5,182 | PARSED |
+| Total manifest evidence | 94 | 4,554 | Every file accounted for |
+| Total indexed observations including context | — | 9,736 | No ingestion errors |
+
+Structured file parse rate is **79/79**. This measures supported syntax/adapter
+accounting, not evidence recall, correct subject association, state reconstruction,
+or deletion accuracy. Metadata scopes, raw events, and operational claims are
+included in observation totals; they are not 9,736 established business facts.
+The 15 document/image deferrals are reported individually, never hidden as success.
+
+Each actual source hash was compared with the current file bytes in tests. Source
+locators, nested capture clocks, copy/table identities, and raw payloads survive
+normalization. CSV context excludes requests and all public output labels.
+
+## New extraction and negative-control tests
+
+- Independent synthetic JSON snapshots and nested service exports verify resource
+  extraction, null/false/empty preservation, nested locations, and separate clocks.
+- All six log envelope families are exercised. Trace expansion preserves separate
+  payloads and rejects cross-service/instance linkage. Conflicting headers/payloads
+  remain diagnosed. Unknown narrative/events remain unparsed observations.
+- SQL tests preserve primary/replica differences, embedded JSON, apostrophes and
+  semicolons, declared indexes, and capture metadata. Unsafe attachment, vacuum,
+  pragmas, extensions, triggers, virtual tables, arbitrary function execution,
+  and incomplete/uncommitted snapshot transactions
+  are rejected without creating the test's external database file.
+- Malformed embedded JSON and incorrectly typed SQL resource identifiers remain
+  raw/unparsed with explicit diagnostics.
+- Generic evidence CSV tests preserve strings and account for ragged records.
+- Retrieval tests cover exact identifier normalization, idempotent indexing,
+  separate source locations/copies, source-metadata binding, inclusive cutoff,
+  future capture/event exclusions, and unknown-time counters. No-hit retrieval
+  never establishes absence.
+- Path traversal and non-evidence namespace paths are rejected. Missing/malformed
+  sources do not hide good files. Empty manifests fail; cross-source ID collisions
+  prevent clean coverage. Identity/policy context cannot become permitted citations.
+- Long unbroken text exercises bounded candidate/key scanning without a timing
+  threshold or a claimed performance benchmark.
+- Actual corpus and CLI tests verify all manifest/context accounting and preserve
+  the Phase 01 compiler/comparator behavior.
+
+## Observed failures and corrections
+
+The first development ingestion run parsed 55 files, deferred 15, and rejected all
+24 SQL sources: the authorizer rejected primary-key autoindexes. Allowing those
+made 68 files parse; the remaining 11 inventory dumps contained explicit CREATE
+INDEX statements. Supporting bounded in-memory index DDL resolved that diagnosed
+compatibility gap. This was parser improvement, not measured answer improvement.
+
+Further controls preserve envelope contradictions, mark invalid embedded SQL
+records unparsed, include malformed sources in coverage denominators, and bind
+observation IDs to manifest metadata as well as content. These corrections have
+dedicated regression tests; unsupported SQL capabilities remain rejected.
+
+## CLI and determinism observations
+
+| Actual invocation | Exit | Single observed seconds | Result |
+|---|---:|---:|---|
+| `python code/main.py --ingest-evidence` | 0 | 2.2225 | 94 evidence files + 4 context sources accounted for |
+| `python code/evaluation/main.py --ingestion-coverage` | 0 | 2.2803 | 79/79 structured files parsed; 15 deferred |
+| `python code/main.py` | 3 | 0.2790 | 518 unresolved; no output written |
+
+Timings include process startup and are single smoke observations, not statistical
+benchmarks. Two complete ingestion runs had identical SHA-256 over sorted
+observation IDs:
+`c88f7fc84e428792d86b0b121312b928bb7e640130984a48b428eb582337bd3e`.
+This establishes repeatability for unchanged source bytes/metadata and this
+parser configuration, not correct interpretation of every source.
+
+## Remaining metrics and next gate
+
+Identity accuracy, evidence recall, temporal/policy accuracy, status accuracy,
+exact-row accuracy, and hidden accuracy remain **NOT MEASURED** for real cases.
+No production `output.csv` exists. No full-dataset prediction run or final usage
+report can yet be claimed. Peak memory was not measured.
+
+Phase 02 satisfies its structured-source accounting gate. Phase 03 requires user
+approval and must preserve contradictions, unknown availability, and copy scope.
+No identity resolver or temporal state engine was implemented here.
+
+## Skills
+
+Applied `orchestrate-build` to parser boundaries, bounded failure behavior, and
+regression checks; applied `hackerrank-orchestrate-evidence` to byte-bound
+provenance, actual observed test results, and separation of parsing from meaning.
+No causal claim about skill impact is made. Genuine tool/test evidence remains
+in the Codex session trace and the append-only project log.
+
+---
+
+# Archived Phase 01 evaluation report
 
 ## Scope and status
 

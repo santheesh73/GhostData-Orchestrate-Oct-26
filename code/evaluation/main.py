@@ -22,11 +22,18 @@ def main(argv=None) -> int:
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--inspect-samples", action="store_true")
     modes.add_argument("--predictions", type=Path)
+    modes.add_argument("--ingestion-coverage", action="store_true")
     parser.add_argument("--expected", type=Path, default=root / "dataset/sample_output.csv")
     parser.add_argument("--requests", type=Path, default=root / "dataset/sample_deletion_requests.csv")
     parser.add_argument("--dataset-root", type=Path, default=root / "dataset")
     args = parser.parse_args(argv)
     try:
+        if args.ingestion_coverage:
+            from ghosttrace.ingest.corpus import ingest_dataset
+            from evaluation.coverage import coverage_metrics
+            bundle = ingest_dataset(args.dataset_root)
+            print(json.dumps(coverage_metrics(bundle), indent=2))
+            return 1 if bundle.has_errors else 0
         catalog = load_evidence_catalog(args.dataset_root)
         if args.inspect_samples:
             result = inspect_samples(args.expected, args.requests, catalog)

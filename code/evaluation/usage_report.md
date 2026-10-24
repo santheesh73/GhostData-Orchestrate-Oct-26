@@ -1,4 +1,15 @@
-# GHOSTTRACE Phase 01 usage status
+# GHOSTTRACE usage status through Phase 02
+
+## Phase 02 runtime
+
+Structured parsing/indexing and its CLI coverage runs use the standard library,
+including restricted in-memory SQLite. No provider adapter, external extraction,
+or network call is used by this runtime. Provider calls/input tokens/output tokens
+for these executions are 0/0/0. These values are not a final prediction-run cost
+report and do not include Codex development-session usage, which was not measured.
+
+All 518 real decisions remain unresolved; no final root output.csv exists.
+The final-run reporting fields below therefore remain unavailable.
 
 ## Required final-run report
 
