@@ -242,3 +242,100 @@ and claim-only state scopes; 15 deferred documents/images; unmeasured semantic
 recall/identity/state accuracy; policy/category normalization and decisions;
 semantic citation enforcement; remediation ordering; production output and final
 submission. Phase 04 is not started.
+
+## Phase 04 — policy and risk engine (approved)
+
+The user approved Phase 04 with “Start the Phase 4”. Earlier phase statements
+above are historical. The new policy layer consumes reconstruction and feeds the
+existing emitter, without changing the frozen stages or official contract.
+
+### Applicability and rules
+
+Request authorization uses conservative grammar, negation/conflict checks and
+explicit unknowns. It reads request_text, never reported_status or evidence
+instructions. Supported affirmative grammar includes English, Portuguese, Spanish
+and French forms; unsupported scripts, quoted/hypothetical instructions and
+unclear mentions defer. This is not a general multilingual language model.
+
+The initial full run exposed a concrete mistake: “would like it permanently
+deleted” lacked a request cue, and “correct treatment” in a later sentence could
+then be misclassified as a correction request. Adding the missing grammatical
+cue and keeping unscoped deletion mentions unresolved fixed this. Regression
+fixtures cover that counterexample, retention exceptions, conflicting requests,
+other actions, negation, reported speech and unsupported languages. No public
+answer labels were consulted or runtime case-family rules introduced.
+
+Rules are loaded literally from the supplied CSV with unique IDs/categories and
+known action types. Named adapters implement its conditions as true/false/unknown;
+unknown/new condition text is never executed or treated as Always. Collection and
+event mappings interpret participant schemas, not resource-ID prefixes. A
+condition that is false does not invent an alternative deletion policy. Explicit
+cleared attribution/email fields can establish an already satisfied treatment.
+
+### Preservation, exposure and recreation risks
+
+- Retention dates are compared at audit_at, with exclusive retention_until.
+  Missing/expired retention or inactive/unknown holds leave the alternative policy
+  unresolved. Required retained records must remain present. Their absence cannot
+  be repaired by inventing an operation outside the official vocabulary.
+- Support conversations require shared-context evidence before redaction;
+  attachment deletion requires subject-only evidence. Unsupported free text defers.
+- Analytics anonymization removes subject references as well as direct identifiers.
+  Tombstone redaction preserves the supported stable reference and clears name,
+  email, phone, hash and additional direct identifier fields, including nested
+  values. Unknown/omitted fields are distinct from explicit null or empty values.
+- Exact subject identifiers in supported message fields establish exposure.
+  Nonempty unsupported narrative cannot prove absence of PII. Agent/staff fields
+  in shared support records are not treated as the customer's direct fields.
+- Flow enabled/readback facts establish active/disabled state. Contradictory or
+  malformed scheduler controls cannot silently become disabled-flow proof.
+- Backups are retained; restore_allowed and supported eligibility/block fields
+  establish restore risk. Complete blocked-restore verification also needs the
+  archive's presence. No backup DELETE action is generated.
+- SQLite 0/1 is adapted only for named Boolean fields in SQL records; JSON
+  integers and malformed Boolean representations remain unknown, not truthy.
+
+### Proof and planning boundaries
+
+Every assessment retains rule, resource/copy, outcome, supporting observation
+IDs and proposed operations. Complete conjunctive verification requires a single
+eligible artifact supporting all required state fields. Findings cite positive
+state evidence. For incomplete plans all remediation and future verification
+citations are empty, including verification of already compliant retained scopes.
+
+The planner combines copies while retaining internal per-copy assessments.
+Incompatible actions for one public system/resource block publication. Explicit
+typed source/downstream endpoints are checked against canonical operation order;
+if the contract cannot express a safe dependency order, the case remains unknown.
+Disable/block operations otherwise precede record changes by the official table.
+
+The new audit gate checks authorization/status/assessment consistency, protected
+categories, proof presence, source clocks/roles, exact derived operations and plan
+coverage. It does not duplicate the producer's complete policy interpretation.
+The existing independent CSV validator remains a separate structural check.
+Handwritten fixtures test semantic rules; source checks alone are not proof of
+semantic correctness or recall.
+
+The normal lightweight diagnostic reports POLICY_AUDIT_NOT_RUN.
+`--audit-policy` performs the real audit without writing a CSV. The checked audit
+publication API is exercised only on synthetic premises in tests. An explicit
+coverage_complete Boolean is an internal asserted premise, not inferred from
+file parse success. Production integration does not set it: inventory scopes
+still say NOT_ESTABLISHED and 15 files remain deferred. Partial findings survive
+internally but cannot be emitted as a complete final plan.
+
+### Validation and remaining work
+
+285 tests pass, retaining all 209 earlier tests. Synthetic complete/incomplete/
+non-deletion cases roundtrip through the audit gate, emitter, independent
+validator and writer. Full 518-request diagnostics are reproducible across fresh
+processes/hash seeds; actual metrics and limits are in the evaluation report.
+Ten non-deletion decisions resolve; 508 cases remain unresolved, including 24
+unsupported-language requests. Resource-scope assessments are not accuracy scores.
+
+Applied orchestrate-build guidance for typed seams/failure isolation and
+hackerrank-orchestrate-design for explicit unknowns and output ownership. No
+skill-effectiveness experiment, provider call, package installation, new service
+or framework was introduced. Official files/dataset are preserved. Phase 05
+document/image/language extraction and subsequent coverage/evaluation/release
+work remain pending. No root prediction CSV or submission archive was created.

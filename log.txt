@@ -166,3 +166,38 @@ Phase 03 completion (2026-10-24T22:55:33+05:30):
 * Review hardened interval endpoint provenance, stopped-query handling, reused aliases, omitted fields, cross-object aliases, future registry leakage, fresh-process determinism and long numeric counts. Updated README, DECISIONS and evaluation/usage reports with actual evidence, applied skills, remaining limitations and unmeasured accuracy.
 * git diff --check and Python syntax checks passed. Official AGENTS.md, CLAUDE.md, problem_statement.md, agent_trace_instructions.md and dataset remain unchanged from Phase 02. No root output.csv, code.zip or agenttrace.zip was generated.
 * Preparing commit and push to the existing GhostData origin/main under standing user authorization. Phase 04 is not started.
+
+## [2026-10-24T23:01:51+05:30] GHOSTTRACE Phase 04 policy and risk engine
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 4
+
+Agent Response Summary:
+The user approved Phase 04. Rechecked the clean Phase 03 baseline, official instructions and selected build/design skills. Implementing authorization, policy obligations, retention and tombstone handling, recreation risks and evidence-backed decision planning. Document/image extraction and later release work remain deferred; unsupported cases must remain explicitly unresolved.
+
+Actions:
+* Verified main is clean at Phase 03 commit 249c5ce and read repository instructions.
+* Read build/design skills and Phase 04 scope before implementation.
+* Verified runtime model from authoritative turn_context metadata.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 04 completion (2026-10-24T23:40:40+05:30):
+* Implemented policy models, conservative request authorization, literal supplied-rule loading, three-valued conditions, schema/category adapters, direct policy facts and residual identifiers, retention/hold safeguards, tombstones, anonymization, active flows, restore risks and canonical plan assembly under code/ghosttrace/policy/.
+* Retained records and backups are never default-deleted. Missing conditions, required records, identities, controls and exhaustive coverage remain explicit unknowns. Tombstone stable references are preserved while direct and additional/nested identifier values are checked. Complete verification requires a citation supporting all required state conjuncts.
+* Added policy-audit proof/publication gate checks for authorization, source clocks/roles, protected categories, exact assessment-derived operations and complete plans. Existing independent structural validation and atomic publication remain separate. Copy-action and dependency/canonical-order conflicts block publication. No real-data coverage override is used.
+* Added --audit-policy to process selected requests and report decisions/assessments without CSV publication. The no-argument path is explicitly lightweight and reports POLICY_AUDIT_NOT_RUN. Per-case processing errors isolate to unresolved decisions; no case exceptions occurred in the final real-data runs.
+* Initial full-run review found two affirmative deletion requests incorrectly marked non-deletion: the grammar missed would-like-it-deleted and treated a later correct-treatment phrase as correction. A generic grammar/unscoped-mention fix and regression fixtures corrected that concrete bug. Unsupported scripts defer; limited Spanish/French/Portuguese affirmative forms are supported alongside English. No public output labels or case-family rules were used.
+* Final command python -B -m pytest -q -p no:cacheprovider code/tests: 285 passed in 12.26 seconds, including 209 prior regressions and 76 new Phase 04 checks. A development synthetic roundtrip test initially double-decoded steps_json already parsed by the validator; its reader was corrected.
+* Three handwritten policy cases roundtrip through audit gate, emitter, independent validator and writer: COMPLETE, INCOMPLETE and NOT_APPLICABLE; all 3 cases, 4 steps and 28 public fields checked. Exhaustive coverage is an explicit synthetic premise. Additional fixtures exercise all 15 operations, retained-record safety, residual PII, flows/backups, copy/dependency conflicts, tampering, malformed controls, future facts and isolated failures.
+* Final full policy runs from outside the repo under PYTHONHASHSEED 0 and 12345 returned identical entire parsed reports. Observed times were 18.0942 and 18.0825 seconds, including startup, not statistical benchmarks. Proof SHA-256 a74831053403d2cfd2351cd72ee6f1e7d27a8f9d6c413a7fb29a77821210b211. Both exited 3 for unresolved cases, as intended.
+* All 518 requests processed: authorization 484 DELETION, 10 NON_DELETION, 24 UNRESOLVED; public decisions 10 NOT_APPLICABLE and 508 unresolved. Resource-scope assessments: 134 VIOLATION, 42 COMPLIANT, 1769 UNKNOWN. These are coverage/behavior counts, not measured correctness or score. No real deletion case is publishable yet.
+* Overlapping case uncertainties include 484 incomplete evidence coverage, 385 unqualified identities, 384 provisional resource links, 58 unknown conditions, 53 unmapped categories, 5 unestablished required-retained-record states, 4 unknown flows, 1 unknown record state and 1 with no assessed resource. Fifteen PDF/PNG sources and 24 unsupported-language requests remain for later phases. Snapshot availability must not be invented.
+* Updated README, DECISIONS and evaluation/usage reports with actual results, applied build/design skill guidance and remaining limits. No packages, frameworks, model providers, model calls or submission artifacts were added. Final-run prediction usage and challenge accuracy remain unavailable.
+* Python syntax and diff checks pass. Official AGENTS.md, CLAUDE.md, problem_statement.md, agent_trace_instructions.md and dataset are unchanged from Phase 03. Preparing commit/push to the existing GhostData origin/main under standing authorization; Phase 05 is not started.

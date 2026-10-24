@@ -1,8 +1,50 @@
-# GHOSTTRACE — Phase 03
+# GHOSTTRACE — Phase 04
+
+The policy/risk engine is implemented: request authorization, supplied rule
+conditions, retention safeguards, tombstones, residual identifiers, active flows,
+restore risks, and canonical remediation plans with source proofs.
+
+```text
+python code/main.py --audit-policy
+```
+
+This audits all selected requests and prints JSON diagnostics. It writes no CSV.
+Exit **3** means some cases remain unresolved; **0** means every requested audit
+resolved; **1** reports ingestion errors; **2** reports invalid input/invocation.
+`--requests` and `--dataset-root` select other participant inputs. The no-argument
+runner remains a lightweight boundary diagnostic (`POLICY_AUDIT_NOT_RUN`); use
+`--audit-policy` to run the actual engines.
+
+Current full run: **518 processed**, **10 NOT_APPLICABLE**, **508 unresolved**.
+Authorization grammar recognizes 484 deletion requests; 24 requests require later
+language interpretation. The engine records 134 violating, 42 compliant, and
+1,769 unknown resource-scope assessments. These are coverage counts, not measured
+accuracy, and a compliant scope is not a complete case.
+
+- Rules come from `deletion_rules.csv`; unknown conditions never default to delete.
+- Retained records and backups are preserved. Tombstones retain stable references
+  while direct identifiers require redaction. Analytics must also lose stable
+  subject links to qualify as anonymized.
+- Positive findings retain exact source/observation proofs. Omitted fields,
+  unsupported narrative, ambiguous ownership and malformed controls remain unknown.
+- Risk controls precede destructive changes. Copy-policy or dependency conflicts
+  block publication rather than violating canonical order or retention policy.
+- Policy-audit publication checks proof/operation consistency and eligibility,
+  then uses the existing independent structural validator and atomic writer.
+
+All **285 tests** pass, including the earlier 209 regressions. Three independent
+synthetic cases exercise COMPLETE, INCOMPLETE and NOT_APPLICABLE with exact steps
+and citations. They assert exhaustive synthetic coverage explicitly; parser
+success is not an exhaustive-coverage certificate for the real corpus. Fifteen
+PDF/PNG sources, provisional identities, unsupported conditions and incomplete
+coverage still block real deletion answers. No full prediction file or final
+submission has been generated. Phase 05 has not started.
+
+## Phase 03 reconstruction baseline
 
 Historical identity ownership, resource linkage, audit-cutoff replay, and
-conflict handling are implemented on top of structured ingestion. Policy/risk
-judgments and production predictions remain deferred to later approved phases.
+conflict handling support the policy engine. This section retains the earlier
+Phase 03 measurements; its reconstruction-only command still makes no decisions.
 
 ## Identity and historical-state diagnostics
 
@@ -41,7 +83,7 @@ All **209 tests** pass, including the previous 149 regressions. Full diagnostics
 were identical across fresh processes with hash seeds 0 and 12345 on these fixed
 inputs. Identity, temporal-state and deletion accuracy remain unmeasured.
 See `code/evaluation/evaluation_report.md` for commands, fingerprint and limits.
-Phase 04 requires the user's next approval.
+Phase 04 policy diagnostics are described above.
 
 ## Phase 02 ingestion baseline
 

@@ -1,4 +1,17 @@
-# GHOSTTRACE usage status through Phase 03
+# GHOSTTRACE usage status through Phase 04
+
+## Phase 04 runtime
+
+Authorization grammar, supplied-policy evaluation, risk checks and plan assembly
+use only the standard library and existing evidence index. Full 518-request
+policy diagnostics make zero provider calls and consume zero provider input or
+output tokens; model service cost is zero. No packages were installed. This does
+not measure Codex development-session tokens, local compute cost or a final
+prediction-producing run.
+
+The real corpus still has unresolved cases and no root output.csv. The three-case
+synthetic policy roundtrip in tests is not a production usage report. Final-run
+fields below remain unavailable. Phase 05 has not started.
 
 ## Phase 03 runtime
 

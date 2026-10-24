@@ -1,4 +1,4 @@
-"""Publication boundary. Policy inference remains deferred after Phase 03."""
+"""Publication boundaries for explicit resolved decisions and checked audits."""
 
 from pathlib import Path
 from typing import Mapping
@@ -10,13 +10,13 @@ from .models import Authorization, Decision, EvidenceSource, Request, Uncertaint
 
 def diagnose_requests(requests: tuple[Request, ...]) -> dict:
     decisions = tuple(Decision(request, Authorization.UNRESOLVED,
-                              uncertainties=(Uncertainty("POLICY_ENGINE_NOT_IMPLEMENTED",
-                                  "Policy decisions are deferred; use --reconstruct-evidence for identity/time diagnostics"),))
+                              uncertainties=(Uncertainty("POLICY_AUDIT_NOT_RUN",
+                                  "Use --audit-policy to run policy diagnostics; incomplete evidence prevents publication"),))
                       for request in requests)
-    return {"phase": "03", "status": "UNRESOLVED", "request_count": len(requests),
+    return {"phase": "04", "status": "UNRESOLVED", "request_count": len(requests),
             "unresolved_count": len(decisions),
             "unresolved_case_ids": sorted(d.request.case_id for d in decisions),
-            "reason": "POLICY_ENGINE_NOT_IMPLEMENTED", "output_written": False}
+            "reason": "POLICY_AUDIT_NOT_RUN", "output_written": False}
 
 
 def publish_decisions(decisions: tuple[Decision, ...], requests: tuple[Request, ...],
@@ -28,3 +28,10 @@ def publish_decisions(decisions: tuple[Decision, ...], requests: tuple[Request, 
         raise UnresolvedDecision("decision request context does not match the supplied requests")
     rows = tuple(emit_decision(decision) for decision in decisions)
     return write_output(rows, destination, requests, catalog)
+
+
+def publish_policy_audits(audits, requests, catalog, destination, observations):
+    from .quality.audit_gate import check_audit
+    if any(check_audit(audit, observations) for audit in audits):
+        raise UnresolvedDecision("audit proof/publication gate failed; existing output preserved")
+    return publish_decisions(tuple(audit.decision for audit in audits), requests, catalog, destination)

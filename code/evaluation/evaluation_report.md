@@ -1,4 +1,146 @@
-# GHOSTTRACE Phase 03 evaluation report
+# GHOSTTRACE Phase 04 evaluation report
+
+## Current implementation and measured gate
+
+Phase 04 adds authorization, supplied-policy condition evaluation, retention
+and tombstone safeguards, residual identifier checks, flow/restore risks,
+canonical plan assembly and an audit publication gate. Phase 05 extraction has
+not started. No real output.csv or submission archive was generated.
+
+Final test command: `python -B -m pytest -q -p no:cacheprovider code/tests`.
+**285 passed in 12.26 seconds**, retaining all 209 earlier regression tests and
+adding 76 Phase 04 checks. Runtime uses the standard library; no packages,
+providers, services or frameworks were installed. Model calls/tokens were zero.
+
+## Full participant-data audit diagnostics
+
+Command: `python -B code/main.py --audit-policy`.
+The final runs used absolute entry-point paths from outside the repository.
+
+| Measurement | Result | Limit |
+|---|---:|---|
+| Requests processed | 518 | All selected requests accounted for |
+| Authorization: DELETION | 484 | Supported deterministic grammar, not measured accuracy |
+| Authorization: NON_DELETION | 10 | NOT_APPLICABLE, no deletion operations |
+| Authorization: UNRESOLVED | 24 | Unsupported-script requests defer to later interpretation |
+| Resolved public decisions | 10 | All NOT_APPLICABLE |
+| Unresolved public decisions | 508 | Includes the 24 unresolved intents |
+| Violating resource-scope assessments | 134 | Supported local findings; not complete case plans |
+| Compliant resource-scope assessments | 42 | Scoped treatment only; not case-level completeness |
+| Unknown resource-scope assessments | 1,769 | Includes provisional ownership and unsupported facts |
+| Deferred PDF/PNG files | 15 | Same four PDFs and eleven PNGs as Phase 02 |
+| Ingestion errors / isolated case exceptions | 0 / 0 | No source or case-processing failure in these runs |
+| Root prediction written | No | Publication remains blocked by unresolved cases |
+
+Overlapping case uncertainty counts: 484 lack established exhaustive evidence
+coverage; 385 lack time-qualified request identity; 384 contain provisional or
+ambiguous resource links; 58 contain an unsupported/unestablished policy
+condition; 53 contain unmapped categories; five lack a required retained-record
+state; four have unknown flow state; one lacks a record state and one has no
+assessed resources. Unsupported-script intents account for 24 cases. These are
+engineering diagnostics, not gold-label error counts.
+
+CLI exit 3 correctly reports unresolved cases. The no-argument runner remains
+a lightweight, non-publishing diagnostic with POLICY_AUDIT_NOT_RUN; it is not the
+full policy execution. File parse success and candidate retrieval never assert
+exhaustive subject coverage. The runtime does not set coverage_complete=True.
+
+## Independent synthetic validation
+
+All expected outcomes below are handwritten in code/tests/test_policy.py,
+independent of public reference outputs. The policy tests exercise all 15 allowed
+operations across their fixtures. Full challenge status/step/field/sequence
+accuracy remains NOT_MEASURED; no hidden accuracy or score is estimated.
+
+| Custom case | Expected and observed result |
+|---|---|
+| Present profile with an authorized deletion | INCOMPLETE: cited remaining-record finding, DELETE, future absence check |
+| Later absence readback plus asserted exhaustive synthetic scope | COMPLETE: cited absence verification only |
+| Export/correction/marketing-only or negated request | NOT_APPLICABLE: empty operations; no identity prerequisite |
+| Shared support conversation | REDACT the subject identifiers, preserve the conversation and agent fields |
+| Subject-only attachment / unproven ownership | DELETE only when sole-subject condition is established |
+| Analytics retains a stable user reference | ANONYMIZE even when direct email/phone/hash fields are cleared |
+| Proper tombstone / extra direct identifier | Preserve stable reference; redact any remaining direct identifier |
+| Retention/hold in force / missing retained record | VERIFY_RECORD_PRESENT / unresolved; never DELETE |
+| Active connector / disabled connector | Disable before destructive changes / evidence-backed disabled check |
+| Restore-permitted backup | Retain archive, BLOCK_RESTORE and verify retained presence plus restore block |
+| Primary absent, replica present | Keep the replica violation and its evidence |
+| Conflicting per-copy policies or canonical dependency order | Unresolved; no destructive public decision |
+
+The three-case policy roundtrip writes only a temporary synthetic CSV and
+checks COMPLETE, INCOMPLETE and NOT_APPLICABLE against exact expected steps,
+states, citations, phases, numbering and resource targets: **3/3 exact cases,
+4/4 steps and 28/28 public fields checked**. Publication passes the audit proof
+gate, existing emitter, independent structural validator and atomic writer.
+Exhaustive coverage is an explicit synthetic premise, not a real-data claim.
+
+Negative controls cover quoted/hypothetical/embedded instructions, conflicting
+authorization, retention exceptions, unsupported languages, historical subject
+proof, future observations, reported workflow status changes, unknown conditions,
+false shared/sole ownership conditions, unknown/expired retention, attribution
+through stable references, omitted fields, unparsed narrative, nested/additional
+identifier values, conjunctive citation coverage, SQLite versus JSON Boolean
+types, malformed scheduler flags, copy preservation, safe operation order,
+tampered citation/action/resource, missing coverage, source-proof gates, preserved
+existing output, isolated case failures and the diagnostics-only CLI.
+
+## Corrections found during review
+
+The initial full run classified two affirmative deletion requests as non-deletion:
+the grammar missed “would like it permanently deleted”, then interpreted “correct
+treatment” as a correction action. A generic request-cue fix, unscoped-mention
+guard and regression examples corrected this. Limited Spanish/French grammar
+was added; unsupported scripts explicitly defer rather than taking a fallback
+status. This was a concrete observed classifier error, not a measured change in
+full challenge accuracy.
+
+Review also added nested/additional identifier checks for tombstones, ensured
+malformed optional controls stay unknown, kept complete verification from citing
+an artifact that proves only one conjunct, and independently protected retained
+categories in the audit gate. One development test failed because its harness
+double-decoded the validator's already parsed steps_json; fixing that test reader
+resolved it without changing production output logic. Final suite: 285 passing.
+
+## Determinism and timing
+
+Final fresh-process runs with PYTHONHASHSEED=0 and 12345 produced identical
+entire parsed reports. Runtimes, including process startup, were **18.0942** and
+**18.0825 seconds**. These are individual observations, not a benchmark or speedup.
+
+Aggregate proof SHA-256:
+`a74831053403d2cfd2351cd72ee6f1e7d27a8f9d6c413a7fb29a77821210b211`.
+
+The fingerprint binds source hashes (including policy CSV), decisions, assessed
+operations and proof IDs without printing request text or identifiers. The
+repeatability claim covers these fixed input bytes/metadata and current offline
+adapters. It does not claim provider determinism or robustness to changed facts.
+Observation-order and future-evidence controls are retained in the tests.
+
+## Limits and next phase
+
+- Ten non-deletion decisions resolve; no real deletion case has a publishable full
+  answer yet. Local findings are retained for subsequent work.
+- Twenty-four unsupported-language requests, 15 deferred files, provisional
+  identities, unmapped schemas and unsupported conditions still need evidence or
+  interpretation. A model must not invent snapshot availability timestamps.
+- Exact supported text/field matches can prove exposure; absence of a match in
+  unsupported narrative cannot prove redaction. Current grammar is deliberately
+  narrower than general multilingual understanding.
+- The audit gate verifies proof/assembly/clock/retention consistency; it does not
+  independently reimplement every policy predicate. The original CSV validator
+  remains an independent structural boundary. Semantic correctness is tested on
+  synthetic cases and remains unmeasured on challenge labels.
+- Exhaustive coverage requires additional engineering evidence. No override was
+  used to publish provisional real decisions, and final-run usage is unavailable.
+
+Applied orchestrate-build guidance for typed boundaries and isolated failures;
+hackerrank-orchestrate-design for explicit unknowns, evidence-backed claims and
+exclusive emission. No causal skill-effectiveness experiment was performed.
+Official dataset and instruction files remain unchanged. Stop before Phase 05.
+
+---
+
+# Historical Phase 03 evaluation report
 
 ## Current phase and measured gate
 
