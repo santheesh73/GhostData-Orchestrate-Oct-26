@@ -1,17 +1,17 @@
 {
-  "source_commit_context": "9f258b9e584a3e92eed32b65b595e7916d39f5cf",
+  "source_commit_context": "f36e2eb2e8a796f67307fef7714dd0fb8aec729a",
   "proof": {
     "prediction_mode": true,
-    "proof_diagnostic_cases": 2,
+    "proof_diagnostic_cases": 3,
     "semantic_certification": "NOT_CLAIMED",
-    "audit_sha256": "ea465efff0da2c1dd34038ab6f4431ce01343524c8f3098570947b9db2c57838",
+    "audit_sha256": "5be732512763754f0cbfdc9c19e1b1f0e16d36d9d657d2c253875367c61b24d6",
     "corpus_sha256": "f5049da0e32fc967628fc6f597a0e79434cf74c72da5962d791c974a0c158d43",
-    "implementation_sha256": "79758b91c260aef1842713dfd0bc856937c4798c777cc2d929ed52cbe5d55db1",
+    "implementation_sha256": "02c0de3ea10e29fc7773c1f5bf7e1c801994bfe54901f6de6df2fcf847b40176",
     "timing": {
-      "ingestion_seconds": 4.896034400000644,
-      "engine_seconds": 0.4580151999980444,
-      "audit_seconds": 43.20392329999595,
-      "total_seconds": 48.55797289999464
+      "ingestion_seconds": 4.9601803999976255,
+      "engine_seconds": 0.4618295999971451,
+      "audit_seconds": 43.037786900000356,
+      "total_seconds": 48.459796899995126
     },
     "usage": {
       "calls": 0,
@@ -34,17 +34,17 @@
   },
   "members": {
     "AGENTS.md": "5f1898f12d7c7e9991c4e4b1c038dbab478d64b154a384d27ed7f67066474157",
-    "DECISIONS.md": "b0ffe83713d4c6fc2fa2b4011aef82d4b9c95fb6fc05cc6780a4d689953eb769",
+    "DECISIONS.md": "0afbe06296a3c5b5f0cde91867d0376fa706ac1642a8d76576009f558ff999a3",
     "DESIGN.md": "9c4cd7acd20059604edebac9437be353d9852c9c2fdda4218e1f139ad74cd533",
     "INTERVIEW.md": "d41268363b591421f0b0ca611c15d82d77331595fcf88fc7fa9484dfe205a829",
     "PHASE06B-REPORT.md": "24abc20de55f2cd0e2ac7ac7aa7f5b14b841e10e568ea7f60c8288c7bc9c87d6",
-    "README.md": "dec3c80e695370590dcd4b3e10e9e8fafa3eaa95b85c8e3c3add44a5e90e602c",
+    "README.md": "e21af55376f46888d22efa999601fe342b09266504be9543aabf1e4e32243408",
     "RECOVERY-REPORT.md": "172aaf3e03654ad4e9f1ef5c8f75d7d5a6e1619cbd4404ab7ef4ff89bcd2c4d1",
     "agent_trace_instructions.md": "a7d9dd5882178dec57b95101d5364f8bf8588a4e0c68967ae6eb9f0e0945ba14",
     "code/evaluation/__init__.py": "5409297249253f2aeebfdd872d5f330d237727361773c2dd1bbe34748daafa3b",
     "code/evaluation/audit_evaluation.py": "31abadfb9b4f735efd09c1cf9e621f994ee08df26e5ddd97d868b10c6b230e81",
     "code/evaluation/coverage.py": "9af1b482698a288f5ff8b6ed0f217bb9929c6b7bd47259ee1377bac65f88278d",
-    "code/evaluation/evaluation_report.md": "c5c228a9551949fb9bdfe99596f91e62c503e66eae703695938d7200b62d0bd4",
+    "code/evaluation/evaluation_report.md": "61cef978e83935639043aecf558c9d63607d6bf75dc15c47192a414554b261b0",
     "code/evaluation/failure_taxonomy.py": "8d5287465cf9da270bf83a9c7f5ca497897baef4f0f9a73e641fd83b7250410d",
     "code/evaluation/golden_diff.py": "389ef52533c9ad99e75c659bdf6e7114dcf402d9c0c05c8e21278a92b52430b6",
     "code/evaluation/main.py": "03a09f7a5e2316eee4695718796ae5e9323357ae005110aae3a7aebee8b9557d",
@@ -86,7 +86,7 @@
     "code/ghosttrace/policy/__init__.py": "42daa032fe206068457cb9e265566258f0cac2b1ef7a1d961e9f6ab63c4930ea",
     "code/ghosttrace/policy/applicability.py": "de4f66956908ea14d8d6df342dff2755ee8e982c1fba7e2d7023c0ce8ac1d514",
     "code/ghosttrace/policy/coverage.py": "857257127fe401ae39a944f94b7f1bc3669f3ef50becf2306bff1ebdce43ea76",
-    "code/ghosttrace/policy/engine.py": "943c495c37c9648fe9589a4947a109ab8fe806a1ae5e1dd70c709b10e8287392",
+    "code/ghosttrace/policy/engine.py": "5878322565a596a3bc57f037a880684b6682f1bee83ef32915b73f0be35d7a9f",
     "code/ghosttrace/policy/facts.py": "3f54bd1fcf4e7bf2d4ba1566275005504e50473de380f88bc83026f17f33ccaa",
     "code/ghosttrace/policy/models.py": "cea8d4cea74b9eb04b397feb3ea3099ff0a3ffd8d2525536db16ef38fdae604b",
     "code/ghosttrace/policy/obligations.py": "2e87090d1c2f711cd4e251d45d936b77f61387fcc260f1fab073e08b0715378c",
@@ -125,7 +125,7 @@
     "code/tests/test_packaging.py": "f11e236654db518399c3f166f990e597ea2f22ecf12170c24d960b7b0d3c0698",
     "code/tests/test_phase06.py": "051d526082b387e809ebd99c20a4533ef2ebaafb6df24cb1533f15f1a04eda7a",
     "code/tests/test_phase06_repairs.py": "dedb38371506c4bf759cfcc00b3dcb4c3c5fcf0f5234093b664495ba0a5c7622",
-    "code/tests/test_phase06b.py": "0cf2e951656f8b0d740ed95b5b2e61bcddcbb184e6a1b115b98a19c787355665",
+    "code/tests/test_phase06b.py": "cd20ae373a9249180ad3032119c158c62aadfb980500070e36d18dd63b41ab39",
     "code/tests/test_policy.py": "994fce7eaedcf05f4987954b82af36963c93bf73c9f509e76a3cb5da47839a9d",
     "code/tests/test_reconstruction.py": "f765b53d83fc139ec8b066ad46d8e63a8b78013a01cfe73c213e743f8231b523",
     "code/tests/test_recovery.py": "42b630904326af6816c9da80c38ec1715a7db935555a1b4f36559137737b9597",
@@ -134,34 +134,37 @@
     "problem_statement.md": "8f795329dd20b97c96d74fdfbc4ecc892c95bb3de2f2262a6e75d6547e621b18",
     "release-files.json": "7cec48c4e6f9cda0913c39674112ad56b0b40c906f49c0365d671163a01f8f1d",
     "scripts/package.py": "86ec801b2de0620a4168dea28e41427a086d4a717c6d5d04446cd36dd17ae086",
-    "evaluation/evaluation_report.md": "c5c228a9551949fb9bdfe99596f91e62c503e66eae703695938d7200b62d0bd4",
+    "evaluation/evaluation_report.md": "61cef978e83935639043aecf558c9d63607d6bf75dc15c47192a414554b261b0",
     "evaluation/usage_report.md": "835fc9976aeca8695adaccee9ed9a6c7a5421b06802714fa29af66f8f5e2814c"
   },
   "artifacts": {
-    "README.md": "dec3c80e695370590dcd4b3e10e9e8fafa3eaa95b85c8e3c3add44a5e90e602c",
-    "log.txt": "80bdf378a99eb65798400c97f70c1526952e5f757ba4cbf511c5afb957a9e5a9",
+    "README.md": "e21af55376f46888d22efa999601fe342b09266504be9543aabf1e4e32243408",
+    "log.txt": "2e6f8d7a8ed0079f4022f5a7a684af0dca602c2c573e93b51af54ee1c61c506a",
     "output.csv": "82418de4de7b6619201c2f5ca98dadd2bead434ae7580195b43926e26e5d2be2"
   },
-  "readiness": "PREDICTION_ARTIFACTS_VALIDATED",
-  "code_zip_sha256": "bff85a4cdb1ec660a904aae442620d09b51fedc546fcd56a1008078e9e0887f2",
+  "readiness": "LOCAL_CHECKS_PASSED",
+  "code_zip_sha256": "fd1eac00b9d14566fe2cfb9d28ba24fe7baa5c6e8a27937e580ca414142a7c28",
   "archive_reproduction": {
     "exit_code": 0,
-    "seconds": 64.155,
-    "csv_bytes_identical": true,
-    "fresh_cache": true,
-    "dataset_byte_copy": true,
-    "source": "submission-final/code.zip",
-    "output_sha256": "82418de4de7b6619201c2f5ca98dadd2bead434ae7580195b43926e26e5d2be2"
+    "seconds": 61.877,
+    "bytes_match_submitted_output": true,
+    "code_zip_sha256": "fd1eac00b9d14566fe2cfb9d28ba24fe7baa5c6e8a27937e580ca414142a7c28",
+    "fresh_cache": true
   },
   "test_suite": {
-    "passed": 538,
+    "passed": 542,
     "skipped": 0,
-    "seconds": 23.44
+    "seconds": 21.79
   },
-  "known_limits": [
-    "User-authorized heuristic policy defaults; semantic certification is not claimed.",
-    "Public status 32/32; exact rows 8/32; hidden accuracy not measured.",
-    "One full-dataset COMPLETE prediction has no established resource verification.",
-    "Active Codex trace export is a snapshot until session closure."
-  ]
+  "polish": {
+    "baseline": "submitted-f36e2eb",
+    "rule": "Omit account absence verifications supported only before requested_at",
+    "public_status_correct": 32,
+    "public_exact_rows": 9,
+    "public_step_true_positives": 158,
+    "public_predicted_steps": 161,
+    "public_reference_steps": 193,
+    "full_status_changes": 0,
+    "full_steps_json_rows_changed": 0
+  }
 }

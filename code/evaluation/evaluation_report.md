@@ -8,12 +8,12 @@ policy defaults were explicitly authorized for the final competition prediction.
 |---|---:|---:|
 |Predicted public cases|16/32|32/32|
 |Case-level deletion-status accuracy|16/32 (50%)|32/32 (100.00%)|
-|Exact rows|1/32|8/32 (25.00%)|
-|Sequence accuracy|1/32|8/32 (25.00%)|
-|Step precision|73/73|158/162 (97.53%)|
+|Exact rows|1/32|9/32 (28.12%)|
+|Sequence accuracy|1/32|9/32 (28.12%)|
+|Step precision|73/73|158/161 (98.14%)|
 |Step recall|73/193|158/193 (81.87%)|
-|Step F1|54.89%|89.01%|
-|Field accuracy|481/1351|1060/1379 (76.87%)|
+|Step F1|54.89%|89.27%|
+|Field accuracy|481/1351|1062/1372 (77.41%)|
 |Full prediction rows|Blocked|518, sorted and unique|
 
 Final full command: `python -B code/main.py --run --with-extraction`, exit 0.
@@ -38,7 +38,7 @@ Hidden accuracy and exhaustive semantic correctness are NOT MEASURED.
    source-backed shared context in strict audit mode.
 
 These are real fixtures in `code/tests/test_phase06b.py`; final measured suite:
-538 passed in 23.06 seconds, no tests skipped. The one full-run CLI fixture was
+542 passed (timing recorded in the session log), no tests skipped. The one full-run CLI fixture was
 updated for the expressly requested prediction publication behavior. Strict
 policy, provenance, temporal and malformed-output fixture coverage remains.
 
@@ -53,9 +53,15 @@ policy, provenance, temporal and malformed-output fixture coverage remains.
 |Restore permission without archive readback|Subject-linked restore entry defaults to affected backup; block/check restore|
 |Contact lookup classified as analytics|Explicit email_opt_in contact schema selects SECONDARY_IDENTIFIER/DELETE|
 |Compliant obligations omitted by incomplete-only output|Planner includes every established compliant verification alongside remediation|
-|Unlinked absent/anonymized resources|Remain omitted; no numeric-ID fabrication. 24/32 public rows still differ from reference|
+|Unlinked absent/anonymized resources|Remain omitted; no numeric-ID fabrication. 23/32 public rows still differ from reference|
 
 Selected new output exceeds fallback thresholds (fallback 25/32 statuses, 5/32
 exact, 137/193 matching steps). Final 32/32 statuses does not imply perfect step
 plans or hidden performance. Packaging checks reproducibility of these heuristic
 predictions; independent proof diagnostics remain informative, not blocking.
+
+Polish accepted against submitted f36e2eb: omit account-absence verification
+when its only absence readback predates requested_at. One general rule, no
+case/resource overrides. Public statuses remain 32/32, exact rows rise 8 to 9,
+precision rises 158/162 to 158/161, and recall remains 158/193. The full 518
+case IDs and statuses match; 0 steps_json rows changed.

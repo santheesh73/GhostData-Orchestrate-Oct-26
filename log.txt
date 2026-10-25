@@ -784,3 +784,52 @@ parent_agent=none
 
 Emergency final result: public predictions 32/32, status 32/32, exact/sequence 8/32, steps 158/162 precision and 158/193 recall, fields 1060/1379 (76.87%). Full command exits 0 and produces 518 rows: 156 COMPLETE, 352 INCOMPLETE, 10 NOT_APPLICABLE. One COMPLETE has no established verification and is published as a heuristic per user override. Final 538 tests pass in 23.44s, none skipped; only the explicitly superseded abstention CLI expectation changed. Independent package regeneration matches; extracted 103-member ZIP with fresh cache reproduces CSV bytes in 64.155s, exit 0. Source archive excludes dataset/caches/credentials; configured key-value scan finds no secrets. Fallback tag and bytes preserved. Agent trace ZIP includes six Codex and three Antigravity authentic snapshots, 18 credential-like patterns redacted; active trace requires refresh after session closure. New source exceeds fallback measured thresholds. Submission files are selected under submission/. Preparing final commit and push; no external HackerRank upload.
 Final measured field counts (authoritative): 1060/1379; accuracy 0.7686729514.
+
+## [2026-10-25T11:55:53.813910+00:00] Exact-row polish with unchanged status
+
+User Prompt (verbatim, secrets redacted):
+# CODEX 15-MINUTE PROMPT: exact-row polish (HARD STOP 17:50 IST)
+
+Repo: main @ f36e2eb (already submitted: 32/32 status, 8/32 exact rows, 158/193 step recall). Append to log.txt per AGENTS.md. No questions, no new docs, no refactors.
+
+## Goal
+Raise exact rows and step recall WITHOUT changing any status.
+
+## Steps
+1. Tag the baseline: `git tag submitted-f36e2eb`.
+2. Run the sample eval and list every missing or extra step across the 32 samples, grouped by (phase, operation, system_id), with counts. Print the 2 largest groups.
+3. Fix ONLY the single largest group with one general rule (no hardcoded case or resource IDs). Typical candidates:
+   - a missing verification on a relevant resource;
+   - a wrong evidence_id ("" vs a citation) in INCOMPLETE vs COMPLETE cases;
+   - an ordering tie-break on system_id/resource_id.
+4. Re-run the sample eval. ACCEPT only if all three hold:
+   - status stays 32/32;
+   - exact rows are greater than 8;
+   - step precision does not drop.
+   Otherwise run `git reset --hard submitted-f36e2eb` and STOP.
+5. If accepted:
+   - run the full 518; confirm 518 sorted rows with the same case-ID set and zero status changes vs the submitted output.csv (print the count of steps_json rows changed);
+   - run the tests;
+   - update the metrics line in evaluation/evaluation_report.md;
+   - rebuild code.zip;
+   - commit and push.
+6. At 17:50 IST, whatever the state, stop and report which files to upload. If nothing was accepted, the already-submitted files stand.
+
+Agent Response Summary:
+Preserved the submitted files and tagged f36e2eb. Measuring the missing/extra step groups before one general-rule attempt. User acceptance requires 32/32 status, more than 8 exact rows, and no precision decrease; the 17:50 IST stop applies.
+
+Actions:
+* Read AGENTS.md and test-fix skill; tag baseline and preserve submission bytes.
+* Run sample comparison and group all missing/extra steps.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Single-rule polish ACCEPTED: baseline tag submitted-f36e2eb; largest difference group account VERIFY_RECORD_ABSENT has 21 missing and 1 extra, next groups anonymization/security retained checks each 7 missing. Excluded only pre-request negative account checks from prediction verification, without changing statuses. Public 32/32 statuses, 9/32 exact, precision 158/161 (98.1366%) vs 158/162 (97.5309%), recall 158/193 unchanged; fields 1062/1372 (77.4052%). Four synthetic boundary/positive controls added; 542 tests pass in 21.79s. Full 518 run exits 0, identical sorted case-ID set, 0 status changes and 0 steps_json rows changed. Preparing matched code ZIP and existing report updates; no new documentation files or unrelated rules.
+
+Polish archive verification passed: 103 members, independent regeneration matches all 518 rows. Extracted new code.zip with fresh cache reproduced the submitted output bytes in 61.877s, exit 0. New ZIP SHA-256 fd1eac00b9d14566fe2cfb9d28ba24fe7baa5c6e8a27937e580ca414142a7c28. Replaced local submission code.zip/README/manifest; output.csv unchanged. All three sample acceptance conditions pass, 542 tests pass, no second inference rule attempted. Preparing commit/push before 17:50 IST; no external submission performed.

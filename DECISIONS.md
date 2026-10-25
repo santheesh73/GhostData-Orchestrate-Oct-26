@@ -729,3 +729,16 @@ was updated; all 538 tests pass, none skipped. New candidate wins the requested
 thresholds: 32/32 statuses, 8/32 exact, 158/193 matching steps versus fallback
 25/32, 5/32 and 137/193. Full output has 518 rows (156/352/10).
 Historical fallback bytes/tag and previous submission are preserved in .rescue/.
+
+## Single-rule polish after submitted-f36e2eb
+
+Group measured first: account-service absence verifications, 21 missing and 1
+extra; next groups analytics anonymization and security retention, 7 missing each.
+Change only the largest group: in prediction mode omit an already-absent account
+verification when all absence facts predate requested_at. A pre-request negative
+readback does not establish current deletion verification. Retain current/at-request
+negative checks and historical positive findings. No IDs or statuses are overridden.
+ACCEPT: 32/32 statuses, 9/32 exact (was 8), 158/161 step precision (was 158/162),
+158/193 recall unchanged. Four synthetic request-time/present-record controls;
+542 tests pass in 21.79 seconds. Full 518 run: same sorted case-ID set, 0 status
+changes and 0 steps_json changes. Submitted output remains byte-identical.

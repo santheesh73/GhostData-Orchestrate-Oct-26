@@ -199,3 +199,30 @@ def test_continued_attachment_properties_bind_the_literal_reference_without_sole
     assert "sole_subject" not in json.loads(rows[0].payload_json)
     assert not project_document(document(text.replace("Attachment properties and upload history", "Customer notes")), {})
     assert not project_document(document(text + "\nother@example.invalid"), {})
+
+
+@pytest.mark.parametrize("observed_day,verify", [(2, False), (5, True), (9, True)])
+def test_prediction_verifies_absence_only_from_request_time_onward(observed_day, verify):
+    old_or_current = observation("negative-read", {"event": "profile_lookup_completed", "rows": 0,
+        "http_status": 404, "subject_reference": "subject-A"}, day=observed_day,
+        system="account_service", resource="opaque-profile", kind="LOG_EVENT")
+    remaining = observation("remaining-now", {"record_type": "SEARCH_INDEX_ENTRY", "subject_reference": "subject-A"},
+        system="search_service", resource="opaque-search")
+    engine = PolicyEngine(EvidenceIndex([change(day=0), old_or_current, remaining]),
+        RuleBook.load(ROOT / "dataset"), prediction_defaults=True)
+    result = engine.audit(request(), coverage_complete=True)
+    assert result.decision.status.value == "INCOMPLETE"
+    checks = [op for op in result.decision.operations if op.resource_id == "opaque-profile"]
+    assert bool(checks) is verify
+    assert all(op.operation == "VERIFY_RECORD_ABSENT" and op.evidence_id == "" for op in checks)
+
+
+def test_prediction_keeps_present_profile_observed_before_request():
+    present = observation("present-read", {"record_type": "USER_PROFILE", "subject_reference": "subject-A"},
+        day=2, system="account_service", resource="opaque-profile")
+    engine = PolicyEngine(EvidenceIndex([change(day=0), present]),
+        RuleBook.load(ROOT / "dataset"), prediction_defaults=True)
+    result = engine.audit(request(), coverage_complete=True)
+    assert result.decision.status.value == "INCOMPLETE"
+    assert [op.operation for op in result.decision.operations] == [
+        "REPORT_REMAINING_RECORD", "DELETE_RECORD", "VERIFY_RECORD_ABSENT"]

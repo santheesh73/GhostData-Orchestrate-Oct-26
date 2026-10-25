@@ -55,6 +55,16 @@ class PolicyEngine:
                                 reconstruction.identity.ownership, request.audit_at, self.observations,
                                 self.reconstruction.index.lookup_resource(state.resource.resource_id, system_id=state.resource.system_id).observations,
                                 prediction_defaults=self.prediction_defaults)
+            # A negative lookup before this deletion request is not a current
+            # subject resource verification. Keep it as diagnostic history,
+            # without asserting its continued absence for this request.
+            if (self.prediction_defaults and assessment.category == "USER_PROFILE"
+                    and assessment.operations
+                    and all(op.operation == "VERIFY_RECORD_ABSENT" for op in assessment.operations)):
+                absence = tuple(f for f in project(state) if f.dimension == "presence")
+                if (absence and all(decoded(f) == "ABSENT" and f.observed_at < request.requested_at for f in absence)):
+                    assessment = replace(assessment, operations=(), uncertainties=assessment.uncertainties + (
+                        Uncertainty("PRE_REQUEST_NEGATIVE_LOOKUP", "earlier absence is not a current deletion verification"),))
             assessments.append(assessment)
             # Dependencies require explicit typed endpoints, never a guessed ID
             # relationship or a global SYNC SUCCESS message.
