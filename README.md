@@ -1,4 +1,44 @@
-# GHOSTTRACE — Phase 05
+# GHOSTTRACE — Phase 06
+
+Evaluation now runs the actual audit engines before opening the public reference.
+It reports status, exact-row, step, field and sequence agreement, counts abstentions
+as failures, and separates unpublishable candidate plans from predictions.
+
+```text
+python -B code/evaluation/main.py --audit-samples
+python -B code/evaluation/main.py --audit-samples --with-extraction
+python -B code/evaluation/main.py --trace-case case_29 --with-extraction
+python -B code/evaluation/main.py --benchmark-audits --requests dataset/deletion_requests.csv --repetitions 3
+```
+
+These commands write JSON diagnostics to stdout and never create output.csv.
+Sample evaluation exits **1** for imperfect results, **0** for exact agreement,
+and **2** for invalid inputs. Trace and benchmark exit 0 on successful diagnostics;
+a benchmark proof mismatch exits 2. Extraction caches stay under `.ghosttrace/`.
+Model calls are disabled in this offline evaluation path. Public labels are
+development references already inspected in earlier phases, not a held-out set.
+
+Native authorization agreement improved from **18/32 to 27/32** through general
+grammar fixes with positive/negative controls. End-to-end public-sample status,
+exact-row, field and sequence accuracy remain **0%**: all 32 cases
+abstain. Nine candidate steps match the 193 reference steps, but incomplete
+coverage, identity timing and policy interpretation prevent their publication.
+Full-dataset/hidden accuracy and semantic extraction recall remain unmeasured.
+
+The identity optimization reuses immutable, undated context normalization and
+indexes within a fixed input graph. Every audit still filters time-qualified
+ownership at its own cutoff; a snapshot never becomes temporal proof. The
+benchmark compares a retained uncached reference path, alternates trial order,
+and requires identical complete audit fingerprints, including candidate plans.
+Three alternating trials on all 518 requests measured median processing time of
+12.872 seconds for the reference and 6.816 seconds with caching (**1.89×** locally).
+Ingestion/startup are excluded; this does not change the unresolved outcomes.
+See `code/evaluation/evaluation_report.md` for measurements and case-level failures.
+
+**384 tests pass. Submission readiness is blocked.** No root output.csv or
+submission archive exists. Phase 07 freeze and packaging have not started.
+
+## Phase 05 extraction baseline
 
 Selective document/image/text extraction is implemented with literal source
 grounding, content-addressed caches, bounded optional model calls and usage
@@ -65,7 +105,7 @@ Unknown usage/pricing yields unknown cost rather than a fabricated zero.
 Live model calls were not exercised because no provider was configured. Tests
 use injected providers/transports; they do not measure live model accuracy.
 Source availability, exhaustive coverage and unresolved identities still require
-evidence. See `code/evaluation/evaluation_report.md`. Phase 06 has not started.
+evidence. See `code/evaluation/evaluation_report.md` for the Phase 06 results.
 
 ## Phase 04 policy baseline
 

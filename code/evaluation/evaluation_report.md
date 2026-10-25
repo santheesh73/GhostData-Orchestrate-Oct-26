@@ -1,4 +1,281 @@
-# GHOSTTRACE Phase 05 evaluation report
+# GHOSTTRACE Phase 06 evaluation report
+
+## Result and readiness
+
+Phase 06 implements real public-sample evaluation, guard-based failure analysis,
+feature counts, privacy-limited traces, metamorphic controls and measured identity
+optimization. **The application is not submission ready.** All 32 public sample
+cases abstain, so published status, exact-row, field and sequence accuracy are 0%.
+The full 518-request diagnostic still has 10 NOT_APPLICABLE and 508 unresolved.
+No production output.csv, code.zip or submission folder was generated. Phase 07
+freeze and submission have not started.
+
+The public reference has 10 COMPLETE and 22 INCOMPLETE cases, 193 steps and no
+NOT_APPLICABLE cases. Labels were already inspected in earlier phases: this is
+an explicitly labeled development comparison, not a held-out accuracy estimate.
+No organizer-only data or hidden answers were read. Hidden/full-dataset accuracy,
+identity accuracy, OCR accuracy and semantic extraction recall remain unmeasured.
+
+## Reproducible commands and boundary
+
+```text
+python -B code/evaluation/main.py --audit-samples
+python -B code/evaluation/main.py --audit-samples --with-extraction --cache-dir .ghosttrace/phase05-verify
+python -B code/evaluation/main.py --trace-case case_29 --with-extraction --cache-dir .ghosttrace/phase05-verify
+python -B code/evaluation/main.py --benchmark-audits --requests dataset/deletion_requests.csv --repetitions 3
+python -B -m pytest -q -p no:cacheprovider code/tests
+```
+
+The evaluator loads requests, runs every audit and publication gate, and only
+then opens the public expected output. Runtime modules cannot import evaluation
+or sample-label utilities. A regression checks the actual ordering of all 32
+audits/gates before label access. Trace and benchmark never open labels. These
+commands emit JSON to stdout, make zero provider calls, and never invoke a CSV
+writer. Raw diagnostic files and extraction caches remain ignored under
+.ghosttrace/. The independent publication validator rejects the empty result
+for CASE_COVERAGE. Public evaluation correctly exits 1 for imperfect agreement;
+input/contract/proof errors exit 2. Successful traces/benchmarks exit 0.
+
+Initial harness correction: a citation catalog built only from parsed observations
+omitted valid IDs for deferred PDFs/images. Evaluation now uses the participant
+manifest/activity/audit metadata catalog. Citation existence/time eligibility is
+separate from successful extraction and semantic support; the reference validates
+without declaring deferred contents understood.
+
+## Measured baseline and two configurations
+
+The before measurement used unchanged Phase 05 runtime cb9e142. The after runtime
+adds general request grammar fixes and an identity cache, without changing any
+publication premise. Structured-only and locally extraction-augmented modes were
+both executed before and after; each pair has identical semantic outcomes.
+
+| Measurement | Phase 05 baseline | Phase 06 after |
+|---|---:|---:|
+| Native authorization agreement | 18/32 (56.25%) | 27/32 (84.375%) |
+| Publishable sample rows / abstentions | 0 / 32 | 0 / 32 |
+| Status / exact-row accuracy | 0% / 0% | 0% / 0% |
+| Published step true positives / reference steps | 0/193 | 0/193 |
+| Published step precision / recall / F1 | undefined / 0 / 0 | undefined / 0 / 0 |
+| Published correct fields / compared fields | 0/1,351 | 0/1,351 |
+| Published exact sequences | 0/32 | 0/32 |
+| Unpublishable candidate step overlap | 9/193 | 9/193 |
+| Candidate precision / recall / F1 | 1.0 / 0.046632 / 0.089109 | same |
+| Candidate correct fields / sequences | 56/1,351 / 0/32 | same |
+| Native resolved request authorizations | 18 | 27 |
+| Resource-scope assessments | 3 violations, 71 unknown | 3 violations, 95 unknown |
+| Structured parse inventory | 79 parsed, 15 deferred | same |
+| Augmented capture inventory | 94 parsed | same |
+
+Missing rows count against the 32-reference denominator. Step overlap is a
+multiset over six non-number fields; field alignment also compares numbering.
+Sequence equality preserves every field and array order. An undefined precision
+is null, not 100%. Candidate metrics have the explicit scope
+UNPUBLISHABLE_CANDIDATE_STEPS; they never count as predictions or case accuracy.
+All nine candidates belong to one still-unresolved development case. The increase
+in unknown assessments reflects more requests reaching reconstruction, not a
+regression established by ground-truth resource labels.
+
+Generalized authorization fixes cover ongoing erasure language, explicit permanent
+closure, continuation of a scoped deletion, quoted benign UI labels, residual
+search/export/contact requests in account context, and verification after the
+person states they deleted their own account. Nearby negatives cover export/reset,
+status-only questions, a deleted filter rather than account, third-party accounts,
+quoted erasure instructions and negation. Native authorization rules contain no
+case IDs or complete sample sentences and do not read workflow statuses or public
+expected labels.
+Five public authorizations remain unresolved. They are retained as failures rather
+than translated or inferred from their expected answer.
+
+## Failure taxonomy and observed feature coverage
+
+Guard stages overlap; they identify observed blockers, not an asserted causal
+model misread. All actual model-call counts are zero. In skill terminology the
+known native coverage/interpretation limitations are RULE failures; no MISREAD
+classification is claimed without evidence of a model extraction error.
+
+| Guard stage | Baseline cases | After cases |
+|---|---:|---:|
+| Authorization | 14 | 5 |
+| Identity/time qualification | 16 | 25 |
+| Retrieval/resource linkage | 16 | 25 |
+| Evidence completeness | 18 | 27 |
+| Policy/interpretation | 2 | 2 |
+| Publication gate | 32 | 32 |
+
+After native interpretation, 25 requests have only snapshot-context identity with
+unknown availability, 21 have unestablished resource links and 4 have no assessed
+resource. Two cases have unknown policy conditions; one also has unmapped
+categories. Context/coverage cannot be promoted just because all files were read.
+The three positive scopes are ANALYTICS_PROFILE, DATA_FLOW and SEARCH_INDEX_ENTRY,
+each violating; two SUPPORT_MESSAGE scopes and 93 unclassified scopes are unknown.
+Nine candidate operation kinds appear, once each: three findings, three remedies
+and three verifications. This is observed feature coverage, not exhaustive recall.
+
+The augmented configuration captures 15 additional files but changes no public
+semantic result. Fourteen documents remain candidate text; the single anchored
+record has partial interpretation. Extraction's marginal end-to-end improvement
+in this zero-model configuration is therefore **zero**. Native-only capture and
+optional model support must not be confused with a working full audit.
+
+## Case-level golden diff
+
+Every actual status is unresolved and every published row is missing. The table
+lists expected public status, candidate/reference step counts and explicit guard
+stages: A authorization, C coverage, I identity, R retrieval/linkage, P policy,
+G publication gate. Candidate counts are diagnostic only.
+
+| Case | Public expected status | Candidate/reference steps | Blockers |
+|---|---|---:|---|
+| case_01 | COMPLETE | 0/1 | C, I, G, R |
+| case_02 | COMPLETE | 0/1 | C, I, G, R |
+| case_03 | COMPLETE | 0/3 | C, I, G, R |
+| case_04 | COMPLETE | 0/2 | C, I, G, R |
+| case_05 | INCOMPLETE | 0/3 | C, I, G, R |
+| case_06 | INCOMPLETE | 0/4 | C, I, G, R |
+| case_07 | INCOMPLETE | 0/4 | C, I, G, R |
+| case_08 | INCOMPLETE | 0/4 | C, I, G, R |
+| case_09 | INCOMPLETE | 0/5 | C, I, G, R |
+| case_10 | INCOMPLETE | 0/4 | C, P, G |
+| case_11 | INCOMPLETE | 0/14 | C, I, G, R |
+| case_12 | INCOMPLETE | 0/5 | A, G |
+| case_13 | INCOMPLETE | 0/8 | C, I, G, R |
+| case_14 | INCOMPLETE | 0/5 | A, G |
+| case_15 | INCOMPLETE | 0/5 | C, I, G, R |
+| case_16 | INCOMPLETE | 0/7 | C, I, G, R |
+| case_17 | INCOMPLETE | 0/5 | C, I, G, R |
+| case_18 | INCOMPLETE | 0/14 | C, I, G, R |
+| case_19 | INCOMPLETE | 0/8 | C, I, G, R |
+| case_20 | INCOMPLETE | 0/8 | C, I, G, R |
+| case_21 | COMPLETE | 0/3 | C, I, G, R |
+| case_22 | INCOMPLETE | 0/8 | C, I, G, R |
+| case_23 | INCOMPLETE | 0/8 | C, I, G, R |
+| case_24 | INCOMPLETE | 0/7 | C, I, G, R |
+| case_25 | COMPLETE | 0/3 | A, G |
+| case_26 | COMPLETE | 0/6 | A, G |
+| case_27 | COMPLETE | 0/6 | C, I, G, R |
+| case_28 | COMPLETE | 0/6 | C, I, G, R |
+| case_29 | INCOMPLETE | 9/14 | C, P, G |
+| case_30 | INCOMPLETE | 0/14 | A, G |
+| case_31 | COMPLETE | 0/3 | C, I, G, R |
+| case_32 | INCOMPLETE | 0/5 | C, I, G, R |
+
+## One actual input trace
+
+`--trace-case case_29 --with-extraction` validates the request schema, recognizes
+explicit deletion, and resolves one subject. It retrieves 4 logical links across
+8 state scopes, retaining 9 eligible timeline observations from evidence_92 and
+activity_3541 through activity_3544; it excludes 5 future observations and 1 with
+unknown time. Three scopes establish analytics identifiers, an active connector
+and a search record requiring treatment. Four activity-only scopes have no mapped
+category; the support scope lacks its required policy condition. Nine candidate
+steps follow, but unknown policy/coverage premises keep the status unresolved.
+The writer is never called. Trace output omits request text and direct subject
+identifiers; model calls are zero. This is an actual pipeline trace, not a
+fabricated successful inference or use of future facts.
+
+## Regression and additional participant cases
+
+Full observed command: **384 passed in 12.12 seconds**, including the 340 existing
+checks and 44 Phase 06 tests. Controls use handwritten fixtures, not public answer
+rows. Three additional classes exercised here are:
+
+1. Authorization minimal pairs: 11 new positives and 12 neighboring negatives,
+   including harmless UI quotations versus embedded commands and account history
+   versus deleting a saved filter. Review restored the informational-question
+   guard for “explain when” and “what ... can you delete”; both have counterexamples.
+   Existing negation/language tests still pass.
+2. Shared/reassigned identity: reference and optimized reconstructions agree at
+   six cutoffs, including exact reassignment boundaries, a future-only registry
+   entry and an early reference that cannot borrow that later registry. A later
+   view warmed first cannot promote an undated snapshot in an earlier view.
+3. Policy metamorphisms: three arbitrary subject/resource/case naming schemes,
+   reversed input order, equivalent timezone offsets and future absent-state
+   noise preserve the independently asserted INCOMPLETE plan and exact citation.
+
+The fingerprint test deliberately drops an unpublished candidate plan and detects
+it even though the final unresolved decision is unchanged. A deliberately broken
+benchmark implementation raises a proof mismatch rather than reporting a speedup.
+Other controls reject invalid trial counts/cache escapes/unknown trace IDs,
+separate candidate/status metrics, retain trace privacy and check inference-label
+import isolation. Earlier independent COMPLETE, INCOMPLETE and NOT_APPLICABLE
+synthetic roundtrips, protected retention/tombstones, multi-copy conflicts,
+canonical ordering, source eligibility, writer preservation and real local OCR
+checks remain passing. Synthetic success does not establish public accuracy.
+
+## Measured optimization
+
+A real pre-change cProfile trace of the 32-sample audit attributed 0.817 cumulative
+seconds to 18 IdentityGraph.at calls, the dominant processing hotspot. Profiling
+has overhead and is not used as the speed benchmark.
+
+Only fixed-input work is cached: normalized immutable snapshot candidates, their
+alias/subject indexes, and exact stable-reference pairs when the eligible subject
+registry is unchanged. Snapshot candidates retain certain=false and missing
+availability. Audit history, time qualification, conflicts and resource replay
+remain cutoff-specific. Future registry entries force the original pairing path.
+There is no global cross-dataset or cached-cutoff result reuse. The uncached path
+is retained as an explicit development reference.
+
+Final benchmark: CPython 3.14.3 on this Windows machine; 518 requests, one common
+untimed warm-up, three trials per configuration with alternating order. Ingestion,
+startup, label I/O and fingerprint serialization are excluded. No test suite ran
+concurrently with this final measurement. The earlier exploratory run overlapped
+regression work and is not the reported timing. Peak memory was not measured.
+The final repeat after restoring informational-question guards is reported below;
+the earlier serial repeat was 1.97×. Local load varied, so the latest observed
+ranges accompany the medians rather than selecting the faster result.
+
+| Configuration | Median engine seconds | Median audit seconds | Median processing seconds | Processing range |
+|---|---:|---:|---:|---:|
+| Uncached reference | 0.346039 | 12.482549 | 12.872485 | 12.720762–14.212807 |
+| Cached immutable context | 0.341569 | 6.458603 | 6.816385 | 4.499196–7.250012 |
+
+Median processing speedup: **1.8885×** (47.05% less time) for this local workload.
+All six complete audit fingerprints, including candidate plans and all proofs,
+match the warm-up. This is a measured processing improvement, not an end-to-end
+accuracy improvement or universal speed guarantee. No dependency was installed.
+
+## Full-run repeatability, cost and provenance
+
+Two fresh extraction-augmented full runs with PYTHONHASHSEED=0 and 12345 produce
+identical entire JSON diagnostics, both exit 3: 484 DELETION authorizations,
+10 NON_DELETION, 24 UNRESOLVED; 10 NOT_APPLICABLE, 508 unresolved final cases;
+134 violating, 42 compliant and 1,770 unknown scope assessments. The full diagnostic
+proof also equals Phase 05. Each run makes zero provider calls/tokens and has USD0
+model-service cost. This excludes Codex development usage and local compute.
+No output-producing full run or final usage report exists.
+
+| Bound measurement | SHA-256 |
+|---|---|
+| Public requests | b3802bdb242ab4869d84191a6c0d3f7d1601afbc6114833f9184c323d319c7e6 |
+| Public expected output | 72ef6b14f504a72a674deefad08c66e397f8d8c05bd23d9791e41db6ef184d91 |
+| Evidence/context file bytes and paths | f5049da0e32fc967628fc6f597a0e79434cf74c72da5962d791c974a0c158d43 |
+| Manifest file | bcb1d0b909dfe2b29dd461f9d7e90d8a031803de21858d5f18f52c771ab0d614 |
+| Supplied rules | 17332f5566e776d2f7bcff36e93cf23c9d8594dc2ff1e9c247ad2614539dc40f |
+| Runtime implementation after | 558f08aa0267f57755b59ad47508e94d014abd8d7e1ced03539543a03b558f8f |
+| Sample semantic result, both modes | 9d7bce4c978fdb1ab35b095de0a529820056f75d7a52a337cbb86eef0cf479b7 |
+| Full benchmark complete-audit fingerprint | e61502c6e6ade0f1a058aaa57f3a4071c96bad96d36cc4ccbce7620fda28344b |
+| Full augmented diagnostic proof | c85b1c97969dca93f4c684aa77b1eccd19fd3d374dfae68f06cef408e802be22 |
+
+The runtime fingerprint hashes runtime Python/PowerShell/prompt text by relative
+path and bytes; diagnostics also record source, request, manifest and rule hashes.
+The corpus digest alone covers file bytes/paths; the separately bound manifest
+supplies source clocks/origins. Raw artifacts stay private under .ghosttrace/;
+these Markdown results and genuine commands/logs are the reviewable evidence.
+No causal skill-effectiveness experiment or official score estimate was run.
+
+## Remaining failures and next gate
+
+Phase 06's evaluation/optimization work is implemented. Its accuracy/readiness
+gate **fails**. Time-qualified identity/alias evidence, semantic document and
+conditional-policy coverage, remaining authorization interpretation and exhaustive
+copy/flow accounting require additional work before freeze. Increasing parse
+counts or asserting coverage_complete would conceal these failures. Phase 07
+packaging/release remains unstarted; no submission readiness claim is made.
+
+---
+
+# Archived Phase 05 evaluation report
 
 ## Measured implementation gate
 

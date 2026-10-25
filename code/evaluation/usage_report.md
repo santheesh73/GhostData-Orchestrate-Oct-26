@@ -1,4 +1,23 @@
-# GHOSTTRACE usage status through Phase 05
+# GHOSTTRACE usage status through Phase 06
+
+Phase 06 public evaluation (32 requests in each of structured and extraction-
+augmented modes), the 518-request alternating reference/cache benchmark and two
+fresh 518-request augmented diagnostics all used **0 provider calls, 0 input
+and output tokens, and USD 0 model-service cost**. No provider/model was selected
+for these runs. Diagnostic tokens and model cost per request are also zero;
+per-model totals are empty. Cache-build model usage was zero. These measurements
+exclude local compute and Codex development-session usage.
+
+The offline evaluator hard-disables provider calls rather than inheriting any
+optional model environment configuration. The benchmark times native engines and
+makes no label requests. No dependencies were installed. Full-run statuses remain
+10 NOT_APPLICABLE and 508 unresolved. No root output.csv was created, so these are
+not final prediction-run usage figures. The required final-run report below
+remains unavailable. Phase 07 freeze/submission has not started.
+
+---
+
+# Archived usage status through Phase 05
 
 ## Phase 05 measured runs
 

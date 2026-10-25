@@ -21,14 +21,34 @@ def classify_request(text):
         return Intent(Authorization.UNRESOLVED, "UNSUPPORTED_REQUEST_LANGUAGE")
     # Explicitly unsupported interpretation; do not execute instructions nested
     # inside a quoted example, a role override, or a hypothetical question.
-    if re.search(r'[`"“”]|\b(ignore (?:all |previous |prior )?instructions|system prompt|if i|hypothetical|what happens if|how (?:do|can) i)\b', normalized):
+    if re.search(r'`|\b(ignore (?:all |previous |prior )?instructions|system prompt|if i|hypothetical|what happens if|how (?:do|can) i)\b', normalized):
         return Intent(Authorization.UNRESOLVED, "QUOTED_OR_HYPOTHETICAL_REQUEST")
+    # A quoted UI label is not a quoted command. Remove only balanced benign
+    # labels; erasure commands within quotations remain explicitly unresolved.
+    quoted = re.findall(r'"([^"\n]*)"|“([^”\n]*)”', normalized)
+    if any(re.search(r"\b(delete|deletion|erase|erasure|remove|eliminar|supprimer)\b", a or b) for a, b in quoted):
+        return Intent(Authorization.UNRESOLVED, "QUOTED_OR_HYPOTHETICAL_REQUEST")
+    normalized = re.sub(r'"[^"\n]*"|“[^”\n]*”', " ", normalized)
+    if re.search(r'["“”]', normalized):
+        return Intent(Authorization.UNRESOLVED, "QUOTED_OR_HYPOTHETICAL_REQUEST")
+    if re.search(r"\b(someone else's|another person's|their account|his account|her account)\b", normalized):
+        return Intent(Authorization.UNRESOLVED, "THIRD_PARTY_SCOPE")
+    account_context = bool(re.search(r"\b(account|profile|cuenta|conta|compte)\b", normalized))
+    self_deletion_history = bool(re.search(r"\bi (?:have )?(?:deleted|closed|erased) (?:my |this |the )?(?:account|profile|personal (?:data|information))\b", normalized))
     sentences = re.split(r"[.!?;\n]+|\bbut\b", normalized)
     positive, negative, other, unresolved_mention = False, False, False, False
     for sentence in sentences:
         subject = re.search(r"\b(account|profile|personal (?:data|information)|records|conta|dados pessoais|cuenta|datos personales|compte|donnees personnelles|konto)\b", sentence)
-        deletion = re.search(r"\b(delete[ds]?|deleting|deletion|erase[ds]?|erased|erasure|remove[ds]?|removing|exclus[aã]o|excluir|apagar|eliminar|eliminaci[oó]n|borrar|suppression|supprimer|effacer|loeschen|löschen)\b", sentence)
-        negated = re.search(r"\b(do not|don't|not (?:asking|a request|requesting)|without|never|n[aã]o|no (?:quiero|solicito|eliminen|borren)|ne .* pas)\b", sentence)
+        if account_context and re.search(r"\b(search result|export file|my name|my contact details)\b", sentence):
+            subject = True
+        continuation = account_context and re.search(r"\b(finish|complete|continue|completar)\b.*\b(deletion|erasure|eliminaci[oó]n)\b", sentence)
+        if continuation:
+            subject = True
+        deletion = re.search(r"\b(delete[ds]?|deleting|deletion|erase[ds]?|erasing|erasure|remove[ds]?|removing|exclus[aã]o|excluir|apagar|eliminar|eliminaci[oó]n|borrar|suppression|supprimer|effacer|loeschen|löschen)\b", sentence)
+        permanent_closure = re.search(r"\bclose (?:my |this |the )?account (?:permanently|completely)\b", sentence)
+        verification = self_deletion_history and re.search(r"\b(verify|confirm|check|ensure)\b.*\b(gone|absent|removed|deleted|erased)\b", sentence)
+        deletion = deletion or permanent_closure or verification
+        negated = re.search(r"\b(do not|don't|not (?:asking|a request|requesting)|without|never|n[aã]o|no (?:quiero|solicito|eliminen|borren|completen|completar)|ne .* pas)\b", sentence)
         other_action = re.search(r"\b(copy|download|export|portable|access|reset|correct|correction|replace|change|unsubscribe|marketing|promotional|information request|opt out)\b", sentence)
         scoped_other = re.search(r"\b(marketing|promotional|mailing|newsletter)\b", sentence)
         if other_action:
@@ -41,10 +61,16 @@ def classify_request(text):
                 negative = True
             elif not scoped_other:
                 # Questions about policy are not affirmative deletion requests.
-                if re.search(r"\b(?:does|what|when|explain|policy says|for example|said|already|previously)\b", sentence):
-                    return Intent(Authorization.UNRESOLVED, "DESCRIPTIVE_DELETION_TEXT")
+                cue = re.search(r"\b(please|would like|i (?:request|am requesting|want|am asking)|could you|can you|solicito|je demande|pueden)\b|\bi(?: am|'m) (?:deleting|erasing|removing)\b", sentence)
+                imperative = re.match(r"\s*(delete|erase|remove|close|excluir|apagar|eliminar|borrar|supprimer|effacer|loeschen|löschen)\b", sentence)
+                if re.search(r"\b(?:does|what|when|explain|policy says|for example|said|already|previously)\b", sentence) and not verification:
+                    unresolved_mention = True
+                    continue
+                if re.search(r"\b(?:whether|if)\b", sentence) and not self_deletion_history and not continuation:
+                    unresolved_mention = True
+                    continue
                 # An explicit request/imperative is needed, not just a mention.
-                if re.search(r"\b(please|would like|i (?:request|am requesting|want|am asking)|could you|can you|solicito|je demande)\b", sentence) or re.match(r"\s*(delete|erase|remove|excluir|apagar|eliminar|borrar|supprimer|effacer|loeschen|löschen)\b", sentence):
+                if cue or imperative:
                     positive = True
                 else:
                     unresolved_mention = True

@@ -17,8 +17,8 @@ from .rulebook import RuleBook
 
 
 class PolicyEngine:
-    def __init__(self, index, rulebook, intent_resolver=None):
-        self.reconstruction = ReconstructionEngine(index)
+    def __init__(self, index, rulebook, intent_resolver=None, *, cache_identity=True):
+        self.reconstruction = ReconstructionEngine(index, cache_identity=cache_identity)
         self.observations = self.reconstruction.observations
         self.rulebook = rulebook
         self.intent_resolver = intent_resolver

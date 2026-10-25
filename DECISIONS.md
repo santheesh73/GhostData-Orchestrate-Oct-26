@@ -451,3 +451,86 @@ and retained-state proof still require further evidence. Extracting every file
 does not set coverage_complete. Live model verification, challenge accuracy and
 final prediction-run usage remain unavailable. No root output.csv or submission
 archive was generated. Stop before Phase 06.
+
+## Phase 06 — observed failures and measured optimization
+
+The user approved “Start the Phase 6”. Scope follows the kickoff's evaluation and
+optimization phase, independent of similarly numbered community skill phases.
+Phase 07 freeze/packaging remains separate. The typed compiler, participant-data
+boundary, temporal rules, supplied policy and publication guards are preserved.
+
+### Honest evaluation rather than inferred readiness
+
+The development evaluator runs requests/audits/publication gates before opening
+the already-inspected public labels. Runtime modules cannot import evaluation or
+sample-label utilities. Missing rows count against all reference cases. Published
+and candidate metrics remain distinct; diagnostics never call a CSV writer.
+Status, exact-row, step, field and sequence comparison reuse the independent golden
+diff. Reference metadata comes from the full allowed citation catalog, including
+deferred files; capture success and semantic support are separate.
+
+Both structured-only and extraction-augmented runs measure zero publishable rows
+on 32 public samples: 0% status/exact-row/field/sequence accuracy. Candidate plans
+overlap 9/193 steps (precision 1.0, recall 0.046632), but no candidate is publishable.
+The additional document capture has zero measured semantic benefit in this
+zero-model configuration. Hidden accuracy and semantic recall remain unmeasured.
+Guard-based failure stages identify limitations without inventing model misreads.
+
+Generalized authorization grammar improves agreement from 18/32 to 27/32.
+Changes cover ongoing erasure, explicit permanent closure, scoped continuation,
+benign quoted UI labels, account-related residual copies/contact details and
+verification after self-reported account deletion. Minimal pairs preserve other
+actions, negation, third-party/quoted commands and status-only questions. Five
+sample authorizations stay unresolved. No complete sample sentence, case-specific
+predicate, reported status or golden label was added to inference.
+
+### Profile-driven cache, with an uncached reference
+
+A pre-change profile identified IdentityGraph.at as the main processing hotspot.
+The cache shares only immutable normalized snapshot candidates and alias/subject
+indexes inside one fixed input graph. Context stays uncertain and undated; every
+view filters temporal history and pairs by its audit cutoff. Precomputed pairs
+are reused only when the eligible subject registry exactly matches. Future-only
+registry entries force the original pairing path. No cached cutoff decisions or
+cross-input state is reused. The uncached implementation remains selectable by
+the development benchmark and temporal differential controls.
+
+The final benchmark uses one common warm-up, alternating trial order and three
+trials per configuration on 518 requests. Complete Audit fingerprints include
+unpublished candidate plans, so matching unresolved statuses cannot hide a changed
+plan. All seven fingerprints match. Median engine-plus-audit time changes from
+12.872485 to 6.816385 seconds (1.8885× local speedup), with ranges
+12.720762–14.212807 and 4.499196–7.250012 seconds. Startup, ingestion, label I/O and
+fingerprinting are excluded. Peak memory is not measured. This improves processing
+time without improving end-to-end answer accuracy.
+
+Benchmark repetitions (3–10) are a JUDGEMENT measurement/resource bound, not a
+classification threshold. The actual report uses 3 per configuration. All
+reference/optimized mismatches abort the measurement. No framework or dependency
+was installed, and no live provider was called.
+
+### Validation, actual result and failed readiness gate
+
+384 tests passed in 12.12 seconds, retaining all 340 earlier tests. New controls
+cover 23 authorization cases, six temporal boundaries, immutable cache context,
+three opaque-ID/timezone/order/future-noise policy cases, label access ordering,
+traces, inference import isolation, cache paths, benchmark trial counts and a
+deliberately broken candidate-plan fingerprint/benchmark. Review restored the
+informational-question guard with two new counterexamples before committing.
+Prior retained-record,
+tombstone, restore, ordering and native PDF/OCR controls remain passing.
+
+Two fresh extraction-augmented full runs with hash seeds 0 and 12345 return
+identical entire reports: 10 NOT_APPLICABLE, 508 unresolved; 484 deletion
+authorizations, 10 non-deletion, 24 unresolved; 134 violating, 42 compliant and
+1,770 unknown scopes. The full diagnostic proof remains
+c85b1c97969dca93f4c684aa77b1eccd19fd3d374dfae68f06cef408e802be22.
+Each run uses zero provider calls/tokens and USD0 model-service cost; development
+usage/local compute are excluded. No output-producing final run exists.
+
+The evaluation/optimization implementation is present, but its accuracy/readiness
+gate fails. Identity availability, semantic conditions/documents, unsupported
+authorization and exhaustive resource/copy coverage need additional work before
+freeze. No root output.csv, submission archive or submission-readiness claim is
+created. Updated evaluation/usage reports distinguish these observed failures
+from the passing implementation regressions. Phase 07 remains unstarted.

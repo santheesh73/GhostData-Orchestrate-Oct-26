@@ -257,3 +257,39 @@ Phase 05 completion (2026-10-25T07:56:25+05:30):
 * Actual provider calls/input tokens/output tokens/model service cost were 0/0/0/USD0. Code preserves unknown usage/pricing and separates current replay calls from all historical cache-build attempts, including retries. Codex development usage and local compute cost were not measured; final prediction-run usage remains unavailable.
 * Applied read build/design, prompt-engineering, PDF extraction/visual-review and multimodal grounding guidance, plus fetched official OpenAI/Microsoft API documentation. No skill-effectiveness experiment was run. Updated README, DECISIONS and evaluation/usage reports with actual outcomes, supported commands, environment requirements and remaining limits.
 * All Python sources parse and diff checks pass. Official instructions and dataset remain unchanged from Phase 04. Caches/preview material are ignored, no secrets are staged, and no root output.csv or submission archive was generated. Preparing commit/push to the existing GhostData origin/main under standing authorization. Phase 06 is not started.
+
+## [2026-10-25T08:00:45+05:30] GHOSTTRACE Phase 06 evaluation and optimization
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 6
+
+Agent Response Summary:
+The user approved Phase 06. Rechecked the clean Phase 05 baseline and read the repository contract and selected testing/evidence skills. Implementing honest public-sample metrics, failure/coverage analysis, metamorphic regressions and measured optimization while preserving evidence and publication guards. Final packaging/release remains outside this phase.
+
+Actions:
+* Verified main is clean at Phase 05 commit cb9e142.
+* Read official instructions, evaluation code and runtime identity/policy seams.
+* Verified exact runtime model from authoritative turn_context metadata.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 06 completion evidence [2026-10-25T08:23:53+05:30] (same user turn):
+* Added real public-sample audits with inference/gates before label access, independent golden diff, explicit abstention penalties, separate candidate-step diagnostics, source/manifest/rule/runtime hashes, failure-stage and feature counts, native-only traces and a repeated differential benchmark. CLI diagnostics never write a prediction file and disable provider calls.
+* Measured the unchanged Phase 05 baseline and both structured/extraction-augmented configurations. General request-grammar fixes improve public authorization agreement from 18/32 to 27/32; nearby negation/status/quoted/third-party counterfactuals stay protected. Published status/exact-row/field/sequence accuracy remains 0%, with 32 abstentions; 9 of 193 candidate steps overlap the public reference and are not predictions.
+* Profile-guided identity optimization caches immutable normalized context/indexes and reuses pairs only for the same eligible subject registry. Context stays undated/uncertain, and cutoff-specific ownership/history are rebuilt. Kept the uncached path for differential controls. Six timed full-dataset audit fingerprints plus the common warm-up match, including unpublished plans.
+* Final serial benchmark: 518 requests, 3 trials per configuration in alternating order; median engine-plus-audit 9.763589 seconds reference versus 4.965914 seconds cached (1.9661x local speedup). Ranges 9.638828-10.305257 versus 4.961938-4.973774 seconds. Startup/ingestion/fingerprints excluded; peak memory unmeasured. Exploratory concurrent-test timing was not used as the final measurement.
+* Full suite: python -B -m pytest -q -p no:cacheprovider code/tests, 382 passed in 9.36 seconds. Final targeted metadata/golden-diff checks: 51 passed in 2.00 seconds. New controls exercise grammar, six cutoffs/future registry, immutable context, three opaque-ID/order/timezone/future-state policy cases, actual label ordering, trace privacy, inference isolation, cache escape, trial bounds and deliberately broken candidate/benchmark proofs.
+* Two fresh extraction-augmented full runs with hash seeds 0 and 12345 returned identical entire diagnostics and exit 3: 484 DELETION, 10 NON_DELETION and 24 unresolved authorizations; 10 NOT_APPLICABLE and 508 unresolved final cases; 134 violating, 42 compliant and 1770 unknown scopes. Proof remains c85b1c97969dca93f4c684aa77b1eccd19fd3d374dfae68f06cef408e802be22. Provider calls/input/output tokens/cost were 0/0/0/USD0, excluding development usage and local compute. No packages were installed.
+* Recorded all 32 public case diffs, explicit failed readiness gate, an actual complex-case trace, source-bound metrics and benchmark methodology in README, DECISIONS and evaluation/usage reports. Current limitations include identity availability, semantic conditions/documents, remaining authorization and exhaustive evidence/copy coverage. Hidden accuracy/semantic recall remain unmeasured.
+* All Python files parse; diff checks pass. Official AGENTS.md, problem_statement.md and dataset are unchanged. No root output.csv, code.zip or submission folder was generated. Preparing commit/push only to the existing GhostData origin/main under standing authorization. Phase 07 freeze/packaging remains unstarted.
+
+Final review and superseding Phase 06 measurements (same user turn):
+* Review restored the informational-question guard for explain/what/when/does; added two independent negative requests so supported question wording cannot become deletion authorization. Final full regression invocation: 384 passed in 12.12 seconds, including 44 new Phase 06 checks and all 340 prior tests.
+* Repeated the serial alternating full benchmark after that correction: reference median processing 12.872485 seconds (range 12.720762-14.212807), cached median 6.816385 (4.499196-7.250012), 1.8885x local speedup. Local timing varied; reports use this latest observation and include ranges instead of choosing the faster earlier repeat. All six trials plus warm-up still share complete-audit SHA e61502c6e6ade0f1a058aaa57f3a4071c96bad96d36cc4ccbce7620fda28344b.
+* Repeated both real public evaluation modes and both fresh full augmented hash-seed runs on the final code. Entire full reports match the earlier proof; sample semantic digest remains 9d7bce4c978fdb1ab35b095de0a529820056f75d7a52a337cbb86eef0cf479b7, with 27/32 authorization agreement, zero publishable sample rows and 508 unresolved full cases. Final runtime SHA 558f08aa0267f57755b59ad47508e94d014abd8d7e1ced03539543a03b558f8f. The manifest hash is also bound in diagnostics/reports. No prediction or submission artifact exists; readiness still fails.

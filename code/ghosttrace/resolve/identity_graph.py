@@ -6,6 +6,7 @@ in eligible business records establish point observations, not lifelong ownershi
 """
 
 from collections import defaultdict
+from types import MappingProxyType
 
 from ..ingest.normalization import normalize_identifier
 from ..models import Uncertainty
@@ -18,8 +19,14 @@ def _value(kind, value):
     return normalize_identifier(kind, value) if isinstance(value, str) and value.strip() and value.casefold() not in {"null", "none"} else ""
 
 
+def _ownership_key(o):
+    return (o.kind, o.value, o.user_id, o.valid_from.isoformat() if o.valid_from else "",
+            o.valid_until.isoformat() if o.valid_until else "", o.basis, o.observation_ids)
+
+
 class IdentityGraph:
-    def __init__(self, observations):
+    def __init__(self, observations, *, cache_context=True):
+        self.cache_context = cache_context
         self.observations = tuple(observations)
         self.payloads = {o.observation_id: payload(o) for o in self.observations}
         self.known_users = frozenset(p["user_id"] for o in self.observations
@@ -35,15 +42,38 @@ class IdentityGraph:
             if len(self.subject_signals[o.observation_id][0]) == 1
             and self.pairs[o.observation_id]
             and {f.value_json for f in extract_facts(o) if f.dimension == "presence"} == {'"PRESENT"'})
+        self.context_users = frozenset(self.payloads[o.observation_id].get("user_id") for o in self.context_records)
+        if cache_context:
+            # These undated candidates never become temporal proof. Share only
+            # immutable normalization/index work within this fixed input graph.
+            context = []
+            for observation in self.context_records:
+                data = self.payloads[observation.observation_id]
+                user = data.get("user_id", "")
+                for kind in sorted(STRONG_KINDS):
+                    value = _value(kind, data.get(kind))
+                    if user and value:
+                        context.append(Ownership(user, kind, value, None, None, None,
+                            (observation.observation_id,), "SNAPSHOT_CONTEXT", certain=False))
+            self.cached_context = tuple(sorted(context, key=_ownership_key))
+            by_alias, by_user = defaultdict(list), defaultdict(list)
+            for owner in self.cached_context:
+                by_alias[(owner.kind, owner.value)].append(owner)
+                by_user[owner.user_id].append(owner)
+            self.context_aliases = MappingProxyType({key: tuple(value) for key, value in by_alias.items()})
+            self.context_by_user = MappingProxyType({key: tuple(value) for key, value in by_user.items()})
 
     def at(self, cutoff):
         aware(cutoff)
         ownership, context, issues = [], [], defaultdict(list)
         changes = defaultdict(list)
-        known_at_cutoff = {self.payloads[o.observation_id].get("user_id") for o in self.context_records}
+        known_at_cutoff = set(self.context_users)
         known_at_cutoff.update(self.payloads[o.observation_id].get("user_id") for o in self.history_records
                                if eligible(o, cutoff) == "ELIGIBLE")
-        for observation in (*self.context_records, *self.history_records, *self.pair_records):
+        if self.cache_context:
+            context = self.cached_context
+        records = (*(() if self.cache_context else self.context_records), *self.history_records, *self.pair_records)
+        for observation in records:
             data = self.payloads[observation.observation_id]
             if observation.claim_kind == "IDENTITY_CONTEXT":
                 user = data.get("user_id", "")
@@ -61,7 +91,11 @@ class IdentityGraph:
                 if user and kind in STRONG_KINDS:
                     changes[(user, kind)].append(observation)
             elif observation.claim_kind in {"RECORD_SNAPSHOT", "SQL_RECORD", "LOG_EVENT"}:
-                for user, kind, value in paired_aliases(data, known_at_cutoff):
+                # Future-only registry entries must still be excluded. Reuse
+                # pairs only when the eligible registry is exactly unchanged.
+                pairs = (self.pairs[observation.observation_id] if self.cache_context and known_at_cutoff == self.known_users
+                         else paired_aliases(data, known_at_cutoff))
+                for user, kind, value in pairs:
                     ownership.append(Ownership(user, kind, value, observation.observed_at,
                         observation.observed_at, observation.evidence.available_at,
                         (observation.observation_id,), "OBSERVED_PAIR", point=True))
@@ -104,21 +138,30 @@ class IdentityGraph:
                 if broken and old:
                     ownership.append(Ownership(user, kind, old, None, clock, available, proof,
                                                "AUDIT_HISTORY", certain=False))
-        return IdentityView(cutoff, ownership, context, issues, frozenset(known_at_cutoff))
+        return IdentityView(cutoff, ownership, context, issues, frozenset(known_at_cutoff),
+                            context_index=self.context_aliases if self.cache_context else None,
+                            context_by_user=self.context_by_user if self.cache_context else None)
 
 
 class IdentityView:
-    def __init__(self, cutoff, ownership, context, issues, known_users):
+    def __init__(self, cutoff, ownership, context, issues, known_users, *, context_index=None, context_by_user=None):
         self.cutoff = cutoff
         self.known_users = known_users
-        key = lambda o: (o.kind, o.value, o.user_id, o.valid_from.isoformat() if o.valid_from else "",
-                         o.valid_until.isoformat() if o.valid_until else "", o.basis, o.observation_ids)
-        self.ownership = tuple(sorted(ownership, key=key))
-        self.context = tuple(sorted(context, key=key))
+        self.ownership = tuple(sorted(ownership, key=_ownership_key))
+        self.context = tuple(context) if context_index is not None else tuple(sorted(context, key=_ownership_key))
+        self.context_by_user = context_by_user
         self.issues = issues
-        self.by_alias = defaultdict(list)
-        for owner in (*self.ownership, *self.context):
-            self.by_alias[(owner.kind, owner.value)].append(owner)
+        if context_index is None:
+            self.by_alias = defaultdict(list)
+            for owner in (*self.ownership, *self.context):
+                self.by_alias[(owner.kind, owner.value)].append(owner)
+        else:
+            self.by_alias = dict(context_index)
+            proven = defaultdict(list)
+            for owner in self.ownership:
+                proven[(owner.kind, owner.value)].append(owner)
+            for key, owners in proven.items():
+                self.by_alias[key] = (*owners, *self.by_alias.get(key, ()))
 
     def owners(self, kind, value, *, at=None, include_context=False):
         if at is not None:
@@ -128,6 +171,8 @@ class IdentityView:
                      and (at is None or o.contains(at)))
 
     def identifiers_for(self, user):
+        if self.context_by_user is not None:
+            return (*tuple(o for o in self.ownership if o.user_id == user), *self.context_by_user.get(user, ()))
         return tuple(o for o in (*self.ownership, *self.context) if o.user_id == user)
 
     def possible_owners(self, kind, value, observed_at):

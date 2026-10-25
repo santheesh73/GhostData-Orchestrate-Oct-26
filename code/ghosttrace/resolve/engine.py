@@ -14,9 +14,9 @@ from .temporal_replay import replay
 
 
 class ReconstructionEngine:
-    def __init__(self, index):
+    def __init__(self, index, *, cache_identity=True):
         self.index = index
-        self.graph = IdentityGraph(index.all_observations())
+        self.graph = IdentityGraph(index.all_observations(), cache_context=cache_identity)
         self.by_user, self.by_alias = defaultdict(set), defaultdict(set)
         for oid, (users, aliases, references) in self.graph.subject_signals.items():
             for user in users:
