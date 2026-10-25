@@ -1,3 +1,5 @@
+Final prediction results are in [README.md](README.md); the strict-audit findings below are historical.
+
 # CURRENT LIMITATIONS — 25 October 2026 recovery
 
 Corrected diagnostics resolve280/518;238 are unresolved. Known unsafe defaults

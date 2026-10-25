@@ -833,3 +833,103 @@ parent_agent=none
 Single-rule polish ACCEPTED: baseline tag submitted-f36e2eb; largest difference group account VERIFY_RECORD_ABSENT has 21 missing and 1 extra, next groups anonymization/security retained checks each 7 missing. Excluded only pre-request negative account checks from prediction verification, without changing statuses. Public 32/32 statuses, 9/32 exact, precision 158/161 (98.1366%) vs 158/162 (97.5309%), recall 158/193 unchanged; fields 1062/1372 (77.4052%). Four synthetic boundary/positive controls added; 542 tests pass in 21.79s. Full 518 run exits 0, identical sorted case-ID set, 0 status changes and 0 steps_json rows changed. Preparing matched code ZIP and existing report updates; no new documentation files or unrelated rules.
 
 Polish archive verification passed: 103 members, independent regeneration matches all 518 rows. Extracted new code.zip with fresh cache reproduced the submitted output bytes in 61.877s, exit 0. New ZIP SHA-256 fd1eac00b9d14566fe2cfb9d28ba24fe7baa5c6e8a27937e580ca414142a7c28. Replaced local submission code.zip/README/manifest; output.csv unchanged. All three sample acceptance conditions pass, 542 tests pass, no second inference rule attempted. Preparing commit/push before 17:50 IST; no external submission performed.
+
+## [2026-10-25T12:06:48.699320+00:00] Final submission README
+
+User Prompt (verbatim, secrets redacted):
+# CODEX 10-MINUTE PROMPT: final README (HARD STOP 17:46 IST)
+
+Repo: main @ dacdf24. Append to log.txt per AGENTS.md. Edit ONLY README.md (root, plus the copy inside code.zip). Do NOT touch code, output.csv or any dataset file. No questions.
+
+Rewrite README.md with exactly these sections (concise, honest, final numbers only): GHOSTTRACE — Proof-carrying deletion auditor; Results; Architecture; Key engineering decisions; How to run; Evaluation & cost; Known limitations.
+Full section text and exact commands were provided in the user message; referenced here under the large-content logging restriction.
+Remove stale figures, incomplete/NOT READY/exit-3/handoff narrative. If EVIDENCE-GAPS.md conflicts, add one line at its top saying final results are in README.
+Finish: markdown-only prepackage diff; rebuild submission/code.zip with the same packaging script; verify root README/evaluation and byte-identical ZIP reproduction; commit and push Final README for submission; print code.zip only and commit hash by 17:46 IST.
+
+Agent Response Summary:
+Rewriting only README content with the seven requested sections, measured final metrics, exact commands and explicit limitations. EVIDENCE-GAPS.md has conflicting historical strict-audit claims, so the explicitly allowed pointer is added. Rebuilding the code archive and checking byte-identical reproduction without changing implementation, dataset or predictions.
+
+Actions:
+* Rewrite README and prepend the allowed historical-results pointer.
+* Preserve prediction hashes, rebuild and verify archive.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Complete verbatim user prompt (the earlier brief reference was abbreviated):
+# CODEX 10-MINUTE PROMPT: final README (HARD STOP 17:46 IST)
+
+Repo: main @ dacdf24. Append to log.txt per AGENTS.md. Edit ONLY README.md (root, plus the copy inside code.zip). Do NOT touch code, output.csv or any dataset file. No questions.
+
+## Rewrite README.md with exactly these sections (concise, honest, final numbers only)
+
+1. **GHOSTTRACE — Proof-carrying deletion auditor**
+   One paragraph: for each of the 518 requests, it resolves current and historical identifiers, replays evidence to audit_at, applies deletion_rules.csv, and emits contract-exact steps_json. It is deterministic: no LLM invents operations or evidence IDs, and the final run makes 0 model calls ($0).
+
+2. **Results** (public sample set; these labels were inspected during development, so they are not a held-out score)
+
+   | Metric | Value |
+   |---|---|
+   | Status accuracy | 32/32 |
+   | Exact rows | 9/32 |
+   | Step precision | 98.14% |
+   | Step recall | 158/193 |
+   | Full run | 518/518 rows, contract-valid |
+   | Tests | 542 passing |
+
+   Include this sentence: Hidden-set accuracy is not measured.
+
+3. **Architecture**
+   A 5-line pipeline list:
+   - Ingest (CSV/JSON/SQL/logs; PDF/image text capture with OCR);
+   - Resolve (temporal identity graph, replay to audit_at, conflict resolution);
+   - Policy & risk (rules, retention, tombstones, data flows, restore risks);
+   - Emit (operation mapping, canonical ordering, evidence-ID contract);
+   - Validate (independent contract validator).
+
+   Then one line pointing to the code/ghosttrace/ modules.
+
+4. **Key engineering decisions**
+   4–6 bullets taken from DECISIONS.md:
+   - reported statuses are treated as claims;
+   - verification covers every relevant resource, not only remediated ones;
+   - INCOMPLETE remediation/verification steps use evidence_id "";
+   - sample-backed defaults for unknown conditions (retention, ownership, archive existence), with no publication blocking;
+   - account-absence checks are not supported by evidence from before the request;
+   - no hardcoded IDs.
+
+5. **How to run**
+   Exact commands:
+   - setup: `pip install -r code/requirements-dev.txt -r code/requirements-extract.txt`
+   - full run: `python -B code/main.py --run --with-extraction`
+   - sample eval: `python -B code/evaluation/main.py --audit-samples --with-extraction`
+   - trace: `python -B code/evaluation/main.py --trace-case case_20 --with-extraction`
+   - tests: `python -B -m pytest -q -p no:cacheprovider code/tests`
+
+   Note the OCR requirement: Windows OCR or Tesseract.
+
+6. **Evaluation & cost**
+   One line each linking evaluation/evaluation_report.md and evaluation/usage_report.md.
+
+7. **Known limitations**
+   3 honest bullets:
+   - remaining missing steps (35/193 recall gap);
+   - defaults for unsupplied retention/ownership facts;
+   - OCR-dependent evidence.
+
+## Remove
+All stale content: the 375/143 figures, "Phase 06 incomplete", "NOT READY", exit-3 language, handoff and phase-audit narrative. EVIDENCE-GAPS.md may stay, but README must not contradict it. If it conflicts, add one line at its top saying the final results are in README.
+
+## Finish (must be done by 17:46)
+1. Check that `git diff --stat` shows only .md files changed.
+2. Rebuild submission/code.zip with the same packaging script. Confirm `unzip -l` shows README.md and evaluation/ at zip root.
+3. Re-run the reproduction check: the ZIP reproduces output.csv byte-identically.
+4. Commit and push: "Final README for submission".
+5. Print: the files to upload (code.zip only; output.csv unchanged) and the commit hash.
+
+Final README check passed: exactly seven requested sections, five architecture lines, three limitation bullets, exact run commands and final metrics. Before packaging, tracked changes were Markdown only except mandatory append-only log.txt. Same packaging script rebuilt the 103-member code ZIP; member-by-member comparison proves README.md is the only changed payload, with evaluation/evaluation_report.md and evaluation/usage_report.md at ZIP root. Extracted archive fresh-cache run exits 0 in 83.616s and reproduces submitted output.csv byte-identically. Root and submission CSV SHA-256 values unchanged; no code or dataset changes. New code ZIP SHA-256: 4d30f8780a98cf6c7a37c57816b946457031c6ac4f3ab721c986257e9673b509. Preparing Final README for submission commit/push before 17:46 IST. Upload code.zip only; output.csv unchanged.
