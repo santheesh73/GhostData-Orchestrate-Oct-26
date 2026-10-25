@@ -518,3 +518,91 @@ branch=antigravity-submission
 repo_root=D:\Projects\Orchestrate-Oct'26
 worktree=main
 parent_agent=none
+
+Recovered append-only Codex entries preserved before the Antigravity handoff:
+
+## [2026-10-25T09:24:22+05:30] Complete and repair Phases 01 through 06
+
+User Prompt (verbatim, secrets redacted):
+Complete all the Phases Completely from 1 to 6 and Fix all the issues in it
+
+Agent Response Summary:
+The user requests complete functional closure of Phases01-06 and all remaining defects. Re-auditing the remaining failures against literal contracts and testing general fixes for policy interpretation, retrieval and semantic extraction while preserving cutoffs, source authenticity and untouched official inputs. Completion will be reported against actual measured gates, not code existence alone.
+
+Actions:
+* Read the project contract, current README, remaining-gap report and policy/coverage code.
+* Reconfirmed authoritative runtime model and continuing designated GhostData repository scope.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Continued work: recovered additional business-panel bindings, normalized typed log readbacks, and constrained causal query metadata by operation, service, instance and trace. A preliminary full audit resolves386/518; this is diagnostic progress, not Phase06 completion. Public comparison and regression verification follow before committing.
+
+## [2026-10-25T06:40:29.430856+00:00] Model recommendation requested
+
+User Prompt (verbatim, secrets redacted):
+Which is best
+
+Agent Response Summary:
+Recommended GPT-6.1 Sol for balanced selective extraction and GPT-6 Astra for the strongest model capability, using current official model documentation. No paid calls were authorized or made; provider configuration and spending limit remain unset.
+
+Actions:
+* Continued local implementation and verification; no paid model calls.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T06:40:29.431134+00:00] Continue Phase01-06 repairs
+
+User Prompt (verbatim, secrets redacted):
+Continue
+
+Agent Response Summary:
+Continued the existing Phase01-06 repair task, preserving official inputs and evidence cutoff restrictions. Added regression checks for document row bindings, temporal log context and conservative support-summary interpretation; final measured results will be recorded below.
+
+Actions:
+* Continued local implementation and verification; no paid model calls.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T08:54:27.214620+00:00] Inspect merged Antigravity handoff on main
+
+User Prompt (verbatim, secrets redacted):
+This is the final report from Antigravity 2.0 
+Inspect the main branch in the repo
+From now u can Take over this 
+
+Agent Response Summary:
+The user authorizes resuming after Antigravity and asks to inspect main and take over. Fetched the designated GhostData origin and found main advanced to fc69092 while the local checkout remains at399eba8 with earlier Codex edits intact. Reviewing a separate source snapshot preserves all uncommitted files and permits independent validation of the readiness claims.
+
+Actions:
+* Read attached final report and complete AGENTS.md; fetched origin.
+* Applied hackerrank-orchestrate-evidence guidance; exported an ignored inspection snapshot.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Handoff inspection result: independently reproduced413 passing tests,518 internally resolved requests and successful isolated publication. The generated and submitted CSVs are semantically identical; sample evaluation remains25/32 publishable statuses and5/32 exact rows. Synthetic controls demonstrate unsupported exclusive-ownership/retention/hold assumptions and invented document IDs/redaction fields, so submission readiness is not established by internal resolution. Archive obligations.py differs only in line endings, not logic.
+
+Local main was safely fast-forwarded tofc69092 after preserving prior uncommitted Codex source/tests/log in named stash569016ae1ab137511cab88551be761b4f1621384. Created HANDOFF-REVIEW.md with exact source locations and reproduction outcomes. No application source, official dataset or tracked submission artifact was modified during inspection.
