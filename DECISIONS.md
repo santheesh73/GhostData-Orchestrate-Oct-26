@@ -339,3 +339,115 @@ skill-effectiveness experiment, provider call, package installation, new service
 or framework was introduced. Official files/dataset are preserved. Phase 05
 document/image/language extraction and subsequent coverage/evaluation/release
 work remain pending. No root prediction CSV or submission archive was created.
+
+## Phase 05 — selective extraction (approved)
+
+The user approved “Start the Phase 5” and then “Continue the phase 5”. Stage 1
+now accepts optional document extraction and the policy layer accepts a selective
+intent resolver. Earlier phase statements above preserve their historical scope.
+The compiler stages, output contract and publication gates remain unchanged.
+
+### Local capture and source grounding
+
+PyMuPDF extracts all text blocks/pages from native PDFs. Scanned pages can render
+to a temporary bitmap for OCR. Pillow validates image bytes/dimensions; OCR uses
+Windows OCR en-US through Windows PowerShell 5.1 or optional Tesseract English
+on another platform. Document paths are passed as data, never interpolated into
+program text. The fixed reviewed Windows helper changes no profile or execution
+policy and closes its bitmap/stream. No source document is modified.
+
+Capture retains source SHA-256, manifest origin/capture time, page/block/line
+locators, text and bounding boxes. DOCUMENT_TEXT observations are retrieval
+candidates. They cannot establish identity, absence or compliance by themselves.
+Only an explicit resource anchor plus validated literal fields becomes a
+RECORD_SNAPSHOT. Source/system/category mappings are declared schema adapters;
+ambiguous business artifacts retain an empty category instead of a guessed rule.
+Documents have separate source-specific view scopes rather than inferred replica
+equivalence. Capture time is the observation time of the artifact, not a new
+timestamp invented by a model or a backend-state guarantee.
+
+The structured extraction schema excludes verdicts, actions and caller-selected
+evidence IDs. Every field needs a known name, exact quote and locator; resource
+anchors must be explicit. Boolean/null values need explicit source literals.
+Missing fields, masked screenshots and empty OCR cannot prove deletion or
+redaction. Quote grounding verifies transcription consistency, not the truth of
+the underlying business claim or perfect OCR accuracy. Free narrative that cannot
+meet the literal schema remains unknown.
+
+Extraction proof metadata is reserved and skipped by identity/temporal/policy
+walkers. Otherwise a proof's field-name label could itself become a fake personal
+name or identifier; a dedicated regression prevents that.
+
+### Selective model seam and recovery
+
+Native authorization remains first. Only unresolved language/intent paths can
+use the optional resolver; supported grammar does not require calls.
+Recognized quotation/hypothetical/override patterns remain unresolved. The returned
+authorization is an enum with an original quote and negation-preserving English
+translation, checked for consistency by native code. This guard does not prove
+translation accuracy.
+
+The optional OpenAI Responses transport uses strict JSON schema, store=false,
+fixed API endpoint, disabled redirects, sanitized errors and no SDK dependency.
+Model and credentials come from environment; no model or rates are guessed.
+The transport follows the official
+[Structured Outputs guide](https://developers.openai.com/api/docs/guides/structured-outputs).
+The local OCR integration uses Microsoft's
+[OcrEngine API](https://learn.microsoft.com/en-us/uwp/api/windows.media.ocr.ocrengine?view=winrt-26100).
+
+Calls require an explicit budget, default zero. Limits are at most 64 attempts
+per run and 3 per task. Refusals/permanent failures do not retry; transient or
+invalid structured responses are bounded. No source content becomes executable
+code. No configured provider was available in the actual verification runs, so
+live model behavior/account compatibility remains unverified. Test doubles verify
+transport, extraction and policy integration without pretending to be live runs.
+
+### Cache and usage provenance
+
+Atomic private caches live in ignored .ghosttrace/. Keys bind source bytes,
+manifest identity/path/origin/time, reader/runtime/helper identity, prompt/schema,
+model configuration and image hash. Replay repeats schema/grounding validation.
+Corrupt/stale entries are rejected. Cache digests detect corruption and source
+mixups; they do not authenticate against a malicious user rewriting both a cache
+entry and its digest. Caches can contain fictional participant identifiers and
+must not enter code.zip or Git.
+
+Usage separates current provider calls from historical cached build attempts,
+including rejected/transient retries. Missing usage and rates remain unknown.
+Actual returned model names and reported token counts are preserved. Costs are
+estimates using user-supplied verified rates; omitted cache-token breakdown uses
+the standard input rate. Development-session Codex usage is not measured here.
+
+| Bound | Value | Provenance |
+|---|---:|---|
+| Source file | 16 MiB | Existing Phase 02 JUDGEMENT bound |
+| Pages / image pixels | 32 / 20,000,000 | JUDGEMENT resource limits |
+| Captured text / units | 2,000,000 chars / 20,000 | JUDGEMENT resource limits |
+| Model input / output | 128,000 chars / 2,048 output tokens | JUDGEMENT call limits |
+| Source cache / provider response | 8 MiB / 4 MiB | JUDGEMENT resource limits |
+| Model attempts | 3 per task, 64 per run, default 0 | JUDGEMENT cost/recovery bounds |
+| HTTP / OCR process | 30 sec / 45 sec | JUDGEMENT timeout limits |
+
+### Verification and limits
+
+340 tests passed, retaining the 285 earlier regressions. Controls cover actual
+local OCR and blank images, swapped sources, all-page PDF capture, literal facts,
+typed schemas, stale/corrupt caches, retries/refusals/budgets, source changes,
+negation, model-to-evidence/policy integration, usage provenance and preserved
+output. No dependencies were installed. Build/design/prompt guidance, PDF visual
+review and official API documentation were applied; no skill-effectiveness
+experiment was run.
+
+Actual local capture reads all 15 formerly deferred files: 4 PDFs/7 pages and
+11 PNGs, 992 text units, 1 anchored record, 10,729 total indexed observations.
+These are capture/provenance counts, not evidence recall or semantic accuracy.
+Fourteen documents still need interpretation; the one record also has only
+partial semantic coverage. All 24 unsupported-language requests remain unresolved
+without a provider. Fresh-process cached full audits match at 10 NOT_APPLICABLE
+and 508 unresolved; no real deletion answer has been published.
+
+Exhaustive coverage, time-qualified identities, unknown categories/conditions
+and retained-state proof still require further evidence. Extracting every file
+does not set coverage_complete. Live model verification, challenge accuracy and
+final prediction-run usage remain unavailable. No root output.csv or submission
+archive was generated. Stop before Phase 06.

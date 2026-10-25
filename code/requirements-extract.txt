@@ -1,0 +1,4 @@
+# Optional Phase 05 local document/image extras; baseline CLI remains stdlib.
+# Versions verified in this development environment. No model SDK is required.
+PyMuPDF==1.27.2.3
+Pillow==12.2.0

@@ -201,3 +201,59 @@ Phase 04 completion (2026-10-24T23:40:40+05:30):
 * Overlapping case uncertainties include 484 incomplete evidence coverage, 385 unqualified identities, 384 provisional resource links, 58 unknown conditions, 53 unmapped categories, 5 unestablished required-retained-record states, 4 unknown flows, 1 unknown record state and 1 with no assessed resource. Fifteen PDF/PNG sources and 24 unsupported-language requests remain for later phases. Snapshot availability must not be invented.
 * Updated README, DECISIONS and evaluation/usage reports with actual results, applied build/design skill guidance and remaining limits. No packages, frameworks, model providers, model calls or submission artifacts were added. Final-run prediction usage and challenge accuracy remain unavailable.
 * Python syntax and diff checks pass. Official AGENTS.md, CLAUDE.md, problem_statement.md, agent_trace_instructions.md and dataset are unchanged from Phase 03. Preparing commit/push to the existing GhostData origin/main under standing authorization; Phase 05 is not started.
+
+## [2026-10-24T23:53:52+05:30] GHOSTTRACE Phase 05 selective extraction
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 5
+
+Agent Response Summary:
+The user approved Phase 05. Verified the clean Phase 04 baseline, repository contract and selected extraction/build skills. Implementing selective document/image/text extraction, structured validation, source-bound caching, bounded retries and usage accounting. Later evaluation optimization and final release remain outside this phase.
+
+Actions:
+* Read AGENTS.md and existing ingestion, policy and CLI boundaries.
+* Verified exact runtime model from authoritative session metadata.
+* Inspected local extraction dependencies and credential presence without exposing values.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T07:25:45+05:30] Continue Phase 05 extraction implementation
+
+User Prompt (verbatim, secrets redacted):
+Continue the phase 5
+
+Agent Response Summary:
+Continuing the approved Phase 05 scope from the partial extraction work. Local PDF extraction and Windows OCR have been verified; no model API credentials are configured. Completing validated extraction, source-bound cache, optional model integration, bounded retries and genuine usage reporting before testing and publication. Later evaluation optimization and release phases remain outside this turn.
+
+Actions:
+* Rechecked the current working tree and existing OCR helper without restarting completed inspection.
+* Confirmed the prior Phase 05 logging and authoritative runtime model.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 05 completion (2026-10-25T07:56:25+05:30):
+* Completed the approved selective extraction package: optional PyMuPDF/Pillow PDF/image intake, native Windows OCR en-US plus portable Tesseract fallback, literal record extraction, source-grounded structured output validation, content-addressed atomic caches, optional OpenAI Responses transport, bounded retries/call budgets and genuine usage accounting. No dependencies were installed.
+* Preserved source bytes, SHA-256, manifest metadata, page/block/line locators and boxes. Raw DOCUMENT_TEXT stays candidate evidence. Only explicitly anchored, quoted fields become record observations; empty OCR, omitted fields and unparsed narratives never prove absence or redaction. Extraction proof metadata is excluded from business walkers.
+* Added --extract-evidence and --audit-policy --with-extraction. Cache writes are confined by CLI to ignored repository .ghosttrace/. Model calls default to zero and require an explicit budget (maximum 64 attempts, at most 3 per selected task). Model, credentials and optional rates come from environment; no model or price is guessed.
+* The optional model path is connected to evidence extraction and policy intent, with literal quotes, negation/translation consistency and known quotation/override guards. It was verified with injected providers/transports only. No provider was configured for actual runs; hosted-model/account behavior and translation accuracy remain unverified.
+* Initial PowerShell 7 WinRT probing failed; Windows PowerShell 5.1 successfully exposes the native OCR API. The reviewed helper passes document paths as data, closes resources and changes no profile/execution policy. Initial sandbox extraction blocked image temporary snapshots; authorized temporary-directory verification then succeeded on all images.
+* Final test command python -B -m pytest -q -p no:cacheprovider code/tests: 340 passed in 8.70 seconds, including the 285 earlier regressions and 55 new extraction tests. Controls cover actual PDF/OCR, blank/swapped images, all pages, schema/quote/field grounding, byte/metadata-bound cache, stale/corrupt entries, retry/refusal/budget behavior, source changes, negation, provider/policy integration, cache-build retry costs, malformed rates and existing-output preservation.
+* Actual local capture: all 15 previously deferred sources read (4 PDFs/7 pages plus 11 PNGs), 992 text units and 1 anchored record; augmented index 10729 observations. Fourteen documents yield candidate text without a promoted record; the one record also has only partial semantic coverage. These are capture counts, not semantic recall or accuracy.
+* Cold extraction cache: 15 misses/0 hits in observed 7.5361 seconds; warm extraction: 15 hits/0 misses in 2.0275 seconds. Individual command timings include startup and are not statistical benchmarks. No source failures or unreadable pages occurred in the successful run.
+* Two fresh cached full-audit processes with hash seeds 0 and 12345 produced identical entire reports. Observed times were 10.2421 and 10.3324 seconds; proof SHA-256 c85b1c97969dca93f4c684aa77b1eccd19fd3d374dfae68f06cef408e802be22. Both exited 3 for unresolved cases.
+* All 518 requests processed: 484 native deletion authorizations, 10 non-deletion and 24 unresolved-language requests; 10 NOT_APPLICABLE and 508 unresolved public decisions. Scoped assessments: 134 violating, 42 compliant, 1770 unknown. Fourteen document-model tasks plus 24 request tasks report MODEL_NOT_CONFIGURED. No real deletion case is publishable yet.
+* Actual provider calls/input tokens/output tokens/model service cost were 0/0/0/USD0. Code preserves unknown usage/pricing and separates current replay calls from all historical cache-build attempts, including retries. Codex development usage and local compute cost were not measured; final prediction-run usage remains unavailable.
+* Applied read build/design, prompt-engineering, PDF extraction/visual-review and multimodal grounding guidance, plus fetched official OpenAI/Microsoft API documentation. No skill-effectiveness experiment was run. Updated README, DECISIONS and evaluation/usage reports with actual outcomes, supported commands, environment requirements and remaining limits.
+* All Python sources parse and diff checks pass. Official instructions and dataset remain unchanged from Phase 04. Caches/preview material are ignored, no secrets are staged, and no root output.csv or submission archive was generated. Preparing commit/push to the existing GhostData origin/main under standing authorization. Phase 06 is not started.

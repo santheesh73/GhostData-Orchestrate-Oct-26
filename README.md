@@ -1,4 +1,73 @@
-# GHOSTTRACE — Phase 04
+# GHOSTTRACE — Phase 05
+
+Selective document/image/text extraction is implemented with literal source
+grounding, content-addressed caches, bounded optional model calls and usage
+accounting. The existing identity, policy and output boundaries remain in place.
+
+```text
+python code/main.py --extract-evidence
+python code/main.py --audit-policy --with-extraction
+```
+
+Both commands default to **zero model calls**. Extraction-only exit 0 means text
+capture completed without source errors; it does not prove semantic recall or
+deletion completeness. The audit command exits 3 while any case is unresolved.
+Neither command publishes predictions. The cache stays under ignored
+`.ghosttrace/extraction/`; `--cache-dir` may select another directory there.
+
+The local run reads all **4 PDFs and 11 PNGs**, covering **18 pages/images and
+992 text units**. One explicitly anchored record is normalized; other content
+remains candidate text or partially interpreted. All **340 tests** pass. The
+augmented audit processes 518 requests with 10 NOT_APPLICABLE and 508 unresolved;
+no root output.csv has been generated. Capture coverage is not answer accuracy.
+
+## Local extraction dependencies
+
+The baseline CLI remains standard-library-only. Optional PDF/image commands use
+the tested extras in `code/requirements-extract.txt` (PyMuPDF and Pillow).
+This development environment already supplied both; nothing was installed.
+On Windows, OCR uses the existing Windows OCR en-US recognizer through Windows
+PowerShell 5.1. No execution-policy/profile settings are changed. Other systems
+need Tesseract with its English data on PATH. Missing dependencies or unreadable
+pages remain explicit failures/partial results.
+
+OCR text, boxes, page/block/line locators, file hashes and source clocks survive
+normalization. Unrecognized layouts remain candidate text. Missing text never
+becomes an absent record, redacted field or disabled process. Extraction metadata
+is excluded from business identity and policy fields.
+
+## Optional model configuration
+
+The OpenAI Responses adapter requires a user-selected compatible model in
+`GHOSTTRACE_MODEL` and credentials in `OPENAI_API_KEY`. Configure secrets outside
+the transcript and repository. Calls remain disabled unless an explicit budget
+is passed, for example:
+
+```text
+python code/main.py --audit-policy --with-extraction --max-model-calls 8
+```
+
+This opts into external model requests when configured. The hard run limit is
+64 attempts; each selected task gets at most 3 attempts and 2,048 output tokens
+per call. Only unresolved document facts or request interpretation are selected;
+ordinary supported requests do not require a model. Prompts live in
+`code/ghosttrace/extract/prompts/`. The model returns observations/authorization,
+never CSV decisions or remediation. Strict local validation runs on responses
+and cache replays. Missing configuration leaves tasks unresolved.
+
+Actual input/output/cache tokens and unknown usage are tracked per provider/model.
+Optional user-verified USD-per-million rates use
+`GHOSTTRACE_INPUT_USD_PER_MILLION`, `GHOSTTRACE_OUTPUT_USD_PER_MILLION` and
+`GHOSTTRACE_CACHED_INPUT_USD_PER_MILLION`. No prices are assumed. Cache-build
+attempts, including retries, are reported separately from current replay calls.
+Unknown usage/pricing yields unknown cost rather than a fabricated zero.
+
+Live model calls were not exercised because no provider was configured. Tests
+use injected providers/transports; they do not measure live model accuracy.
+Source availability, exhaustive coverage and unresolved identities still require
+evidence. See `code/evaluation/evaluation_report.md`. Phase 06 has not started.
+
+## Phase 04 policy baseline
 
 The policy/risk engine is implemented: request authorization, supplied rule
 conditions, retention safeguards, tombstones, residual identifiers, active flows,
@@ -38,7 +107,7 @@ and citations. They assert exhaustive synthetic coverage explicitly; parser
 success is not an exhaustive-coverage certificate for the real corpus. Fifteen
 PDF/PNG sources, provisional identities, unsupported conditions and incomplete
 coverage still block real deletion answers. No full prediction file or final
-submission has been generated. Phase 05 has not started.
+submission has been generated. Phase 05 extraction additions are described above.
 
 ## Phase 03 reconstruction baseline
 

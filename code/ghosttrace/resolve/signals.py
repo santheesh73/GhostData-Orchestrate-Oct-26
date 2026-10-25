@@ -13,7 +13,7 @@ REFERENCE_KEYS = {"customer_reference", "subject_reference", "subject_ref", "sta
                   "user_id", "lookup_key", "match_key", "subject_key", "correlation_key",
                   "query", "lookup_value", "scan_key"}
 LOOKUP_KEYS = {"query", "lookup_key", "match_key", "subject_key", "correlation_key", "scan_key"}
-SKIP = {"raw_line", "record_json", "message", "header_fields", "message_fields", "details"}
+SKIP = {"raw_line", "record_json", "message", "header_fields", "message_fields", "details", "extraction_proof"}
 
 
 def payload(observation):

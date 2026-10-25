@@ -1,4 +1,4 @@
-"""GHOSTTRACE contract, reconstruction and Phase 04 policy/risk diagnostics."""
+"""GHOSTTRACE contract, policy and Phase 05 selective extraction diagnostics."""
 
 import argparse
 import json
@@ -21,11 +21,19 @@ def main(argv=None) -> int:
     modes.add_argument("--ingest-evidence", action="store_true", help="parse/index evidence and report coverage only")
     modes.add_argument("--reconstruct-evidence", action="store_true", help="resolve identity/history and report audit-time state coverage; no predictions")
     modes.add_argument("--audit-policy", action="store_true", help="audit authorization, policy obligations and risks; report unresolved coverage without writing predictions")
+    modes.add_argument("--extract-evidence", action="store_true", help="selectively read documents/images and unresolved intent; no predictions")
+    parser.add_argument("--with-extraction", action="store_true", help="augment --audit-policy with Phase 05 source extraction")
+    parser.add_argument("--cache-dir", type=Path, default=ROOT / ".ghosttrace/extraction")
+    parser.add_argument("--max-model-calls", type=int, default=0, help="explicit opt-in paid-call budget 0..64; default 0")
     parser.add_argument("--requests", type=Path, default=ROOT / "dataset/deletion_requests.csv")
     parser.add_argument("--dataset-root", type=Path, default=ROOT / "dataset")
     parser.add_argument("--output", type=Path, help="demo CSV, restricted to repository .ghosttrace/")
     args = parser.parse_args(argv)
     try:
+        if args.with_extraction and not args.audit_policy:
+            raise InputError("--with-extraction requires --audit-policy")
+        if args.max_model_calls and not (args.extract_evidence or args.with_extraction):
+            raise InputError("model budget requires an explicit extraction mode")
         if args.demo:
             from ghosttrace.demo import synthetic_cases
             requests, decisions, catalog = synthetic_cases()
@@ -63,10 +71,38 @@ def main(argv=None) -> int:
             from ghosttrace.policy.engine import audit_dataset, audit_summary
             from ghosttrace.policy.rulebook import RuleBook
             bundle = ingest_dataset(args.dataset_root)
-            audits = audit_dataset(bundle, RuleBook.load(args.dataset_root), requests)
+            extractor = None
+            if args.with_extraction:
+                from ghosttrace.extract.engine import configured_extractor
+                cache_root = (ROOT / ".ghosttrace").resolve()
+                if not cache_root.is_relative_to(ROOT.resolve()) or not args.cache_dir.resolve().is_relative_to(cache_root):
+                    raise InputError("extraction cache must stay in repository .ghosttrace/")
+                extractor = configured_extractor(args.cache_dir, args.max_model_calls)
+                bundle = extractor.enrich(bundle, args.dataset_root)
+            audits = audit_dataset(bundle, RuleBook.load(args.dataset_root), requests,
+                                   extractor.resolve_intent if extractor else None)
             report = audit_summary(bundle, audits)
+            if extractor:
+                report["phase"] = "05"
+                report["extraction"] = extractor.summary()
             print(json.dumps(report, indent=2))
             return 1 if bundle.has_errors else 3 if report["unresolved_count"] else 0
+        if args.extract_evidence:
+            from ghosttrace.extract.engine import configured_extractor
+            from ghosttrace.ingest.corpus import ingest_dataset
+            from ghosttrace.policy.applicability import classify_request
+            cache_root = (ROOT / ".ghosttrace").resolve()
+            if not cache_root.is_relative_to(ROOT.resolve()) or not args.cache_dir.resolve().is_relative_to(cache_root):
+                raise InputError("extraction cache must stay in repository .ghosttrace/")
+            extractor = configured_extractor(args.cache_dir, args.max_model_calls)
+            bundle = extractor.enrich(ingest_dataset(args.dataset_root), args.dataset_root)
+            for request in requests:
+                extractor.resolve_intent(request, classify_request(request.request_text))
+            report = extractor.summary()
+            report["indexed_observations"] = len(bundle.index)
+            report["has_ingestion_errors"] = bundle.has_errors
+            print(json.dumps(report, indent=2))
+            return 1 if bundle.has_errors else 0
         print(json.dumps(diagnose_requests(requests), indent=2))
         return 3
     except (InputError, ValueError, OSError) as exc:

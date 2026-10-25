@@ -93,7 +93,7 @@ def extract_facts(observation):
     while pending:
         item, prefix = pending.pop()
         for key, value in sorted(item.items()):
-            if key in {"raw_line", "record_json", "message", "header_fields", "message_fields"}:
+            if key in {"raw_line", "record_json", "message", "header_fields", "message_fields", "extraction_proof"}:
                 continue
             path = f"{prefix}/{key}"
             if isinstance(value, dict):

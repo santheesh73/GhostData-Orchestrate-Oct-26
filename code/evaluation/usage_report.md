@@ -1,4 +1,22 @@
-# GHOSTTRACE usage status through Phase 04
+# GHOSTTRACE usage status through Phase 05
+
+## Phase 05 measured runs
+
+Local capture of all 15 PDF/PNG sources and two augmented 518-request diagnostic
+runs used **0 provider calls, 0 input tokens, 0 output tokens and USD 0 model
+service cost**. No provider was configured, and call budgets defaulted to zero.
+This excludes local compute cost and Codex development-session usage, which are
+not measured by this application. No production output.csv was generated.
+
+The optional adapter records actual returned model names, reported input/output
+and cached-input tokens, refusals/failed attempts and unknown usage. Missing token
+counts or pricing produce unknown totals/cost; user-provided USD-per-million
+rates supply estimates without hardcoded prices. Cached build attempts, including
+retries, are separate from zero-call replay. No live provider behavior or pricing
+was validated in this phase; provider tests use explicitly synthetic transports.
+
+Cache/usage files under .ghosttrace/ are private runtime artifacts and excluded
+from Git. Required final prediction-run fields below remain unavailable.
 
 ## Phase 04 runtime
 

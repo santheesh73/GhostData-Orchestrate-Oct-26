@@ -44,7 +44,7 @@ def project(state):
         while pending:
             item, prefix = pending.pop()
             for key, value in sorted(item.items()):
-                if key in {"raw_line", "record_json", "header_fields", "message_fields", "message"}:
+                if key in {"raw_line", "record_json", "header_fields", "message_fields", "message", "extraction_proof"}:
                     continue
                 path = prefix + "/" + key
                 if isinstance(value, dict):

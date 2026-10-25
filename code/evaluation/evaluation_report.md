@@ -1,4 +1,140 @@
-# GHOSTTRACE Phase 04 evaluation report
+# GHOSTTRACE Phase 05 evaluation report
+
+## Measured implementation gate
+
+Phase 05 adds optional PDF/image capture, literal record extraction, a selective
+model seam for unresolved content/intent, source-bound caches, bounded retries
+and genuine usage accounting. It does not run Phase 06 optimization or create
+predictions/submission artifacts. The historical phase reports below retain
+their original scope and measurements.
+
+Final command: `python -B -m pytest -q -p no:cacheprovider code/tests`.
+**340 passed in 8.70 seconds**, retaining the 285 earlier regressions and adding 55
+extraction/provider/cache/usage checks. Actual native Windows OCR and PDF reading
+are exercised; provider integration uses test doubles, not paid/live calls.
+
+## Actual capture and audit diagnostics
+
+Commands:
+
+```text
+python -B code/main.py --extract-evidence --cache-dir .ghosttrace/phase05-verify
+python -B code/main.py --audit-policy --with-extraction --cache-dir .ghosttrace/phase05-verify
+```
+
+| Measurement | Actual result | Scope |
+|---|---:|---|
+| Previously deferred files read | 15/15 | 4 PDFs and 11 PNGs |
+| PDF pages / image pages | 7 / 11 | All 18 pages accounted for |
+| Captured text units | 992 | Blocks/lines with locations, source hashes and boxes |
+| Literal anchored record observations | 1 | Partial semantic coverage, not a complete case |
+| Indexed observations after augmentation | 10,729 | Previous 9,736 plus 992 text units and 1 record |
+| Extraction source failures / unreadable pages | 0 / 0 | Actual successful local run |
+| Native policy authorizations | 484 DELETION, 10 NON_DELETION, 24 UNRESOLVED | Same as Phase 04 |
+| Full case outcomes | 10 NOT_APPLICABLE, 508 unresolved | No publishable real deletion answer |
+| Resource-scope assessments | 134 violating, 42 compliant, 1,770 unknown | Coverage counts, not accuracy |
+| Provider calls / input / output tokens | 0 / 0 / 0 | No provider configured; default call budget zero |
+| Model service cost | USD 0 | Excludes Codex development usage/local compute |
+
+PARSED on these files means supported text capture completed. It does not mean
+all business semantics were extracted. Fourteen documents yield candidate text
+without a promoted record; the one record also remains only partially interpreted.
+There are 14 document-model tasks plus 24 unresolved request tasks, reported as
+38 MODEL_NOT_CONFIGURED events. No model was invoked for the ordinary supported
+requests. The source availability and exhaustive coverage gates stay in place.
+
+No challenge identity/deletion/step/field/sequence accuracy, semantic extraction
+recall, OCR character accuracy, hidden score or ranking is measured. Capturing
+all files does not establish coverage_complete. No public answer labels enter
+the extraction path.
+
+## Validation and independent controls
+
+- Real local OCR reads a handwritten synthetic image; a blank image fails instead
+  of generating absence/null/disabled evidence. Swapped-source quotes are rejected.
+- Actual two-page PDF extraction accounts for both pages and preserves the source
+  bytes. Magic mismatches, pixel/text/page bounds and incomplete pages are checked.
+- Handwritten record fixtures verify opaque resource anchors, literal field/quote
+  binding, false versus zero, null versus missing, exact locators and schema keys.
+  Fabricated values, other-system targets, output verdicts, wrong labels and
+  malformed/duplicate fields are rejected.
+- Cache tests bind bytes, origin, path and capture time; corrupt entries and
+  path traversal are rejected. Replay repeats grounding validation rather than
+  trusting valid JSON. Source files changing during extraction fail explicitly.
+- Model tests cover strict Responses schema, returned model/tokens, sanitized
+  transport errors, refusals/permanent failures, transient retries, invalid JSON,
+  zero/cross-job budgets, oversized inputs and missing providers.
+- Usage checks retain every build retry in cached provenance, distinguish current
+  from replay/build usage, preserve unknown billing, reject invalid rates, and
+  correctly apply an explicitly zero cached-input rate. Cache-write failure does
+  not double count a successful call.
+- Intent fixtures preserve negation and require an original quote. Supported
+  requests avoid calls; duplicate unresolved text reuses one result. The
+  unsupported-language route also blocks quoted/instruction-override requests.
+- Injected model outputs are consumed through both evidence and policy seams,
+  proving the optional adapter is connected. These are mocked integration tests,
+  not measured translation/model accuracy.
+- Extraction metadata cannot become business PII or identity. Existing policy,
+  retention, temporal, emission, independent CSV and output-preservation checks
+  remain passing. Diagnostics do not modify an existing prediction.
+
+## Observed failures and corrections
+
+PowerShell 7 could not expose the Windows Runtime OCR types. The verified local
+adapter uses Windows PowerShell 5.1 with existing en-US recognition, passing a
+fixed reviewed program and a separate path argument. It changes no execution
+policy/profile and installs no language pack. The initial sandbox run blocked
+OCR temporary image snapshots; the authorized temporary-directory run succeeded
+on all 11 images. Cached replay needs no new OCR snapshots.
+
+Review reserved extraction-proof metadata from business-field walkers, bound
+field labels as well as values, retained failed/rejected model attempts in cache
+build accounting, and closed a quoted-request guard on the non-Latin route.
+These changes have regression fixtures. They are engineering corrections, not
+a measured improvement in challenge-answer accuracy.
+
+Dependencies already present: PyMuPDF 1.27.2.3, Pillow 12.2.0 and native Windows
+OCR. No dependency installation or live provider request occurred. The optional
+extras file records the tested Python versions. Tesseract fallback on another OS
+and hosted-model/account compatibility were not verified live in this environment.
+
+## Reproducibility and timing limits
+
+Cold extraction: 15 cache misses, 0 hits, **7.5361 seconds** observed command wall
+time. Warm extraction: 15 hits, 0 misses, **2.0275 seconds**. Both capture 992 units
+and 1 anchored record with no errors. These are single observations including
+startup, not a statistical benchmark or a general performance claim.
+
+Two fresh processes used PYTHONHASHSEED=0 and 12345 for cached full audits from
+outside the repository. Entire parsed reports matched, including every case
+outcome, source-derived proof and usage counters. Observed times were **10.2421**
+and **10.3324 seconds**; both exited 3 for unresolved cases.
+
+Aggregate proof SHA-256:
+`c85b1c97969dca93f4c684aa77b1eccd19fd3d374dfae68f06cef408e802be22`.
+
+This establishes fixed-input cached replay repeatability. It does not establish
+fresh OCR/model bit stability or correctness of business claims. Cache digests
+detect source mixups/corruption, not malicious rewriting of both data and digest.
+
+## Remaining work and applied guidance
+
+The optional model path is implemented and mock-tested but not verified with a
+live configured provider. All 24 unresolved-language requests and broader document
+interpretation remain pending. Exhaustive coverage, provisional identities,
+unknown policy conditions/categories and retained-state proof still block the
+508 unresolved cases. A model must not invent source availability or a verdict
+to make these counters disappear. Final prediction-run usage remains unavailable.
+
+Applied PDF extraction/visual-review guidance, Orchestrate build/design and
+prompt-engineering guidance, multimodal source-grounding controls, and the
+[official OpenAI Structured Outputs documentation](https://developers.openai.com/api/docs/guides/structured-outputs)
+for the optional transport. No causal skill-effectiveness experiment was run.
+Official instruction files and dataset are unchanged. Stop before Phase 06.
+
+---
+
+# Historical Phase 04 evaluation report
 
 ## Current implementation and measured gate
 

@@ -17,15 +17,18 @@ from .rulebook import RuleBook
 
 
 class PolicyEngine:
-    def __init__(self, index, rulebook):
+    def __init__(self, index, rulebook, intent_resolver=None):
         self.reconstruction = ReconstructionEngine(index)
         self.observations = self.reconstruction.observations
         self.rulebook = rulebook
+        self.intent_resolver = intent_resolver
 
     def audit(self, request, *, coverage_complete=False):
         if type(coverage_complete) is not bool:
             raise ValueError("coverage premise must be an explicit Boolean")
         intent = classify_request(request.request_text)
+        if self.intent_resolver is not None and intent.authorization == Authorization.UNRESOLVED:
+            intent = self.intent_resolver(request, intent)
         if intent.authorization == Authorization.NON_DELETION:
             return Audit(Decision(request, intent.authorization, DeletionStatus.NOT_APPLICABLE,
                                   coverage_complete=True), intent)
@@ -79,8 +82,8 @@ class PolicyEngine:
         return Audit(decision, intent, tuple(assessments), operations, identity_proof)
 
 
-def audit_dataset(bundle, rulebook, requests):
-    engine = PolicyEngine(bundle.index, rulebook)
+def audit_dataset(bundle, rulebook, requests, intent_resolver=None):
+    engine = PolicyEngine(bundle.index, rulebook, intent_resolver)
     # Phase 02 inventory scopes explicitly say completeness NOT_ESTABLISHED.
     # File parse success cannot turn that into exhaustive subject coverage.
     audits = []
