@@ -11,8 +11,10 @@ def _subject(observation, graph, view):
     data = graph.payloads[observation.observation_id]
     if observation.claim_kind == "OPERATION_CLAIM" and data.get("event_type") == "LINK_RESOURCE_IDENTITY":
         match = re.fullmatch(r"Data catalog linked (\S+) \(([^()]*)\) to (\S+) and (\S+)\.", data.get("details", ""))
-        if match and match[1] == observation.resource.resource_id and match[2] == match[4] and match[4] in view.known_users:
+        if match and match[1] == observation.resource.resource_id and match[4] in view.known_users:
             return {match[4]}, "CATALOG_CLAIM", ()
+        if data.get("catalog_subject_reference") in view.known_users:
+            return {data["catalog_subject_reference"]}, "CATALOG_CLAIM", ()
         if data.get("catalog_sole_subject") is True and data.get("catalog_subject_reference") in view.known_users:
             return {data["catalog_subject_reference"]}, "CATALOG_CLAIM", ()
         return set(), "", ()

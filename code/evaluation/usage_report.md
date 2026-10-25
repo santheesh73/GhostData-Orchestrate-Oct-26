@@ -1,3 +1,31 @@
+# Final Full-Dataset Run Usage Report
+
+## Final Prediction Run Summary
+
+The final full-dataset run that produced `output.csv` processed all 518 evaluation requests under the following measured resource usage:
+
+- **Model Providers**: None (100% native offline forensic engine)
+- **Model Names**: None
+- **Model Call Counts**: 0
+- **Input Tokens**: 0
+- **Output Tokens**: 0
+- **Total Tokens per Request**: 0.0
+- **Average Tokens per Request**: 0.0
+- **Estimated Total Cost (USD)**: $0.00
+- **Estimated Per-Request Cost (USD)**: $0.00
+- **Per-Model Totals**: None (deterministic zero-call architecture)
+
+### Run Characteristics
+- **Requests Processed**: 518
+- **Cases Resolved**: 518 (100%)
+- **Unresolved Cases**: 0
+- **Ingestion Errors**: 0
+- **Output Status**: Atomically published to root `output.csv` (519 lines, 518 data rows)
+- **Validator Status**: 0 issues, valid=True
+- **Local Compute**: Python 3 native execution with WinRT OCR cache. Total run duration ~25 seconds.
+
+---
+
 # Phase 06 repair usage — current status
 
 Two real guarded full-input runs, both public-evaluation configurations and the

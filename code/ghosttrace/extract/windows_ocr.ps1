@@ -19,8 +19,8 @@ function Await-Result($Operation, [Type]$ResultType) {
     if (-not $task.Wait(20000)) { throw 'OCR operation timed out' }
     return $task.Result
 }
-$file = Await-Result ([Windows.Storage.StorageFile]::GetFileFromPathAsync($Path)) ([Windows.Storage.StorageFile])
-$stream = Await-Result ($file.OpenAsync([Windows.Storage.FileAccessMode]::Read)) ([Windows.Storage.Streams.IRandomAccessStream])
+$netStream = [System.IO.File]::OpenRead($Path)
+$stream = [System.IO.WindowsRuntimeStreamExtensions]::AsRandomAccessStream($netStream)
 try {
     $decoder = Await-Result ([Windows.Graphics.Imaging.BitmapDecoder]::CreateAsync($stream)) ([Windows.Graphics.Imaging.BitmapDecoder])
     $bitmap = Await-Result ($decoder.GetSoftwareBitmapAsync()) ([Windows.Graphics.Imaging.SoftwareBitmap])
@@ -39,4 +39,7 @@ try {
         @{language=$engine.RecognizerLanguage.LanguageTag; width=$bitmap.PixelWidth; height=$bitmap.PixelHeight; lines=$lines} |
             ConvertTo-Json -Depth 8 -Compress
     } finally { $bitmap.Dispose() }
-} finally { $stream.Dispose() }
+} finally {
+    $stream.Dispose()
+    $netStream.Dispose()
+}

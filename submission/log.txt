@@ -1,0 +1,469 @@
+## [2026-10-24T20:00:15+05:30] SESSION START
+
+tool=Codex
+model=gpt-6.1-sol
+Repo Root: C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+Branch: main
+Worktree: main
+Parent Agent: none
+Language: py
+Time Remaining: not configured
+
+## [2026-10-24T20:00:15+05:30] Import official starter and publish to user repository
+
+User Prompt (verbatim, secrets redacted):
+Pull all the files from this repo '[https://github.com/interviewstreet/hackerrank-orchestrate-october26.git](https://github.com/interviewstreet/hackerrank-orchestrate-october26.git)' and push everything to this repo '[https://github.com/santheesh73/GhostData-Orchestrate-Oct-26.git](https://github.com/santheesh73/GhostData-Orchestrate-Oct-26.git)'
+
+Agent Response Summary:
+Fetched the official starter main branch and checked out all 110 tracked files with its original history. Confirmed the destination repository is empty and origin points to the user repository. No application implementation or evaluation was performed; this log records the import as required by AGENTS.md. The imported source and this logging entry are prepared for publication.
+
+Actions:
+* Checked source and destination refs.
+* Fetched official main at acb3dfca6e94e4803a26e72c49074a488de93c93 and created local main.
+* Read AGENTS.md and verified runtime model from this session's turn metadata.
+* Added this mandatory session and turn log; preparing commit and push to origin/main.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-24T20:15:25+05:30] GHOSTTRACE Phase 00 audit kickoff
+
+User Prompt (verbatim, secrets redacted):
+# Files pasted by the user:
+
+## "# GHOSTTRACE — MASTER CODEX ENGINEERING KICKOFF ## HackerRank Orchestrate Octob…": C:\Users\SANTHEESH\.codex\attachments\476cebd3-61ea-483a-9df6-18399f761789\Pasted text.txt
+
+Pasted text contains the user's request.
+
+## My request:
+
+Agent Response Summary:
+Read the attached Phase 00 instructions and the official AGENTS.md. Confirmed the existing working repository uses the requested GhostData origin on main, has the imported official starter history, and initially has a clean working tree. Began a read-only repository, skill, dataset, and architecture audit. No solution implementation is authorized or being performed.
+
+Actions:
+* Read the full kickoff attachment; SHA-256: ea0e2d276a9b581b5d91d4f4c2263684370f46c45a8feff7379c4cead10e7a50.
+* Inspected repository root, remotes, status, history, tracked files, official documents, and existing log.
+* Read selected installed Orchestrate contract, design, evidence, sequencing, and test-fix skill instructions.
+* Appended this required log entry; the large attached instruction file is referenced by path rather than copied, per AGENTS.md section 5.4.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Audit completion (2026-10-24T20:20:44+05:30):
+* Official main and imported source both resolve to acb3dfca6e94e4803a26e72c49074a488de93c93; GhostData origin/main was d24ac91f8561d8262ebf50ef90134e032cafc0b8 before this audit log commit.
+* Verified 518 evaluation requests, 32 public labeled samples, 850 identities, 306 audit changes, 4011 activity rows, 15 policies, and all 94 manifest evidence paths.
+* Evidence inventory: 24 SQL, 28 JSON, 26 logs, 11 PNG, 4 PDF, and 1 text file. Both existing Python entry points contain zero bytes; no implementation, tests, dependencies, reports, or final root output exist.
+* Inspected all 193 public sample steps: all 15 operations represented; no observed field/numbering/citation-shape, operation-state, canonical-order, or late file-citation issues. Public labels contain 10 COMPLETE and 22 INCOMPLETE cases, with no NOT_APPLICABLE samples. These are static input-contract observations, not measured solution accuracy.
+* Applied selected skill guidance to contract precedence, architecture interfaces, traceable derivations, phase gates, and failure/test planning. Applied PDF read-only guidance with existing PyMuPDF; extracted text in memory from four PDFs and inspected two original screenshots. No evidence files were changed or rendered to disk.
+* The challenge webpage was inaccessible; the official repository does not configure an event deadline. No deadline, hidden grading weights, implementation performance, or accuracy were invented.
+* Identified the Phase 01 full-dataset-output dependency conflict. Proposed fixture-backed contract baseline plus unresolved-case diagnostics; no unsupported prediction defaults. The final report will present architecture, interfaces, file-status inventory, phase plans, risks, and readiness for an explicitly approved Phase 01.
+* No repository scripts, solution tests, evaluation pipelines, model extraction calls, installations, scaffolding, source/config/data edits, predictions, or archives were performed. Only mandatory log.txt changed; this entry is prepared for commit and push under the user's standing GitHub instruction.
+
+## [2026-10-24T20:30:36+05:30] GHOSTTRACE Phase 01 implementation
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 1
+
+Agent Response Summary:
+The user approved Phase 01 following the Phase 00 blueprint. Rechecked the official contract, repository status, and selected design/build/evidence skills. Implementing the contract engine, independent validation, synthetic end-to-end demonstration, request diagnostics, and public sample comparison only. Production decisions remain unresolved until later phases provide evidence and policy reasoning.
+
+Actions:
+* Verified main tracks the requested GhostData origin and the working tree was clean.
+* Read AGENTS.md, problem_statement.md, and selected skill instructions.
+* Recorded the approved corrected Phase 01 scope before implementation.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 01 completion (2026-10-24T21:04:19+05:30):
+* Implemented frozen typed audit-state records; a 15-operation producer registry; strict request/evidence-metadata loading; derivation-gated emission; canonical sorting/numbering; validated atomic CSV publication; and a separate validator with its own operation catalog.
+* Implemented normal-run diagnostics, input-only validation, protected synthetic demonstration, development-only public-reference comparison, sample contract inspection, and discrepancy taxonomy. Runtime does not load public answers. Evidence parsing, identity/time reconstruction, policy/risk inference, and model extraction remain deferred.
+* Added independent synthetic expectations and negative controls covering malformed CSV/JSON, incorrect fields/status/state/order, Boolean numbering, NULs, citation eligibility, future citations, plan relationships, failed replacement, preserved output, and an intentionally broken producer order/comparator candidate.
+* First sandboxed test run: 60 passed, 26 could not start because temporary test directories were blocked. The unchanged suite passed 86 tests outside the sandbox. After three additional guard/integration cases, final command python -B -m pytest -q -p no:cacheprovider code/tests passed all 89 tests in 2.28 seconds.
+* Actual CLI checks: 518 requests validated; normal execution exited 3 with 518 unresolved cases and no output; synthetic demonstration wrote 3 rows/21 steps only under ignored .ghosttrace/; public reference contract check accepted 32 rows/193 steps with semantic_support=NOT_CHECKED. Two demo runs had matching SHA-256 6a4c619dcf69df3be39fb0e03abefd02dc6cbb2559181051eb94c90f0ea3bd58.
+* Synthetic comparison against independent handwritten expectations: 3/3 statuses, exact rows, and sequences; 21/21 matched steps and 147/147 fields. Public/full-dataset/hidden prediction accuracy remains NOT_MEASURED.
+* Recorded decisions, scope, skill use, open risks, reproducibility commands, actual evaluation results, and a clearly preliminary usage report. Runtime provider calls were zero; final-run cost/tokens remain unavailable because no final prediction run exists. No dependencies installed.
+* git diff --check succeeded; every Python source parsed. Official AGENTS.md, CLAUDE.md, problem statement, trace instructions, and dataset are unchanged. No root output.csv or submission archives were created.
+* Preparing the Phase 01 source, tests, documentation, and mandatory log commit/push to the existing GhostData origin/main under standing authorization. Phase 02 is not started.
+
+## [2026-10-24T21:08:40+05:30] GHOSTTRACE Phase 02 structured evidence ingestion
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 2
+
+Agent Response Summary:
+The user approved Phase 02. Rechecked the existing Phase 01 baseline, official instructions, and selected build/evidence skills. Implementing structured evidence readers, provenance-preserving normalization, indexing, and explicit per-source coverage diagnostics. Historical identity resolution, temporal replay, policy decisions, model extraction, and production predictions remain deferred.
+
+Actions:
+* Verified main was clean and tracks the requested GhostData repository at Phase 01 commit 8641a49.
+* Read repository instructions, current interfaces, and relevant installed skills.
+* Began schema/family inspection before changing ingestion logic.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 02 completion (2026-10-24T22:04:01+05:30):
+* Added structured manifest routing, generic evidence CSV, nested JSON, restricted in-memory SQLite dump, six log-envelope families, handover text, and context CSV adapters. Every source receives explicit PARSED/PARTIAL/FAILED/EMPTY/DEFERRED accounting; PDFs/images are pending Phase 05.
+* Normalized observations retain canonical typed payloads, exact source IDs, source SHA-256, relative locators, physical copy, raw log envelopes, snapshot scopes, independent availability/observation clocks, and metadata-bound deterministic observation IDs. Identity/policy snapshots are non-citeable context.
+* Added exact candidate indexes by identifier/resource/evidence and same-file/service/instance trace linkage, with future/unknown-time counters. Lookup results never establish absence; no identities, temporal states, policies, or deletion verdicts are resolved.
+* Initial development ingestion rejected 24 SQL sources because primary-key autoindexes were denied; 11 then still required explicit CREATE INDEX support. The corrected memory-only SQL boundary supports those dump schemas while denying external/unsupported operations and rejecting uncommitted snapshot transactions.
+* Final test command python -B -m pytest -q -p no:cacheprovider code/tests: 149 passed in 11.21 seconds, retaining all 89 Phase 01 regression cases. New cases cover format families, value preservation, replicas, safe SQL, malformed/partial data, path containment, metadata binding, conflicts, cutoff eligibility, and file accounting.
+* Actual corpus gate: all 94 evidence manifest entries accounted for; 79 structured files PARSED (28 JSON, 24 SQL, 26 log, 1 text), 15 document/image files DEFERRED (4 PDF, 11 PNG). Four context CSVs PARSED with 5182 observations. Evidence observations: JSON 1182, SQL 1120, logs 2211, text 41. Total indexed observations: 9736. No ingestion errors or cross-source ID collisions were observed.
+* Actual CLI smoke runs: ingestion exited 0 in 2.2225 seconds; coverage exited 0 in 2.2803 seconds. These are single process-startup-inclusive observations, not statistical benchmarks. Two complete ingestions matched fingerprint c88f7fc84e428792d86b0b121312b928bb7e640130984a48b428eb582337bd3e.
+* The normal runner exited 3 with 518 unresolved cases; no root output.csv or submission archive was produced. Identity accuracy, evidence recall, temporal/policy accuracy, deletion accuracy, hidden accuracy, and peak memory remain NOT_MEASURED.
+* Applied orchestrate-build and hackerrank-orchestrate-evidence guidance; documented actual tests, parser safety limits, provenance, coverage definitions, SQL corrections, remaining risks, and preliminary usage status in Markdown. No packages were installed or runtime model calls made.
+* Every Python file parses. Preparing source/docs/log publication to the existing GhostData origin/main; Phase 03 remains unstarted pending explicit approval.
+
+## [2026-10-24T22:21:07+05:30] GHOSTTRACE Phase 03 identity and temporal reconstruction
+
+User Prompt (verbatim, secrets redacted):
+Start Phase 3
+
+Agent Response Summary:
+The user approved Phase 03. Verified the clean Phase 02 baseline and read repository instructions and selected build, design, and test skills. Implementing historical identity ownership, resource linking, audit-cutoff replay, and explicit conflicts within the frozen architecture. Policy/risk decisions and production predictions remain deferred to later approved phases.
+
+Actions:
+* Verified main tracks the existing GhostData origin; no application changes were pending.
+* Read current interfaces, prior decisions, and the Phase 03 scope before implementation.
+* Verified exact runtime model from authoritative turn_context metadata.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 03 completion (2026-10-24T22:55:33+05:30):
+* Added typed ownership, identity resolution, resource-link, state-fact and reconstruction records in code/ghosttrace/resolve/. Historical audit changes define half-open ownership intervals with endpoint proofs; aliases never merge subjects transitively. Snapshot availability remains unknown rather than being replaced by updated_at.
+* Added exact stable-reference and historical resource linking, multi-account association, causal same-file/service/instance trace continuation, provisional catalog links, competing-owner preservation, and ownership proof IDs. Future registry entries and alias assignments cannot reinterpret earlier evidence.
+* Added direct state readback extraction, two-clock cutoff filtering, per-system/resource/copy replay, equal-time conflict preservation, explicit null versus unknown, and stale-field invalidation. Operation SUCCESS remains a timeline claim; missing search hits/inventory never establish global absence.
+* Added --reconstruct-evidence diagnostics without public prediction statuses or output writing. The default runner exits 3 with all 518 decisions unresolved and POLICY_ENGINE_NOT_IMPLEMENTED. No model calls, packages, services or frameworks were added.
+* Final test command python -B -m pytest -q -p no:cacheprovider code/tests: 209 passed in 12.35 seconds, including the 149 earlier regressions and 60 new Phase 03 checks. Earlier development suites passed 202, 206 and 208 tests before review controls were completed.
+* Final full-dataset diagnostic runs processed 518 requests from outside the repository under hash seeds 0 and 12345. Entire reports matched; observed times were 18.9388 and 21.2317 seconds, including process startup, not statistical benchmarks. Final proof SHA-256: a20a38e5f79b5d464c8886d5e1080f527163aabb6b3bbf9114d32d31f8d90116.
+* Measured coverage: 101 time-qualified identity resolutions and 417 provisional snapshot candidates; 680 grounded and 523 provisional resource associations; 2046 source-specific copy/instance scopes, including claim-only scopes; 285 cases have a STATE_NOT_ESTABLISHED scope, 258 have provisional links, and 10 have no linked resources. Counts overlap and are not correctness scores. Fifteen PDF/PNG sources remain deferred. No equal-time conflicts appeared in supported extracted scopes; synthetic conflict controls pass.
+* Review hardened interval endpoint provenance, stopped-query handling, reused aliases, omitted fields, cross-object aliases, future registry leakage, fresh-process determinism and long numeric counts. Updated README, DECISIONS and evaluation/usage reports with actual evidence, applied skills, remaining limitations and unmeasured accuracy.
+* git diff --check and Python syntax checks passed. Official AGENTS.md, CLAUDE.md, problem_statement.md, agent_trace_instructions.md and dataset remain unchanged from Phase 02. No root output.csv, code.zip or agenttrace.zip was generated.
+* Preparing commit and push to the existing GhostData origin/main under standing user authorization. Phase 04 is not started.
+
+## [2026-10-24T23:01:51+05:30] GHOSTTRACE Phase 04 policy and risk engine
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 4
+
+Agent Response Summary:
+The user approved Phase 04. Rechecked the clean Phase 03 baseline, official instructions and selected build/design skills. Implementing authorization, policy obligations, retention and tombstone handling, recreation risks and evidence-backed decision planning. Document/image extraction and later release work remain deferred; unsupported cases must remain explicitly unresolved.
+
+Actions:
+* Verified main is clean at Phase 03 commit 249c5ce and read repository instructions.
+* Read build/design skills and Phase 04 scope before implementation.
+* Verified runtime model from authoritative turn_context metadata.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 04 completion (2026-10-24T23:40:40+05:30):
+* Implemented policy models, conservative request authorization, literal supplied-rule loading, three-valued conditions, schema/category adapters, direct policy facts and residual identifiers, retention/hold safeguards, tombstones, anonymization, active flows, restore risks and canonical plan assembly under code/ghosttrace/policy/.
+* Retained records and backups are never default-deleted. Missing conditions, required records, identities, controls and exhaustive coverage remain explicit unknowns. Tombstone stable references are preserved while direct and additional/nested identifier values are checked. Complete verification requires a citation supporting all required state conjuncts.
+* Added policy-audit proof/publication gate checks for authorization, source clocks/roles, protected categories, exact assessment-derived operations and complete plans. Existing independent structural validation and atomic publication remain separate. Copy-action and dependency/canonical-order conflicts block publication. No real-data coverage override is used.
+* Added --audit-policy to process selected requests and report decisions/assessments without CSV publication. The no-argument path is explicitly lightweight and reports POLICY_AUDIT_NOT_RUN. Per-case processing errors isolate to unresolved decisions; no case exceptions occurred in the final real-data runs.
+* Initial full-run review found two affirmative deletion requests incorrectly marked non-deletion: the grammar missed would-like-it-deleted and treated a later correct-treatment phrase as correction. A generic grammar/unscoped-mention fix and regression fixtures corrected that concrete bug. Unsupported scripts defer; limited Spanish/French/Portuguese affirmative forms are supported alongside English. No public output labels or case-family rules were used.
+* Final command python -B -m pytest -q -p no:cacheprovider code/tests: 285 passed in 12.26 seconds, including 209 prior regressions and 76 new Phase 04 checks. A development synthetic roundtrip test initially double-decoded steps_json already parsed by the validator; its reader was corrected.
+* Three handwritten policy cases roundtrip through audit gate, emitter, independent validator and writer: COMPLETE, INCOMPLETE and NOT_APPLICABLE; all 3 cases, 4 steps and 28 public fields checked. Exhaustive coverage is an explicit synthetic premise. Additional fixtures exercise all 15 operations, retained-record safety, residual PII, flows/backups, copy/dependency conflicts, tampering, malformed controls, future facts and isolated failures.
+* Final full policy runs from outside the repo under PYTHONHASHSEED 0 and 12345 returned identical entire parsed reports. Observed times were 18.0942 and 18.0825 seconds, including startup, not statistical benchmarks. Proof SHA-256 a74831053403d2cfd2351cd72ee6f1e7d27a8f9d6c413a7fb29a77821210b211. Both exited 3 for unresolved cases, as intended.
+* All 518 requests processed: authorization 484 DELETION, 10 NON_DELETION, 24 UNRESOLVED; public decisions 10 NOT_APPLICABLE and 508 unresolved. Resource-scope assessments: 134 VIOLATION, 42 COMPLIANT, 1769 UNKNOWN. These are coverage/behavior counts, not measured correctness or score. No real deletion case is publishable yet.
+* Overlapping case uncertainties include 484 incomplete evidence coverage, 385 unqualified identities, 384 provisional resource links, 58 unknown conditions, 53 unmapped categories, 5 unestablished required-retained-record states, 4 unknown flows, 1 unknown record state and 1 with no assessed resource. Fifteen PDF/PNG sources and 24 unsupported-language requests remain for later phases. Snapshot availability must not be invented.
+* Updated README, DECISIONS and evaluation/usage reports with actual results, applied build/design skill guidance and remaining limits. No packages, frameworks, model providers, model calls or submission artifacts were added. Final-run prediction usage and challenge accuracy remain unavailable.
+* Python syntax and diff checks pass. Official AGENTS.md, CLAUDE.md, problem_statement.md, agent_trace_instructions.md and dataset are unchanged from Phase 03. Preparing commit/push to the existing GhostData origin/main under standing authorization; Phase 05 is not started.
+
+## [2026-10-24T23:53:52+05:30] GHOSTTRACE Phase 05 selective extraction
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 5
+
+Agent Response Summary:
+The user approved Phase 05. Verified the clean Phase 04 baseline, repository contract and selected extraction/build skills. Implementing selective document/image/text extraction, structured validation, source-bound caching, bounded retries and usage accounting. Later evaluation optimization and final release remain outside this phase.
+
+Actions:
+* Read AGENTS.md and existing ingestion, policy and CLI boundaries.
+* Verified exact runtime model from authoritative session metadata.
+* Inspected local extraction dependencies and credential presence without exposing values.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T07:25:45+05:30] Continue Phase 05 extraction implementation
+
+User Prompt (verbatim, secrets redacted):
+Continue the phase 5
+
+Agent Response Summary:
+Continuing the approved Phase 05 scope from the partial extraction work. Local PDF extraction and Windows OCR have been verified; no model API credentials are configured. Completing validated extraction, source-bound cache, optional model integration, bounded retries and genuine usage reporting before testing and publication. Later evaluation optimization and release phases remain outside this turn.
+
+Actions:
+* Rechecked the current working tree and existing OCR helper without restarting completed inspection.
+* Confirmed the prior Phase 05 logging and authoritative runtime model.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 05 completion (2026-10-25T07:56:25+05:30):
+* Completed the approved selective extraction package: optional PyMuPDF/Pillow PDF/image intake, native Windows OCR en-US plus portable Tesseract fallback, literal record extraction, source-grounded structured output validation, content-addressed atomic caches, optional OpenAI Responses transport, bounded retries/call budgets and genuine usage accounting. No dependencies were installed.
+* Preserved source bytes, SHA-256, manifest metadata, page/block/line locators and boxes. Raw DOCUMENT_TEXT stays candidate evidence. Only explicitly anchored, quoted fields become record observations; empty OCR, omitted fields and unparsed narratives never prove absence or redaction. Extraction proof metadata is excluded from business walkers.
+* Added --extract-evidence and --audit-policy --with-extraction. Cache writes are confined by CLI to ignored repository .ghosttrace/. Model calls default to zero and require an explicit budget (maximum 64 attempts, at most 3 per selected task). Model, credentials and optional rates come from environment; no model or price is guessed.
+* The optional model path is connected to evidence extraction and policy intent, with literal quotes, negation/translation consistency and known quotation/override guards. It was verified with injected providers/transports only. No provider was configured for actual runs; hosted-model/account behavior and translation accuracy remain unverified.
+* Initial PowerShell 7 WinRT probing failed; Windows PowerShell 5.1 successfully exposes the native OCR API. The reviewed helper passes document paths as data, closes resources and changes no profile/execution policy. Initial sandbox extraction blocked image temporary snapshots; authorized temporary-directory verification then succeeded on all images.
+* Final test command python -B -m pytest -q -p no:cacheprovider code/tests: 340 passed in 8.70 seconds, including the 285 earlier regressions and 55 new extraction tests. Controls cover actual PDF/OCR, blank/swapped images, all pages, schema/quote/field grounding, byte/metadata-bound cache, stale/corrupt entries, retry/refusal/budget behavior, source changes, negation, provider/policy integration, cache-build retry costs, malformed rates and existing-output preservation.
+* Actual local capture: all 15 previously deferred sources read (4 PDFs/7 pages plus 11 PNGs), 992 text units and 1 anchored record; augmented index 10729 observations. Fourteen documents yield candidate text without a promoted record; the one record also has only partial semantic coverage. These are capture counts, not semantic recall or accuracy.
+* Cold extraction cache: 15 misses/0 hits in observed 7.5361 seconds; warm extraction: 15 hits/0 misses in 2.0275 seconds. Individual command timings include startup and are not statistical benchmarks. No source failures or unreadable pages occurred in the successful run.
+* Two fresh cached full-audit processes with hash seeds 0 and 12345 produced identical entire reports. Observed times were 10.2421 and 10.3324 seconds; proof SHA-256 c85b1c97969dca93f4c684aa77b1eccd19fd3d374dfae68f06cef408e802be22. Both exited 3 for unresolved cases.
+* All 518 requests processed: 484 native deletion authorizations, 10 non-deletion and 24 unresolved-language requests; 10 NOT_APPLICABLE and 508 unresolved public decisions. Scoped assessments: 134 violating, 42 compliant, 1770 unknown. Fourteen document-model tasks plus 24 request tasks report MODEL_NOT_CONFIGURED. No real deletion case is publishable yet.
+* Actual provider calls/input tokens/output tokens/model service cost were 0/0/0/USD0. Code preserves unknown usage/pricing and separates current replay calls from all historical cache-build attempts, including retries. Codex development usage and local compute cost were not measured; final prediction-run usage remains unavailable.
+* Applied read build/design, prompt-engineering, PDF extraction/visual-review and multimodal grounding guidance, plus fetched official OpenAI/Microsoft API documentation. No skill-effectiveness experiment was run. Updated README, DECISIONS and evaluation/usage reports with actual outcomes, supported commands, environment requirements and remaining limits.
+* All Python sources parse and diff checks pass. Official instructions and dataset remain unchanged from Phase 04. Caches/preview material are ignored, no secrets are staged, and no root output.csv or submission archive was generated. Preparing commit/push to the existing GhostData origin/main under standing authorization. Phase 06 is not started.
+
+## [2026-10-25T08:00:45+05:30] GHOSTTRACE Phase 06 evaluation and optimization
+
+User Prompt (verbatim, secrets redacted):
+Start the Phase 6
+
+Agent Response Summary:
+The user approved Phase 06. Rechecked the clean Phase 05 baseline and read the repository contract and selected testing/evidence skills. Implementing honest public-sample metrics, failure/coverage analysis, metamorphic regressions and measured optimization while preserving evidence and publication guards. Final packaging/release remains outside this phase.
+
+Actions:
+* Verified main is clean at Phase 05 commit cb9e142.
+* Read official instructions, evaluation code and runtime identity/policy seams.
+* Verified exact runtime model from authoritative turn_context metadata.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 06 completion evidence [2026-10-25T08:23:53+05:30] (same user turn):
+* Added real public-sample audits with inference/gates before label access, independent golden diff, explicit abstention penalties, separate candidate-step diagnostics, source/manifest/rule/runtime hashes, failure-stage and feature counts, native-only traces and a repeated differential benchmark. CLI diagnostics never write a prediction file and disable provider calls.
+* Measured the unchanged Phase 05 baseline and both structured/extraction-augmented configurations. General request-grammar fixes improve public authorization agreement from 18/32 to 27/32; nearby negation/status/quoted/third-party counterfactuals stay protected. Published status/exact-row/field/sequence accuracy remains 0%, with 32 abstentions; 9 of 193 candidate steps overlap the public reference and are not predictions.
+* Profile-guided identity optimization caches immutable normalized context/indexes and reuses pairs only for the same eligible subject registry. Context stays undated/uncertain, and cutoff-specific ownership/history are rebuilt. Kept the uncached path for differential controls. Six timed full-dataset audit fingerprints plus the common warm-up match, including unpublished plans.
+* Final serial benchmark: 518 requests, 3 trials per configuration in alternating order; median engine-plus-audit 9.763589 seconds reference versus 4.965914 seconds cached (1.9661x local speedup). Ranges 9.638828-10.305257 versus 4.961938-4.973774 seconds. Startup/ingestion/fingerprints excluded; peak memory unmeasured. Exploratory concurrent-test timing was not used as the final measurement.
+* Full suite: python -B -m pytest -q -p no:cacheprovider code/tests, 382 passed in 9.36 seconds. Final targeted metadata/golden-diff checks: 51 passed in 2.00 seconds. New controls exercise grammar, six cutoffs/future registry, immutable context, three opaque-ID/order/timezone/future-state policy cases, actual label ordering, trace privacy, inference isolation, cache escape, trial bounds and deliberately broken candidate/benchmark proofs.
+* Two fresh extraction-augmented full runs with hash seeds 0 and 12345 returned identical entire diagnostics and exit 3: 484 DELETION, 10 NON_DELETION and 24 unresolved authorizations; 10 NOT_APPLICABLE and 508 unresolved final cases; 134 violating, 42 compliant and 1770 unknown scopes. Proof remains c85b1c97969dca93f4c684aa77b1eccd19fd3d374dfae68f06cef408e802be22. Provider calls/input/output tokens/cost were 0/0/0/USD0, excluding development usage and local compute. No packages were installed.
+* Recorded all 32 public case diffs, explicit failed readiness gate, an actual complex-case trace, source-bound metrics and benchmark methodology in README, DECISIONS and evaluation/usage reports. Current limitations include identity availability, semantic conditions/documents, remaining authorization and exhaustive evidence/copy coverage. Hidden accuracy/semantic recall remain unmeasured.
+* All Python files parse; diff checks pass. Official AGENTS.md, problem_statement.md and dataset are unchanged. No root output.csv, code.zip or submission folder was generated. Preparing commit/push only to the existing GhostData origin/main under standing authorization. Phase 07 freeze/packaging remains unstarted.
+
+Final review and superseding Phase 06 measurements (same user turn):
+* Review restored the informational-question guard for explain/what/when/does; added two independent negative requests so supported question wording cannot become deletion authorization. Final full regression invocation: 384 passed in 12.12 seconds, including 44 new Phase 06 checks and all 340 prior tests.
+* Repeated the serial alternating full benchmark after that correction: reference median processing 12.872485 seconds (range 12.720762-14.212807), cached median 6.816385 (4.499196-7.250012), 1.8885x local speedup. Local timing varied; reports use this latest observation and include ranges instead of choosing the faster earlier repeat. All six trials plus warm-up still share complete-audit SHA e61502c6e6ade0f1a058aaa57f3a4071c96bad96d36cc4ccbce7620fda28344b.
+* Repeated both real public evaluation modes and both fresh full augmented hash-seed runs on the final code. Entire full reports match the earlier proof; sample semantic digest remains 9d7bce4c978fdb1ab35b095de0a529820056f75d7a52a337cbb86eef0cf479b7, with 27/32 authorization agreement, zero publishable sample rows and 508 unresolved full cases. Final runtime SHA 558f08aa0267f57755b59ad47508e94d014abd8d7e1ced03539543a03b558f8f. The manifest hash is also bound in diagnostics/reports. No prediction or submission artifact exists; readiness still fails.
+
+## [2026-10-25T08:31:03+05:30] Phase 07 preliminary inspection interrupted
+
+User Prompt (verbatim, secrets redacted):
+Start Phase 7
+
+Agent Response Summary:
+Started the requested Phase 07 readiness inspection by reading the official instructions, problem statement, kickoff phase scope and packaging/submission skills. The turn was interrupted before any implementation or packaging changes; the previously reported Phase 06 accuracy gate remains failed. No final artifact or readiness claim was produced.
+
+Actions:
+* Read repository contract, packaging skill instructions and existing publication CLI.
+* Verified Phase 06 baseline commit 635ba19750aae461342fb2f80b40327b303b22ae; no project changes made during interrupted inspection.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T08:31:03+05:30] Clarify Phase 06 completion status
+
+User Prompt (verbatim, secrets redacted):
+Whether the Phase 6 is completed
+
+Agent Response Summary:
+Clarified that Phase 06 evaluation/optimization implementation, regression checks and push are complete, while its accuracy/readiness exit gate has not passed. All 384 tests passed in the observed Phase 06 run, but all 32 public samples abstain and 508 of 518 full cases remain unresolved, so Phase 06 is not fully complete for submission readiness.
+
+Actions:
+* Reported the distinction between completed implementation and a failed quality exit gate.
+* No new prediction, packaging artifact or implementation change.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T08:32:34+05:30] Resolve Phase 06 accuracy and coverage blockers
+
+User Prompt (verbatim, secrets redacted):
+Solve all these and complete the phase 6
+
+Agent Response Summary:
+The user explicitly requested resolving the remaining Phase 06 blockers before completion. Investigating authorization, time-qualified identity, content-grounded resource linkage, policy interpretation and exhaustive scoped evidence accounting without changing official inputs or using public answers in inference. Implementation, evaluation and reproducibility work continue; no readiness claim is made until the exit gates pass.
+
+Actions:
+* Read testing/evidence skills and current identity, ingestion, temporal and policy code.
+* Inspected participant input schemas and existing provider configuration presence only; no provider is configured.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 06 repair completion evidence (original solve-all request remains unmet):
+* Implemented canonical registry validity anchoring without inventing file availability; retained generic snapshot uncertainty and future/reassignment/history checks. Parsed explicit catalog relations and removed activity-only phantom physical copies while requiring direct state readbacks. Extended immutable anchor caching with reference-equivalence checks.
+* Added native Japanese/Korean positive, negation, status-question and injection controls plus continuing personal deletion-review grammar. Existing provider/caching integration now uses genuinely unsupported Greek fixtures. No provider was configured/called and no packages were installed.
+* Corrected explicit 404/null profile, download availability, typed handover states, uppercase tombstones, archive locator and retained-until schemas; derived support context only from supplied fields/content. Kept unsupported conditions and unknown state blocked. Signed audit records without an expiry are conservatively preserved, not assigned an invented retention date; explicit invalid/expired periods remain unknown. Removed an extra backup-presence output operation while retaining actual archive-presence proof for restore checks.
+* Added source-bound positive panel/form/retention document adapters. No OCR ID correction or empty-text absence. Document resource lexicons filter both source availability and observation time; independent future/late-capture tests verify that boundary. Four additional business-schema projections occur on the actual supplied corpus; semantic recall is not claimed.
+* Added finite supplied-corpus coverage certificates requiring accounted context/files, resolved identity, direct linked states and interpretation of matching documents. Low-level/generic audits still default to incomplete coverage. Added --run for all 518 official-path requests, atomic publication only after audit/proof/independent CSV checks, and preservation on unresolved runs.
+* Final full test command: python -B -m pytest -q -p no:cacheprovider code/tests; 413 passed in 10.47 seconds, including 29 independent repair cases. Actual synthetic CLI success verifies 518 non-deletion rows; actual unresolved CLI tests preserve existing output. Original regressions and live local PDF/OCR controls remain passing; no fake provider test is described as a live model run.
+* Final fresh full commands with hash seeds 0 and 12345 returned identical entire reports, exit 3: 375 resolved (115 COMPLETE, 250 INCOMPLETE, 10 NOT_APPLICABLE), 143 unresolved. Full authorization is 508 DELETION and 10 NON_DELETION. No root output.csv was produced. Full diagnostic proof ca007dcdacee11ad5d789cea14aad601d1fbe47ffda6b4523e5fd70cb101da51. Cached/reference full complete Audit fingerprint 1bc21338867116377a2cea89d2b1f4b95c4c0b8bd0b72a5283ae035e8721741b; final stricter guards preserve all actual results.
+* Both public configurations were rerun with final code. Authorization agreement 32/32. Structured-only remains unpublished while documents are deferred. Augmented mode publishes 16 in-memory comparison rows, all 16 statuses correct (50% over all 32), with 16 abstentions, 2 exact rows/sequences, 78/193 matching steps and precision1.0, field agreement522/1351. Separate unpublishable candidates134 with132 overlap. No development label is imported by inference. Hidden accuracy and semantic recall remain unmeasured.
+* A 32-sample augmented alternating 3-trial benchmark measured median engine+audit 2.474560 seconds reference versus1.993726 cached (1.2412x locally), with complete proof equality. Document lexicon preprocessing is outside the timed interval. Old 1.89x full-run timing applies to the earlier code only; no new full-run speed claim or peak-memory claim is made.
+* All actual provider calls/input/output tokens/model-service cost are0/0/0/USD0; local compute and Codex development usage excluded. No final prediction-producing usage run exists. Final runtime SHA ffcf1cf93e74e150866d5b1686b099306502e1ce9e2d5e068f1284a6b30f4b1c.
+* Added EVIDENCE-GAPS.md with reproducible missing/pre-cutoff linkage examples, remaining native policy/semantic blockers and next requirements. Updated README, DECISIONS/risk register and evaluation/usage reports. Some remaining failures still need interpretation; not every unknown is claimed impossible. The supplied data, AGENTS.md and problem_statement.md are unchanged. No archive, submission package, external message or upload was created. Phase 06 remains incomplete at its quality gate; preparing commit/push of verified repairs to the existing GhostData origin/main.
+
+## [2026-10-25T09:15:10+05:30] Request actual official clarification or corrected inputs
+
+User Prompt (verbatim, secrets redacted):
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_f74e6362c65449d4b805422c87e833ac\",0]","question":"Several public answers refer to resources whose supplied records contain no subject identifier or whose linking evidence was captured after audit_at. Is there an official clarification or corrected participant dataset for these missing links? I’ll continue fixing the independent code defects while preserving those evidence restrictions.","answer":"I have an official clarification or corrected dataset"}]
+</send_user_message_question_reply>
+
+Agent Response Summary:
+The user selected that an official clarification or corrected dataset existed. Asked for its actual text or local path before using it to resolve missing evidence. Continued independent parser, policy, document and regression repairs without inventing the clarification.
+
+Actions:
+* Requested the actual clarification/path through the text question tool.
+* No new dataset was supplied or used.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T09:15:10+05:30] Recommend preserving evidence restrictions and report remaining gaps
+
+User Prompt (verbatim, secrets redacted):
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_23cc71775f454146abca1bb1b4fa599d\",0]","question":"Please paste the official clarification, or give the local filesystem path to the corrected participant dataset. I need its actual contents to resolve the missing links and policy conditions accurately.","answer":"I didn't have it \nRecommend me what to do"}]
+</send_user_message_question_reply>
+
+Agent Response Summary:
+The user corrected the earlier answer: no clarification was available, and asked for a recommendation. Recommended keeping official inputs/evidence cutoffs intact, completing supported code repairs and documenting remaining missing facts and interpretation limits. Delivered verified repairs improving resolved audits from10 to375 with413 passing tests, while honestly retaining143 unresolved cases and a failed Phase06 exit gate.
+
+Actions:
+* Added EVIDENCE-GAPS.md and source-bound evaluation/usage results.
+* Implemented and verified general repairs under the continuing solve-all request; no fallback answers or final package fabricated.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T09:19:16+05:30] Current phase completion inventory
+
+User Prompt (verbatim, secrets redacted):
+Until Now, List out what are the Phases are fully completed and not yet
+
+Agent Response Summary:
+Reviewed the original phase plan, approved Phase01 scope correction, historical milestone records and latest evaluation. Phases00-02 are closed within their agreed scopes; Phases03-05 have implemented and tested components but current resource-link, policy-proof and semantic-extraction follow-up prevents treating them as fully verified end-to-end. Phase06 remains incomplete with375 of518 audits resolved and143 unresolved, while Phase07 freeze/submission remains blocked after preliminary inspection. Earlier completion labels for Phases03-05 describe implementation milestones, not proof that every real case is solved.
+
+Actions:
+* Read phase definitions, DECISIONS.md and current/historical evaluation records.
+* Verified current source baseline76031c8 and clean checkout; no pipeline/evaluation rerun or implementation change.
+* Latest measured suite remains413 passing tests; no final output.csv or submission package exists.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T11:00:00+05:30] SESSION START
+
+tool=Antigravity
+model=gemini-3.8-flash-n
+Repo Root: d:\Projects\Orchestrate-Oct'26
+Branch: antigravity-submission
+Worktree: main
+Parent Agent: parent
+Language: py
+Time Remaining: not configured
+
+## [2026-10-25T11:00:00+05:30] GHOSTTRACE Antigravity master engineering kickoff and baseline reproduction
+
+User Prompt (verbatim, secrets redacted):
+Task: /goal /boost # GHOSTTRACE — ULTIMATE ANTIGRAVITY 2.0 MASTER ENGINEERING PROMPT
+
+## MISSION: AUDIT, REPAIR, COMPLETE, OPTIMIZE, VALIDATE & PREPARE SUBMISSION
+
+Agent Response Summary:
+Started the authorized master engineering session in branch antigravity-submission. Verified AGENTS.md, runtime tool Antigravity, and exact runtime model gemini-3.8-flash-n from session metadata. Independently reproduced test baseline (413 passed in 10.27s), full diagnostic audit (375 resolved, 143 unresolved, proof ca007dcdacee11ad5d789cea14aad601d1fbe47ffda6b4523e5fd70cb101da51), and public sample baseline (32/32 authorization, 16/32 status agreement, 2/32 exact rows, 78/193 steps).
+
+Actions:
+* Read AGENTS.md, problem_statement.md, EVIDENCE-GAPS.md, DECISIONS.md.
+* Checked out new branch antigravity-submission.
+* Verified runtime environment and model identifier from authoritative metadata.
+* Ran full test suite: 413 passed in 10.27s.
+* Ran policy audit and sample evaluation reproducing all baseline metrics.
+
+Context:
+tool=Antigravity
+model=gemini-3.8-flash-n
+branch=antigravity-submission
+repo_root=d:\Projects\Orchestrate-Oct'26
+worktree=main
+parent_agent=parent

@@ -127,8 +127,8 @@ def load_context_sources(dataset_root: Path) -> tuple[ParseResult, ...]:
                 values = dict(record)
                 if kind == "OPERATION_CLAIM" and record.get("event_type") == "LINK_RESOURCE_IDENTITY":
                     match = re.fullmatch(r"Data catalog linked (\S+) \(([^()]*)\) to (\S+) and (\S+)\.", record["details"])
-                    if match and match[1] == record["resource_id"] and match[2] == match[4]:
-                        values.update(catalog_subject_reference=match[4], catalog_email=match[3])
+                    if match and match[1] == record["resource_id"]:
+                        values.update(catalog_subject_reference=match[4], catalog_email=match[3], catalog_label=match[2])
                     attachment = re.fullmatch(r"Attachment catalog confirmed (\S+) \(([^()]*)\) belongs only to (\S+) and (\S+); no other subject is linked\.", record["details"])
                     if attachment and attachment[1] == record["resource_id"]:
                         values.update(catalog_subject_reference=attachment[4], catalog_email=attachment[3], catalog_sole_subject=True,

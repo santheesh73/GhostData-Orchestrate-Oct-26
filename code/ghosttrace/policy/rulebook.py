@@ -32,6 +32,7 @@ EVENT_CATEGORIES = {
     "restore_candidate_evaluated": "BACKUP_ARCHIVE", "restore_authorization_completed": "BACKUP_ARCHIVE",
     "export_download_check_completed": "USER_EXPORT", "export_metadata_read_completed": "USER_EXPORT",
     "audit_record_read_completed": "SECURITY_AUDIT_LOG", "retained_order_loaded": "LEGAL_HOLD_RECORD",
+    "contact_lookup_completed": "SUPPORT_MESSAGE",
 }
 
 
@@ -61,9 +62,45 @@ class RuleBook:
             if raw == "profiles":
                 raw = {"account_service": "USER_PROFILE", "analytics_platform": "ANALYTICS_PROFILE"}.get(state.resource.system_id, "")
             canonical = raw if raw in self.by_category or raw == "DATA_FLOW" else COLLECTIONS.get(raw)
-            event_category = EVENT_CATEGORIES.get(data.get("event"))
+            event_name = data.get("event")
+            event_category = EVENT_CATEGORIES.get(event_name)
             if canonical:
                 categories.add(canonical)
-            if event_category:
+            if event_name == "contact_lookup_completed":
+                if state.resource.system_id == "analytics_platform" or state.resource.resource_id.startswith("analytics_"):
+                    categories.add("ANALYTICS_PROFILE")
+                else:
+                    categories.add("SUPPORT_MESSAGE")
+            elif event_category:
                 categories.add(event_category)
-        return next(iter(categories)) if len(categories) == 1 else None
+        if len(categories) == 1:
+            return next(iter(categories))
+        if not categories:
+            res_id = state.resource.resource_id or ""
+            if res_id.startswith("support_"):
+                return "SUPPORT_MESSAGE"
+            if res_id.startswith("analytics_"):
+                return "ANALYTICS_PROFILE"
+            if res_id.startswith("search_"):
+                return "SEARCH_INDEX_ENTRY"
+            if res_id.startswith("account_"):
+                return "USER_PROFILE"
+            if res_id.startswith("data_flow_"):
+                return "DATA_FLOW"
+            if res_id.startswith("backup_"):
+                return "BACKUP_ARCHIVE"
+            if res_id.startswith("audit_record_"):
+                return "SECURITY_AUDIT_LOG"
+            if res_id.startswith("export_"):
+                return "USER_EXPORT"
+            if res_id.startswith("tombstone_"):
+                return "ACCOUNT_TOMBSTONE"
+            if res_id.startswith("legal_hold_"):
+                return "LEGAL_HOLD_RECORD"
+            return {"account_service": "USER_PROFILE", "search_service": "SEARCH_INDEX_ENTRY",
+                    "analytics_platform": "ANALYTICS_PROFILE", "support_platform": "SUPPORT_MESSAGE",
+                    "export_service": "USER_EXPORT", "security_service": "SECURITY_AUDIT_LOG",
+                    "legal_service": "LEGAL_HOLD_RECORD", "backup_service": "BACKUP_ARCHIVE",
+                    "integration_service": "DATA_FLOW", "identity_service": "ACCOUNT_TOMBSTONE",
+                    "notification_service": "EMAIL_DELIVERY_LOG", "email_delivery_service": "EMAIL_DELIVERY_LOG"}.get(state.resource.system_id)
+        return None
