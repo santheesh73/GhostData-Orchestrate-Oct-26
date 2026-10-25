@@ -70,10 +70,13 @@ class EvidenceIndex:
             observation = self._observations[oid]
             available, observed = observation.evidence.available_at, observation.observed_at
             if at is not None:
-                if (available is not None and available > at) or (observed is not None and observed > at):
+                if (available is not None and available > at) or (observed is not None and observed > at) or (observation.derived_available_at is not None and observation.derived_available_at > at):
                     future += 1
                     continue
                 if available is None or observed is None:
+                    unknown += 1
+                    continue
+                if observation.derived_valid_until is not None and at >= observation.derived_valid_until:
                     unknown += 1
                     continue
             selected.append(observation)

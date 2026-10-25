@@ -1,0 +1,44 @@
+[
+  {
+    "category": "SECURITY_AUDIT_LOG",
+    "mechanism": "SOURCE_FACT_MISSING",
+    "distinct_cases": 202,
+    "resources": 202,
+    "physical_scopes": 337
+  },
+  {
+    "category": "SUPPORT_MESSAGE",
+    "mechanism": "POLICY_CONDITION_UNESTABLISHED",
+    "distinct_cases": 69,
+    "resources": 69,
+    "physical_scopes": 75
+  },
+  {
+    "category": "BACKUP_ARCHIVE",
+    "mechanism": "SOURCE_FACT_MISSING",
+    "distinct_cases": 3,
+    "resources": 3,
+    "physical_scopes": 3
+  },
+  {
+    "category": "SUPPORT_ATTACHMENT",
+    "mechanism": "POLICY_CONDITION_UNESTABLISHED",
+    "distinct_cases": 3,
+    "resources": 3,
+    "physical_scopes": 3
+  },
+  {
+    "category": "",
+    "mechanism": "RESOURCE_LINK_UNRESOLVED",
+    "distinct_cases": 2,
+    "resources": 2,
+    "physical_scopes": 2
+  },
+  {
+    "category": "LEGAL_HOLD_RECORD",
+    "mechanism": "POLICY_CONDITION_UNESTABLISHED",
+    "distinct_cases": 1,
+    "resources": 1,
+    "physical_scopes": 1
+  }
+]

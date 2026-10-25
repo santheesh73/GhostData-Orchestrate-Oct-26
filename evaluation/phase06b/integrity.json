@@ -1,0 +1,12 @@
+{
+  "baseline_commit": "d302f177cdedabd7e30f97ea49cdac09fce80b8d",
+  "official_inputs_unchanged": true,
+  "participant_inventory_sha256": "05414935e3cddc995ff17c56a0e00206fe5646bcdd8b59943619e62eae6ce73e",
+  "historical_submission_unchanged": true,
+  "historical_artifact_sha256": {
+    "submission/code.zip": "b795b31d6ca1e3bd34b9b04cdf2abf79986761a4f863ee3f855d08d401cdc420",
+    "submission/output.csv": "5cfdd86eb54a26585ad9f2565d212e455c0066e8ed049f164623f5352ff216c9"
+  },
+  "provider_calls": 0,
+  "hidden_accuracy": "NOT_MEASURED"
+}

@@ -688,3 +688,24 @@ to evaluation/history/. All affected cases/resources are listed in
 recovery_blockers.json. Raw session traces remain authentic; final export of this
 active session must wait until it ends. No paid call, new dependency, dataset edit
 or external upload occurred. Final verdict: NOT READY — CRITICAL BLOCKERS REMAIN.
+
+## Phase06B — source recovery checkpoint
+
+Baseline d302f17 reproduced:503 tests,278 resolved,240 unknown. Accepted explicit
+order-content interpretation, separately sourced condition/current-state proof,
+typed restore-permission fields and explicit catalog/document aliases with
+additional availability windows and independent span checks. Protected tests
+remain intact;536 pass. Result:280 resolved,238 unknown; public16/32 statuses and
+1/32 exact rows remain unchanged. Candidate-only precision falls from124/127 to
+124/130 because supported stored-object operations differ from the public plan;
+this is disclosed, not optimized away or counted as correct. Retention337 scopes
+over202 cases lacks a supplied interval and remains unknown. Verification audit
+found no planner omission for established obligations. Full records and release
+gates are in PHASE06B-REPORT.md and evaluation/phase06b/. No paid call or upload.
+
+Phase06B final checkpoint:the continued attachment-properties section recovers
+its literal support reference/type/presence but supplies no exclusive-ownership
+proof; no form deletion is authorized. Final538 tests pass. All280/238 full-case
+outcomes remain unchanged; public verification coverage is58 supported,32 blocked
+at linkage,3 at source/state and18 at policy. Two seeded reports and reference/
+cached full proof agree. Packaging remains blocked for238 cases.

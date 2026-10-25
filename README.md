@@ -1,7 +1,7 @@
-# GHOSTTRACE — current recovery status
+# GHOSTTRACE — Phase06B current status
 
 **NOT READY — CRITICAL BLOCKERS REMAIN.** Known unsafe document/policy defaults
-were repaired.503 tests pass;278/518 requests resolve and240 remain unknown.
+were repaired.538 tests pass;280/518 requests resolve and238 remain unknown.
 Public development agreement is16/32 statuses and1/32 exact rows. These are not
 hidden accuracy measurements. No new corrected final output or bundle is claimed.
 
@@ -44,8 +44,8 @@ local compute and development sessions. Cache/diagnostics stay in .ghosttrace/.
 
 DESIGN.md describes actual stages and uncertainty; INTERVIEW.md has preparation
 notes and constant provenance. Canonical current evaluation/usage reports are
-under code/evaluation/ and mirrored at evaluation/. RECOVERY-REPORT.md gives the
-phase matrix and release verdict. evaluation/recovery_blockers.json identifies
+under code/evaluation/ and mirrored at evaluation/. PHASE06B-REPORT.md gives the
+phase matrix and release verdict. evaluation/phase06b/root_causes.json identifies
 every affected case/resource. Earlier reports and claims are explicitly historical
 under evaluation/history/ and Git history; PHASE-AUDIT/HANDOFF-REVIEW describe the
 pre-repair baseline. Official data and authentic append-only log.txt are intact.
@@ -54,3 +54,9 @@ Before final trace packaging, finish sessions and quit the tools as directed by
 agent_trace_instructions.md. This active Codex trace cannot yet be finalized.
 Project-matching Antigravity traces were located, but no complete reviewed multi-
 harness trace archive is claimed. No external submission occurred.
+
+Phase06B diagnostics: `python -B code/evaluation/phase06b.py` writes source and
+verification matrices under .ghosttrace/phase06b/current/ without predictions.
+Explicit catalog/document joins preserve both source clocks and a derived
+availability window. Multi-source conditions keep all proof IDs while current
+state citations remain grounded. Original recovery history is in RECOVERY-REPORT.md.

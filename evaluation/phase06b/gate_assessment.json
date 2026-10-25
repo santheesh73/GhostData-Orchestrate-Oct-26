@@ -1,0 +1,52 @@
+[
+  {
+    "invariant": "Exact518 IDs,7 step fields,15 triples,phase/order/citations",
+    "classification": "OFFICIAL_CONTRACT_REQUIREMENT",
+    "disposition": "Retained; independent validator"
+  },
+  {
+    "invariant": "Both source/observation times at or before audit_at",
+    "classification": "OFFICIAL_CONTRACT_REQUIREMENT",
+    "disposition": "Retained; derived joins add their prerequisite-availability window"
+  },
+  {
+    "invariant": "Known identity,resource and applicable condition before destructive action",
+    "classification": "NECESSARY_EVIDENCE_SAFETY_INVARIANT",
+    "disposition": "Retained; no numeric suffix or presence-to-condition fallback"
+  },
+  {
+    "invariant": "Policy condition must occur in same artifact as current-state citation",
+    "classification": "OVERLY_STRICT_ASSUMPTION",
+    "disposition": "Removed only for separately proven conditions; IDs/times retained in derivation; state still jointly witnessed"
+  },
+  {
+    "invariant": "All required state-field conjuncts need a joint supporting artifact",
+    "classification": "VALID_INTERNAL_ASSURANCE_CHECK",
+    "disposition": "Retained; protected503-test counterexample remains passing"
+  },
+  {
+    "invariant": "Already-compliant resources must contribute official verification",
+    "classification": "OFFICIAL_CONTRACT_REQUIREMENT",
+    "disposition": "Already implemented; six cross-resource positive controls pass; no planner rewrite"
+  },
+  {
+    "invariant": "Operation-claim-only empty copy created beside a typed permission readback",
+    "classification": "IMPLEMENTATION_DEFECT",
+    "disposition": "Fixed by preserving typed eligibility/block fields as direct permission, never archive presence"
+  },
+  {
+    "invariant": "Matching ordinary document without established interpretation blocks exhaustiveness",
+    "classification": "VALID_INTERNAL_ASSURANCE_CHECK",
+    "disposition": "Retained; case07 form remains unresolved despite independently bound stored object"
+  },
+  {
+    "invariant": "Every catalog target must have state if it is linked to the subject",
+    "classification": "NECESSARY_EVIDENCE_SAFETY_INVARIANT",
+    "disposition": "Retained; catalog linkage/sole ownership is not a storage readback"
+  },
+  {
+    "invariant": "All518 decisions/proofs must pass before root publication",
+    "classification": "NECESSARY_EVIDENCE_SAFETY_INVARIANT",
+    "disposition": "Retained; no fabricated official UNKNOWN/fallback rows or partial root CSV"
+  }
+]

@@ -48,3 +48,12 @@ Packaging uses an explicit release-files inventory, independent full-contract
 validation, a fresh source-grounded audit comparison, member hashes, secret-pattern
 checks and a new staged destination. Shape-only diagnostics cannot build a bundle.
 No existing submission is overwritten. A blocked semantic gate blocks packaging.
+
+Phase06B:explicit catalog aliases may bind a document captured earlier, but the
+derived observation becomes usable only after both sources were available.
+Alias conflicts bound its usable interval. Capture/observation timestamps are
+not rewritten. Independent checks verify binding source, literal span and clocks.
+Separately sourced policy conditions remain in the proof while the cited witness
+proves current state; unscoped conditions are never lent between physical copies.
+Current results:538 tests,280/518 resolved,238 unknown; public16/32 statuses and
+1/32 exact rows,0 provider calls. This is not a verified final release.

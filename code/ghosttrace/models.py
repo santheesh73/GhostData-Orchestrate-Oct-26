@@ -84,6 +84,8 @@ class Observation:
     identifiers: tuple[Identifier, ...] = ()
     time_basis: str = "unknown"
     trace_id: str = ""
+    derived_available_at: datetime | None = None
+    derived_valid_until: datetime | None = None
 
 
 @dataclass(frozen=True, slots=True)

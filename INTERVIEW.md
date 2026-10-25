@@ -48,3 +48,12 @@ The rejected recovery alternative was the permissive Antigravity policy/document
 fallbacks:20 of30 new controls initially failed. Their apparent518-case coverage
 was rejected as a readiness argument. This is an actual counterexample result,
 not a fabricated optimization experiment or official score.
+
+Phase06B:explicit catalog aliases may bind a document captured earlier, but the
+derived observation becomes usable only after both sources were available.
+Alias conflicts bound its usable interval. Capture/observation timestamps are
+not rewritten. Independent checks verify binding source, literal span and clocks.
+Separately sourced policy conditions remain in the proof while the cited witness
+proves current state; unscoped conditions are never lent between physical copies.
+Current results:538 tests,280/518 resolved,238 unknown; public16/32 statuses and
+1/32 exact rows,0 provider calls. This is not a verified final release.

@@ -1,0 +1,336 @@
+{
+  "statuses": {
+    "INCOMPLETE": 182,
+    "UNRESOLVED": 238,
+    "COMPLETE": 88,
+    "NOT_APPLICABLE": 10
+  },
+  "unknown_scopes": {
+    "SECURITY_AUDIT_LOG:POLICY_CONDITION_NOT_ESTABLISHED": 337,
+    "SUPPORT_MESSAGE:POLICY_CONDITION_NOT_ESTABLISHED": 75,
+    "SUPPORT_ATTACHMENT:POLICY_CONDITION_NOT_ESTABLISHED": 3,
+    "BACKUP_ARCHIVE:REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED": 3,
+    "LEGAL_HOLD_RECORD:POLICY_CONDITION_NOT_ESTABLISHED": 1,
+    "UNMAPPED:RESOURCE_LINK_NOT_ESTABLISHED": 2
+  },
+  "audit_sha256": "0840374fe612bbf73b85ab576ff2fc4241afaa32d848027694afffc75226b928",
+  "timing_all550": {
+    "ingestion_seconds": 5.025736700001289,
+    "engine_seconds": 0.5039661999981035,
+    "audit_seconds": 46.843758800001524,
+    "total_seconds": 52.37346170000092
+  },
+  "usage": {
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "unknown_usage_calls": 0,
+    "estimated_cost_usd": "0",
+    "cache_hits": 0,
+    "budget_skips": 0,
+    "pricing_source": "NOT_CONFIGURED",
+    "per_model": [],
+    "cached_build_usage": {
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "unknown_usage_calls": 0,
+      "estimated_cost_usd": "0"
+    }
+  },
+  "public_metrics": {
+    "reference_cases": 32,
+    "predicted_cases": 16,
+    "missing_cases": [
+      "case_01",
+      "case_02",
+      "case_04",
+      "case_07",
+      "case_11",
+      "case_12",
+      "case_13",
+      "case_14",
+      "case_15",
+      "case_16",
+      "case_17",
+      "case_18",
+      "case_19",
+      "case_22",
+      "case_31",
+      "case_32"
+    ],
+    "extra_cases": [],
+    "status_correct": 16,
+    "status_accuracy": 0.5,
+    "exact_rows": 1,
+    "exact_row_accuracy": 0.03125,
+    "exact_sequences": 1,
+    "sequence_accuracy": 0.03125,
+    "predicted_steps": 73,
+    "reference_steps": 193,
+    "step_true_positives": 73,
+    "step_precision": 1.0,
+    "step_recall": 0.37823834196891193,
+    "step_f1": 0.5488721804511278,
+    "correct_fields": 481,
+    "compared_fields": 1351,
+    "field_accuracy": 0.3560325684678016,
+    "failures": [
+      {
+        "case_id": "case_01",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_02",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_03",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_04",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_06",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_07",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_08",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_09",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_10",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_11",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_12",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_13",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_14",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_15",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_16",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_17",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_18",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_19",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_20",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_21",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_22",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_23",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_24",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_25",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_26",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_27",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_28",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_29",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_30",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "SEQUENCE"
+        ]
+      },
+      {
+        "case_id": "case_31",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      },
+      {
+        "case_id": "case_32",
+        "categories": [
+          "FIELD",
+          "MISSING_STEP",
+          "ROW_MISSING"
+        ]
+      }
+    ],
+    "hidden_accuracy": "NOT_MEASURED"
+  },
+  "verification_stages": {
+    "RESOURCE_LINK_UNRESOLVED": 32,
+    "SUPPORTED": 58,
+    "SOURCE_FACT_MISSING": 3,
+    "POLICY_CONDITION_UNESTABLISHED": 18
+  }
+}

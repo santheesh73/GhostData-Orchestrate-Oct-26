@@ -23,7 +23,7 @@ READ_EVENTS = frozenset({"profile_lookup_completed", "contact_query_completed", 
     "export_metadata_read_completed", "restore_policy_read_completed", "restore_candidate_evaluated",
     "restore_authorization_completed", "retained_order_loaded"})
 SCAN_EVENTS = frozenset({"attachment_pii_scan", "message_pii_scan", "analytics_identity_scan"})
-BOOL_FIELDS = frozenset({"enabled", "scheduler_registered", "restore_allowed", "archive_present", "available", "marker_found"})
+BOOL_FIELDS = frozenset({"enabled", "scheduler_registered", "restore_allowed", "archive_present", "available", "marker_found", "eligible", "deletion_block"})
 
 
 def _boolean(value):

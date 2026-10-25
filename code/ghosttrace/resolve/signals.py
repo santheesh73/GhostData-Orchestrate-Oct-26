@@ -56,10 +56,13 @@ def signals(value, known_users):
 
 def eligible(observation, cutoff):
     available, observed = observation.evidence.available_at, observation.observed_at
-    if (available is not None and available > cutoff) or (observed is not None and observed > cutoff):
+    derived = observation.derived_available_at
+    if (available is not None and available > cutoff) or (observed is not None and observed > cutoff) or (derived is not None and derived > cutoff):
         return "FUTURE"
     if available is None or observed is None:
         return "UNKNOWN_TIME"
+    if observation.derived_valid_until is not None and cutoff >= observation.derived_valid_until:
+        return "AMBIGUOUS_DERIVATION"
     return "ELIGIBLE"
 
 

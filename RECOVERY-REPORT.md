@@ -1,3 +1,5 @@
+> HISTORICAL RECOVERY CHECKPOINT (d302f17). Current Phase06B measurements and release status are in PHASE06B-REPORT.md. This earlier report is preserved.
+
 # GHOSTTRACE final recovery engineering report — 25 October 2026
 
 ## A. Executive summary

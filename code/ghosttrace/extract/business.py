@@ -85,8 +85,13 @@ def _ui_records(lines, text, origin, known_subjects):
     if len(candidates) == 1 and origin == "support_platform" and all(label in text for label in ("Conversation", "Sender", "Assigned agent")):
         emails = set(re.findall(email_pattern, text))
         if len(emails) == 1:
+            fields = {"requester_email": next(iter(emails))}
+            references = {m[1] for line in lines if (m := re.fullmatch(r"order\s+(\S+)", line, re.I))
+                          and m[1].casefold() not in {"status", "update", "details", "unknown", "none", "null"}}
+            if len(references) == 1:
+                fields["order_reference"] = next(iter(references))
             rows.append(("support_platform", "SUPPORT_MESSAGE", next(iter(candidates)),
-                         {"requester_email": next(iter(emails))}, "CUSTOMER_AGENT_CONVERSATION_PANEL"))
+                         fields, "CUSTOMER_AGENT_CONVERSATION_PANEL"))
     return rows
 
 
@@ -116,9 +121,17 @@ def project_document(result, known_resources, known_subjects=()):
     if "DELIVERY ADDRESS CORRECTION REQUEST" in text and re.search(r"\buploader customer\b", text, re.I):
         # A support ticket reference is not an attachment identifier.
         anchor = re.search(r"Attachment ID\s*[:=]\s*(\S+)", text, re.I)
+        rule = "EXPLICIT_ATTACHMENT_FORM"
+        if anchor is None and re.search(r"Continued\s*[-–]\s*Attachment properties and upload history", text, re.I) and re.search(r"\bfile\s+\S+\.pdf\b", text, re.I):
+            # The continued attachment-properties section binds the form's
+            # literal internal support reference to this attachment. Neither
+            # the customer uploader nor the single contact proves exclusivity.
+            reference = re.search(r"Support reference\s+\S+\s*/\s*(\S+)", text, re.I)
+            anchor = reference
+            rule = "ATTACHMENT_PROPERTIES_REFERENCE"
         if anchor and len(emails) == 1:
             rows.append(("support_platform", "SUPPORT_ATTACHMENT", anchor[1],
-                         {"email": emails[0]}, "SINGLE_CUSTOMER_UPLOAD_FORM"))
+                         {"email": emails[0]}, rule))
     if "SIGNED RECORD EXTRACT" in text:
         anchor = re.search(r"Event reference\s+(\S+)", text)
         subject = re.search(r"subject reference\s+(\S+)", text, re.I)
@@ -184,7 +197,8 @@ def enrich_business_documents(bundle):
         subjects = {payload(o).get("user_id") for o in all_observations if o.claim_kind == "IDENTITY_REGISTRY_ENTRY"
                     and o.evidence.path == "user_identities.csv" and not o.evidence.citeable
                     and o.observed_at is not None and result.source.available_at is not None and o.observed_at <= result.source.available_at}
-        promoted = project_document(result, resources, subjects)
+        from .catalog import catalog_documents
+        promoted = (*project_document(result, resources, subjects), *catalog_documents(result, all_observations))
         if promoted:
             keys = {(o.resource.system_id, o.resource.resource_id) for o in promoted}
             original = tuple(o for o in result.observations if not (o.claim_kind == "RECORD_SNAPSHOT"

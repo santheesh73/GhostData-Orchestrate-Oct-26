@@ -1,0 +1,25 @@
+{
+  "two_fresh_seeded_reports_identical": true,
+  "publication_statuses": {
+    "COMPLETE": 88,
+    "INCOMPLETE": 182,
+    "NOT_APPLICABLE": 10
+  },
+  "publication_unresolved": 238,
+  "output_written": false,
+  "root_output_preserved": true,
+  "package_result": "PACKAGE BLOCKED",
+  "package_reason_summary": "semantic gate blocked 238 cases",
+  "package_built": false,
+  "reference_cached": {
+    "reference_cached_identical": true,
+    "audit_sha256": "0840374fe612bbf73b85ab576ff2fc4241afaa32d848027694afffc75226b928",
+    "timing": {
+      "ingestion_seconds": 5.972703800001909,
+      "engine_seconds": 0.5840080999987549,
+      "audit_seconds": 64.28262149999864,
+      "total_seconds": 70.8393333999993
+    },
+    "model_calls": 0
+  }
+}

@@ -132,15 +132,20 @@ def make_observation(source: EvidenceSource, digest: str, location: str, payload
                      *, system: str = "", resource: str = "", category: str = "",
                      physical_copy: str = "", observed_at: datetime | None = None,
                      time_basis: str = "unknown", claim_kind: str = "RECORD_SNAPSHOT",
-                     trace_id: str = "") -> Observation:
+                     trace_id: str = "", derived_available_at: datetime | None = None,
+                     derived_valid_until: datetime | None = None) -> Observation:
     encoded = canonical_json(payload)
     identity = canonical_json([source.evidence_id, digest, location, physical_copy, encoded,
                                source.available_at.isoformat() if source.available_at else None,
                                source.source_kind, source.path, source.citeable])
+    if derived_available_at is not None:
+        identity += canonical_json(["derived_available_at", derived_available_at.isoformat()])
+    if derived_valid_until is not None:
+        identity += canonical_json(["derived_valid_until", derived_valid_until.isoformat()])
     facts = tuple((key, canonical_json(value)) for key, value in sorted(payload.items()))
     return Observation(Resource(system, resource, category, physical_copy), source, observed_at,
                        claim_kind, facts, location, hashlib.sha256(identity.encode("utf-8")).hexdigest(),
-                       digest, encoded, identifiers_from(payload, source.evidence_id), time_basis, trace_id)
+                       digest, encoded, identifiers_from(payload, source.evidence_id), time_basis, trace_id, derived_available_at, derived_valid_until)
 
 
 def observation_time(payload: dict, inherited: datetime | None, inherited_basis: str,

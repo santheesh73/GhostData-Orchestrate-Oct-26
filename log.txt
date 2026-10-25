@@ -667,3 +667,44 @@ Full reference/cached proof fingerprints agree. Guarded root publication exits3 
 Final clean-source verification completed on application commit e0e4538f50acc141d460a5cc051cfb3505299cf9. A new source export with exact supplied evidence bytes reproduces identical case diagnostics/proof, exits3 with240 unknown, and creates no root output. Observed81.271s with documented installed dependencies; no clean-machine install or cross-platform result is claimed. Prospective99-member archive inventory/secret-pattern scan passes; no new release archive is built because semantic proof remains blocked. Current JSON integrity, public taxonomy and clean-run evidence are committed with the complete A-M RECOVERY-REPORT.
 
 Final verdict: NOT READY — CRITICAL BLOCKERS REMAIN. Known fabrication/unknown-default paths are repaired and503 tests pass, but missing or uninterpreted source prerequisites prevent a safe complete518-row corrected release. Historical candidate/bundle/stash remain intact. Active-session trace finalization still requires session completion and tool exit. No external upload, paid model call, data edit or fabricated transcript occurred.
+
+## [2026-10-25T09:54:58.106261+00:00] SESSION START
+
+tool=Codex
+model=gpt-6.1-sol
+Repo Root: C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+Branch: main
+Worktree: main
+Parent Agent: none
+Language: py
+Time Remaining: repository not configured; official timetable being verified
+
+## [2026-10-25T09:54:58.106287+00:00] Phase06B evidence recovery authorized
+
+User Prompt (verbatim, secrets redacted):
+Pasted text contains the user's request.
+Attachment: C:\Users\SANTHEESH\.codex/attachments/fbeb98d9-6804-4d0c-b882-e0544f1a48fa/Pasted text.txt
+My request:
+
+Agent Response Summary:
+The user authorizes focused Phase06B evidence and policy recovery while preserving the503-test safety baseline. Confirmed clean main atd302f17 and inspected current source/diagnostics before changes. Reproducing baseline, building unique resource root-cause and verification matrices, and retaining source eligibility and unknown states.
+
+Actions:
+* Read Phase06B request, official contract, current reports and relevant implementation/skills.
+* Verify official timetable and reproduce current diagnostics before repair.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase06B measured checkpoint:baseline503 tests reproduced; initial19 new controls had4 failures and15 passes. Final537 pass in26.00s; no protected test removed or weakened. Explicit order-context prose recovers52 support scopes; exact catalog/document joins resolve case_33 and case_61. Full280/518 resolved (88 COMPLETE,182 INCOMPLETE,10 NOT_APPLICABLE),238 unknown; public16/32 statuses and1/32 exact rows remain unchanged. Published73/73 steps match; candidate-only precision falls from124/127 to124/130 due to an explicitly sourced stored object outside the public canonical plan. This difference is disclosed and not counted as accuracy improvement.
+
+All111 reference verifications were mapped:58 supported,32 blocked at linkage,3 at source/state,18 at policy; established obligations already reach the planner. Retention337 scopes over202 resources have no supplied interval and remain unknown. The attachment form source was interpreted only as type/presence; no sole ownership inferred. Derived joins preserve original clocks and require all mapping sources available, with alias collision windows and independent checks. Matrix generator shadowing bug was corrected and rerun; it did not alter inference rules.
+
+Two fresh seeded --run reports are identical and exit3 preserving the old output. Reference/cached full proofs agree. Package --check-only under -O blocks238 cases. Explicit prospective103-member inventory checks pass; no release bundle is built. Current reports and source maps updated; official input/historical bundle unchanged; provider calls/tokens/cost remain0, excluding development/local compute.
+
+Final Phase06B source checkpoint: 538 tests passed in 24.63s (503 protected plus 35 new controls). Final diagnostics resolve 280/518 with 238 unknown; published public metrics unchanged. Prospective 103-member inventory checked; no new submission archive or output produced. Committing tested source before clean-source reproduction.

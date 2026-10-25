@@ -63,6 +63,9 @@ def certify(bundle, engine, request, reconstruction):
         if state == "UNKNOWN_TIME":
             blockers.add("MATCHING_SOURCE_TIME_UNKNOWN")
             continue
+        if state != "ELIGIBLE":
+            blockers.add("MATCHING_BINDING_UNRESOLVED")
+            continue
         if observation.claim_kind == "RAW_UNPARSED":
             blockers.add("MATCHING_CONTENT_UNPARSED")
         if observation.claim_kind == "DOCUMENT_TEXT":

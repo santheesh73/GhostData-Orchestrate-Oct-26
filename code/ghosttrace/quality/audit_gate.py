@@ -10,6 +10,32 @@ from dataclasses import replace
 
 from ..models import Authorization, DeletionStatus
 from ..resolve.signals import eligible
+from ..resolve.signals import payload
+
+
+def derivation_errors(observation, observations, cutoff):
+    proof = payload(observation).get("extraction_proof", {})
+    if not isinstance(proof, dict) or proof.get("adapter") != "EXPLICIT_CATALOG_ALIAS":
+        return ()
+    binding = observations.get(proof.get("catalog_observation_id"))
+    if (binding is None or binding.claim_kind != "OPERATION_CLAIM" or binding.evidence.path != "system_activity.csv"
+            or eligible(binding, cutoff) != "ELIGIBLE"
+            or (binding.resource.system_id, binding.resource.resource_id) != (observation.resource.system_id, observation.resource.resource_id)):
+        return ("DERIVED_BINDING_PROOF",)
+    clocks = (binding.observed_at, binding.evidence.available_at, observation.evidence.available_at)
+    if None in clocks or observation.derived_available_at is None or observation.derived_available_at < max(clocks):
+        return ("DERIVED_BINDING_TIME",)
+    data = payload(binding)
+    if proof.get("alias") not in {data.get("catalog_label"), data.get("catalog_filename")}:
+        return ("DERIVED_BINDING_ALIAS",)
+    for span in proof.get("document_spans", ()):
+        supporting = [o for o in observations.values() if o.evidence.evidence_id == observation.evidence.evidence_id
+                      and o.location == span.get("locator") and o.claim_kind == "DOCUMENT_TEXT"
+                      and span.get("text") in {line.strip() for line in payload(o).get("text", "").splitlines()}
+                      and o.source_sha256 == observation.source_sha256]
+        if supporting:
+            return ()
+    return ("DERIVED_DOCUMENT_SPAN",)
 
 ALLOWED = {
     "DELETE": {"REPORT_REMAINING_RECORD", "DELETE_RECORD", "VERIFY_RECORD_ABSENT"},
@@ -59,6 +85,8 @@ def check_audit(audit, observations):
             observation = observations.get(oid)
             if observation is None or eligible(observation, decision.request.audit_at) != "ELIGIBLE":
                 errors.add("STATE_PROOF_TIME")
+            elif observation is not None:
+                errors.update(derivation_errors(observation, observations, decision.request.audit_at))
         for operation in assessment.operations:
             if assessment.action == "RETAIN" and assessment.category != "BACKUP_ARCHIVE" and operation.operation != "VERIFY_RECORD_PRESENT":
                 errors.add("RETAINED_RECORD_OPERATION")

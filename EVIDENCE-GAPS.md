@@ -1,8 +1,8 @@
 # CURRENT LIMITATIONS — 25 October 2026 recovery
 
-Corrected diagnostics resolve278/518;240 are unresolved. Known unsafe defaults
+Corrected diagnostics resolve280/518;238 are unresolved. Known unsafe defaults
 were removed. The exact affected cases/resources and condition codes are in
-evaluation/recovery_blockers.json. Resource-scope counts follow; categories can
+evaluation/phase06b/root_causes.json. Resource-scope counts follow; categories can
 overlap within a case. Some are missing source facts, others remain incomplete
 interpretation. No universal impossibility claim is made.
 
@@ -12,9 +12,8 @@ interpretation. No universal impossibility claim is made.
 | LEGAL_HOLD_RECORD:POLICY_CONDITION_NOT_ESTABLISHED | 1 |
 | SECURITY_AUDIT_LOG:POLICY_CONDITION_NOT_ESTABLISHED | 337 |
 | SUPPORT_ATTACHMENT:POLICY_CONDITION_NOT_ESTABLISHED | 3 |
-| SUPPORT_MESSAGE:POLICY_CONDITION_NOT_ESTABLISHED | 127 |
-| UNMAPPED:RESOURCE_LINK_NOT_ESTABLISHED | 4 |
-| UNMAPPED:UNMAPPED_POLICY_CATEGORY | 2 |
+| SUPPORT_MESSAGE:POLICY_CONDITION_NOT_ESTABLISHED | 75 |
+| UNMAPPED:RESOURCE_LINK_NOT_ESTABLISHED | 2 |
 
 A source schema scan found retention_until/retained_until fields on some records,
 but they are not supplied in every relevant record/cutoff. A signed or present
@@ -47,3 +46,8 @@ packaging stay blocked rather than inserting unsupported official labels. The
 historical all518 CSV/bundle are preserved; they are not a safe corrected release.
 A live model could assist existing artifact interpretation only with approved
 configuration/budget; it cannot create missing evidence.
+
+Phase06B investigated337 undated security scopes over202 logical resources.
+No expiry was recovered for them. Explicit source-labeled order contents recover
+52 support scopes; two exact catalog/document joins resolve two full cases.
+All remaining gates and source classifications are in PHASE06B-REPORT.md.

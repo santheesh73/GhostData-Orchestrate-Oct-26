@@ -53,6 +53,19 @@ def condition(rule, facts, user, audit_at):
         supported = tuple(f for f in context if isinstance(decoded(f), str) and decoded(f).strip())
         if supported:
             return True, supported
+        # A source-labeled declarative order-content section establishes order
+        # context, even when another sentence exposes PII. This does not certify
+        # the text clean and does not treat an arbitrary keyword as a condition.
+        for fact in named(facts, "message_text", "message_excerpt"):
+            value = decoded(fact)
+            if not isinstance(value, str):
+                continue
+            match = re.search(r"(?:^|[.!?]\s+)(?:the\s+)?affected\s+order\s+(?:includes|contains)\s*:\s*([^.!?\n]+)", value, re.I)
+            prefix = value[:match.start()] if match else ""
+            if prefix.count('"') % 2 or prefix.count("`") % 2 or prefix.count("“") > prefix.count("”"):
+                continue
+            if match and match[1].strip() and not re.match(r"(?:unknown|null|none|n/a|not|no)\b", match[1].strip(), re.I):
+                return True, (fact,)
         summaries = tuple(f for f in named(facts, "message_excerpt", "message_text")
                           if generic_support_summary(decoded(f)) and re.search(r"\b(?:support|order|delivery)\b", decoded(f), re.I))
         if summaries:
@@ -169,10 +182,24 @@ def pii(facts, category, aliases, user):
     return False, fields + texts
 
 
-def assess(state, book, user, aliases, audit_at, observations):
+def assess(state, book, user, aliases, audit_at, observations, context_observations=()):
     facts = project(state)
     payloads = {o.observation_id: json.loads(o.payload_json) for o in state.timeline}
     category = book.category(state, payloads)
+    if category == "SUPPORT_ATTACHMENT":
+        # Explicit catalog ownership is a condition proof, never a presence
+        # readback. It can corroborate an independently observed stored object.
+        from ..resolve.models import ResolvedFact
+        from ..resolve.signals import eligible
+        for o in context_observations:
+            data = json.loads(o.payload_json)
+            if (o.claim_kind == "OPERATION_CLAIM" and o.evidence.path == "system_activity.csv"
+                    and eligible(o, audit_at) == "ELIGIBLE"
+                    and (o.resource.system_id, o.resource.resource_id) == (state.resource.system_id, state.resource.resource_id)
+                    and data.get("event_type") == "LINK_RESOURCE_IDENTITY"
+                    and data.get("catalog_sole_subject") is True
+                    and data.get("catalog_subject_reference") == user):
+                facts += (ResolvedFact("/sole_subject", "true", o.observed_at, (o.observation_id,)),)
     resource = replace(state.resource, category=category or "")
     rule = book.by_category.get(category)
     rule_id = rule.rule_id if rule else "SPEC_ACTIVE_FLOW" if category == "DATA_FLOW" else ""
@@ -193,9 +220,10 @@ def assess(state, book, user, aliases, audit_at, observations):
         return min(intersection) if intersection else None
 
     def outcome(violation, finding, remedy, verification, proof, condition_proof=(), retained=False, conjunctive=False):
-        # Complete checks need one artifact supporting every required field,
-        # rather than a file that proves only one conjunct of compliance.
-        supporting = proof + condition_proof if not violation else proof
+        # Cite a direct state witness. Separately sourced, time-qualified policy
+        # prerequisites remain in the internal derivation; they need not occur
+        # in that same artifact. Required state fields still need a joint witness.
+        supporting = proof
         groups = tuple((f,) for f in supporting) if not violation or conjunctive else (proof,)
         evidence = citation(groups)
         if evidence is None:
@@ -258,7 +286,7 @@ def assess(state, book, user, aliases, audit_at, observations):
     if action == "RETAIN":
         if presence != "PRESENT":
             return unknown("REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED")
-        return outcome(False, "", "", "VERIFY_RECORD_PRESENT", presence_facts + condition_proof)
+        return outcome(False, "", "", "VERIFY_RECORD_PRESENT", presence_facts, condition_proof)
     if presence == "ABSENT":
         if action != "DELETE":
             return unknown("REQUIRED_PRESERVED_RECORD_NOT_ESTABLISHED")

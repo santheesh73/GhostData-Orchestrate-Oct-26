@@ -51,7 +51,8 @@ class PolicyEngine:
                 issues.append(Uncertainty("INELIGIBLE_RECONSTRUCTION", "state contains an unavailable observation"))
                 continue
             assessment = assess(state, self.rulebook, reconstruction.identity.user_id,
-                                reconstruction.identity.ownership, request.audit_at, self.observations)
+                                reconstruction.identity.ownership, request.audit_at, self.observations,
+                                self.reconstruction.index.lookup_resource(state.resource.resource_id, system_id=state.resource.system_id).observations)
             assessments.append(assessment)
             # Dependencies require explicit typed endpoints, never a guessed ID
             # relationship or a global SYNC SUCCESS message.
