@@ -2,21 +2,6 @@
 
 For each of the 518 deletion requests, GhostTrace resolves current and historical identifiers, replays evidence to `audit_at`, applies `deletion_rules.csv`, and emits contract-exact `steps_json`. Its pipeline is deterministic: no LLM invents operations or evidence IDs, and the final run makes 0 model calls ($0). Where supplied facts are incomplete, the final prediction mode uses the defaults disclosed below.
 
-## Results
-
-Public sample set: these labels were inspected during development, so this is not a held-out score.
-
-| Metric | Value |
-|---|---|
-| Status accuracy | 32/32 |
-| Exact rows | 9/32 |
-| Step precision | 98.14% |
-| Step recall | 158/193 |
-| Full run | 518/518 rows, contract-valid |
-| Tests | 542 passing |
-
-Hidden-set accuracy is not measured.
-
 ## Architecture
 
 - Ingest (CSV/JSON/SQL/logs; PDF/image text capture with OCR);
