@@ -67,7 +67,7 @@ class RuleBook:
             if canonical:
                 categories.add(canonical)
             if event_name == "contact_lookup_completed" and state.resource.system_id == "analytics_platform":
-                event_category = "ANALYTICS_PROFILE"
+                event_category = "SECONDARY_IDENTIFIER" if "email_opt_in" in data else "ANALYTICS_PROFILE"
             if event_name == "contact_query_completed" and data.get("lookup_source", data.get("source")) == "legacy_contact_index":
                 event_category = "SECONDARY_IDENTIFIER"
             if event_category:

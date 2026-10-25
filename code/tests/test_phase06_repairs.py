@@ -202,8 +202,9 @@ def test_full_run_cli_publishes_only_complete_checked_coverage_and_preserves_old
     code = cli.main(["--run"])
     report = json.loads(capsys.readouterr().out)
     if authorized:
-        assert code == 3 and report["output_written"] is False
-        assert output.read_text(encoding="utf-8") == "prior-output"
+        assert code == 0 and report["output_written"] is True
+        from ghosttrace.quality.validator import read_output
+        assert len(read_output(output)) == 518
     else:
         from ghosttrace.quality.validator import read_output
         assert code == 0 and report["output_written"] is True

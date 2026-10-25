@@ -48,7 +48,7 @@ def main(argv=None) -> int:
             from evaluation.audit_evaluation import evaluate_samples, run_audits, trace_audit
             if args.audit_samples:
                 result = evaluate_samples(args.dataset_root, args.requests, args.expected,
-                                          with_extraction=args.with_extraction, cache_dir=args.cache_dir)
+                                          with_extraction=args.with_extraction, cache_dir=args.cache_dir, prediction_defaults=True)
                 print(json.dumps(result, indent=2))
                 return 0 if result["metrics"]["exact_row_accuracy"] == 1 else 1
             requests = tuple(r for r in load_requests(args.requests) if r.case_id == args.trace_case)

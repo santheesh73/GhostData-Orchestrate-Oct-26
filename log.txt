@@ -710,3 +710,77 @@ Two fresh seeded --run reports are identical and exit3 preserving the old output
 Final Phase06B source checkpoint: 538 tests passed in 24.63s (503 protected plus 35 new controls). Final diagnostics resolve 280/518 with 238 unknown; published public metrics unchanged. Prospective 103-member inventory checked; no new submission archive or output produced. Committing tested source before clean-source reproduction.
 
 Final verification: source commit 9a3e683 reproduced with fresh cache and byte-identical dataset in 77.596s, exit 3, 280 resolved / 238 unknown, identical case reports and proof, no new output. Final public metrics unchanged; inspected expected case_07 diagnostic transition after form recovery. Optimized package check exit 1, semantic gate blocks 238; historical bundle, root output and stash preserved. All 538 tests pass (503 protected, 35 new). A-O report and post-session trace-export checklist completed. Integrity comparison was corrected to distinguish the pre-existing root candidate from the separate historical submission candidate; hashes and original modification times recorded. No paid calls, external submission or new release bundle. Preparing final documentation checkpoint and push to authorized GhostData origin.
+
+## [2026-10-25T11:20:34.530455+00:00] SESSION START
+
+tool=Codex
+model=gpt-6-astra
+Repo Root: C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+Branch: main
+Worktree: main
+Parent Agent: none
+Language: py
+Time Remaining: nominal 70 minutes; user freeze in 35 minutes
+
+## [2026-10-25T11:20:34.530455+00:00] Emergency submission recovery
+
+User Prompt (verbatim, secrets redacted):
+Solve all the issue and improve the accuray 
+Make it ready for submission
+Attachment: C:/Users/SANTHEESH/.codex/attachments/a18eca95-3f46-4802-8934-aa70f42e132f/Pasted text.txt
+
+Agent Response Summary:
+Read the emergency directive and repository contract. User explicitly replaces strict abstention with documented prediction defaults, authorizes fallback restoration and packaging, and sets a 17:25 IST freeze. Preserving fallback before comparing measured candidates.
+
+Actions:
+* Read emergency prompt, AGENTS.md and packaging skill.
+* Check repository and time, protect fallback.
+
+Context:
+tool=Codex
+model=gpt-6-astra
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T11:41:16.999652+00:00] Continue emergency recovery
+
+User Prompt (verbatim, secrets redacted):
+continue
+
+Agent Response Summary:
+Continuing the authorized emergency prediction and packaging workflow. Fallback bytes are protected; measuring the old source while implementing explicit prediction defaults.
+
+Actions:
+* Continue candidate repair, sample comparison and submission validation.
+
+Context:
+tool=Codex
+model=gpt-6-astra
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T11:44:39.505928+00:00] Continue final prediction validation
+
+User Prompt (verbatim, secrets redacted):
+continue
+
+Agent Response Summary:
+Resuming after interruption with measured 31/32 public statuses and 7/32 exact rows. Checking the in-progress full run and completing general parsing, validation and packaging under the user emergency directive.
+
+Actions:
+* Resume full-run verification and emergency submission preparation.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Emergency final result: public predictions 32/32, status 32/32, exact/sequence 8/32, steps 158/162 precision and 158/193 recall, fields 1060/1379 (76.87%). Full command exits 0 and produces 518 rows: 156 COMPLETE, 352 INCOMPLETE, 10 NOT_APPLICABLE. One COMPLETE has no established verification and is published as a heuristic per user override. Final 538 tests pass in 23.44s, none skipped; only the explicitly superseded abstention CLI expectation changed. Independent package regeneration matches; extracted 103-member ZIP with fresh cache reproduces CSV bytes in 64.155s, exit 0. Source archive excludes dataset/caches/credentials; configured key-value scan finds no secrets. Fallback tag and bytes preserved. Agent trace ZIP includes six Codex and three Antigravity authentic snapshots, 18 credential-like patterns redacted; active trace requires refresh after session closure. New source exceeds fallback measured thresholds. Submission files are selected under submission/. Preparing final commit and push; no external HackerRank upload.
+Final measured field counts (authoritative): 1060/1379; accuracy 0.7686729514.

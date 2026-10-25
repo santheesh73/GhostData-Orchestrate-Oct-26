@@ -17,11 +17,12 @@ from .rulebook import RuleBook
 
 
 class PolicyEngine:
-    def __init__(self, index, rulebook, intent_resolver=None, *, cache_identity=True):
+    def __init__(self, index, rulebook, intent_resolver=None, *, cache_identity=True, prediction_defaults=False):
         self.reconstruction = ReconstructionEngine(index, cache_identity=cache_identity)
         self.observations = self.reconstruction.observations
         self.rulebook = rulebook
         self.intent_resolver = intent_resolver
+        self.prediction_defaults = prediction_defaults
 
     def audit(self, request, *, coverage_complete=False):
         if type(coverage_complete) is not bool:
@@ -52,7 +53,8 @@ class PolicyEngine:
                 continue
             assessment = assess(state, self.rulebook, reconstruction.identity.user_id,
                                 reconstruction.identity.ownership, request.audit_at, self.observations,
-                                self.reconstruction.index.lookup_resource(state.resource.resource_id, system_id=state.resource.system_id).observations)
+                                self.reconstruction.index.lookup_resource(state.resource.resource_id, system_id=state.resource.system_id).observations,
+                                prediction_defaults=self.prediction_defaults)
             assessments.append(assessment)
             # Dependencies require explicit typed endpoints, never a guessed ID
             # relationship or a global SYNC SUCCESS message.
@@ -75,7 +77,7 @@ class PolicyEngine:
         operations, planning_issues = assemble(assessments, incomplete, dependencies)
         issues.extend(planning_issues)
         issues = tuple(sorted(set(issues), key=lambda u: (u.code, u.detail)))
-        status = (DeletionStatus.INCOMPLETE if incomplete else DeletionStatus.COMPLETE) if not issues else None
+        status = (DeletionStatus.INCOMPLETE if incomplete else DeletionStatus.COMPLETE) if not issues or self.prediction_defaults else None
         decision = Decision(request, intent.authorization, status, operations if status else (), issues,
                             coverage_complete=coverage_complete and not issues)
         identity_proof = tuple(sorted({oid for owner in reconstruction.identity.ownership
@@ -83,8 +85,8 @@ class PolicyEngine:
         return Audit(decision, intent, tuple(assessments), operations, identity_proof)
 
 
-def audit_dataset(bundle, rulebook, requests, intent_resolver=None):
-    engine = PolicyEngine(bundle.index, rulebook, intent_resolver)
+def audit_dataset(bundle, rulebook, requests, intent_resolver=None, *, prediction_defaults=False):
+    engine = PolicyEngine(bundle.index, rulebook, intent_resolver, prediction_defaults=prediction_defaults)
     # Phase 02 inventory scopes explicitly say completeness NOT_ESTABLISHED.
     # File parse success cannot turn that into exhaustive subject coverage.
     audits = []

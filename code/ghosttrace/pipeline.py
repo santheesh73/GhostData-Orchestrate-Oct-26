@@ -20,14 +20,14 @@ def diagnose_requests(requests: tuple[Request, ...]) -> dict:
 
 
 def publish_decisions(decisions: tuple[Decision, ...], requests: tuple[Request, ...],
-                      catalog: Mapping[str, EvidenceSource], destination: Path) -> Path:
+                      catalog: Mapping[str, EvidenceSource], destination: Path, *, allow_uncertainty=False) -> Path:
     expected = {r.case_id: r for r in requests}
     if len(decisions) != len(requests) or {d.request.case_id for d in decisions} != set(expected):
         raise UnresolvedDecision("complete decision coverage is required before publication")
     if any(d.request != expected[d.request.case_id] for d in decisions):
         raise UnresolvedDecision("decision request context does not match the supplied requests")
-    rows = tuple(emit_decision(decision) for decision in decisions)
-    return write_output(rows, destination, requests, catalog)
+    rows = tuple(emit_decision(decision, allow_uncertainty=allow_uncertainty) for decision in decisions)
+    return write_output(rows, destination, requests, catalog, allow_empty_complete=allow_uncertainty)
 
 
 def publish_policy_audits(audits, requests, catalog, destination, observations):

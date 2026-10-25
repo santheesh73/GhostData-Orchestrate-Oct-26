@@ -10,3 +10,9 @@ venv/
 /output.csv
 /code.zip
 /agent-trace.zip
+
+.rescue/
+
+agent-trace/
+agent-trace.zip
+submission-final/

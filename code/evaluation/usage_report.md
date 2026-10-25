@@ -1,10 +1,10 @@
-# CURRENT MEASUREMENT — Phase06B native diagnostics
+# Final full-run usage
 
-No corrected full prediction-producing run exists while238 requests remain
-unresolved. Final successful-run usage is NOT AVAILABLE. Measured full/public
-native diagnostics use0 providers/models,0 calls,0 input/output tokens,0 total
-and average tokens/request, USD0 total/per-request model-service cost, and no
-per-model entries. Cached model-build usage is0. Local compute and development
-session usage are excluded. No paid call or dependency installation occurred.
-Historical usage records are under evaluation/history/; the old all518 CSV is
-not a corrected final artifact. No final package is claimed.
+native deterministic pipeline, 0 model calls, $0.
+
+Final command: `python -B code/main.py --run --with-extraction`, exit 0,
+518 prediction rows. Providers/models: none. Input tokens: 0; output tokens: 0;
+total tokens: 0; average tokens/request: 0. Estimated model-service total cost:
+USD 0; per-request cost: USD 0. Per-model entries: none; overall calls/tokens/cost
+all zero. Local compute, native OCR and coding-session usage are excluded.
+No paid model call or dependency installation was performed during this recovery.

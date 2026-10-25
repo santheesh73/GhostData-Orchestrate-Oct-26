@@ -13,7 +13,7 @@ from ..spec_registry import OUTPUT_COLUMNS
 
 
 def write_output(rows: tuple[OutputRow, ...], destination: Path,
-                 requests: tuple[Request, ...], catalog: Mapping[str, EvidenceSource]) -> Path:
+                 requests: tuple[Request, ...], catalog: Mapping[str, EvidenceSource], *, allow_empty_complete=False) -> Path:
     destination = Path(destination).resolve()
     dataset = Path(__file__).resolve().parents[3] / "dataset"
     if destination.suffix.lower() != ".csv" or destination.is_relative_to(dataset.resolve()):
@@ -21,7 +21,7 @@ def write_output(rows: tuple[OutputRow, ...], destination: Path,
     if catalog is None:
         raise ValueError("publication requires an explicit evidence metadata catalog")
     ordered = tuple(sorted(rows, key=lambda row: row.case_id))
-    report = validate_rows([row.as_dict() for row in ordered], requests, catalog)
+    report = validate_rows([row.as_dict() for row in ordered], requests, catalog, allow_empty_complete=allow_empty_complete)
     if not report.valid:
         raise ValueError("output validation failed: " + ",".join(sorted({i.code for i in report.issues})))
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -39,7 +39,7 @@ def write_output(rows: tuple[OutputRow, ...], destination: Path,
                 writer.writerow((row.case_id, row.deletion_status, payload))
             stream.flush()
             os.fsync(stream.fileno())
-        staged_report = validate_file(staging, requests, catalog)
+        staged_report = validate_file(staging, requests, catalog, allow_empty_complete=allow_empty_complete)
         if not staged_report.valid:
             raise ValueError("serialized output failed independent validation")
         os.replace(staging, destination)

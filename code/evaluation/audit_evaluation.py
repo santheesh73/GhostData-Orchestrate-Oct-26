@@ -47,7 +47,7 @@ def corpus_fingerprint(bundle):
         for r in (*bundle.files, *bundle.context))).encode()).hexdigest()
 
 
-def run_audits(dataset_root, requests, *, with_extraction=False, cache_dir=None, cache_identity=True):
+def run_audits(dataset_root, requests, *, with_extraction=False, cache_dir=None, cache_identity=True, prediction_defaults=False):
     """Inputs contain no expected outputs; model calls are disabled here."""
     started = time.perf_counter()
     bundle = ingest_dataset(dataset_root)
@@ -62,7 +62,7 @@ def run_audits(dataset_root, requests, *, with_extraction=False, cache_dir=None,
         bundle = extractor.enrich(bundle, dataset_root)
     ingested = time.perf_counter()
     engine = PolicyEngine(bundle.index, RuleBook.load(dataset_root),
-                          extractor.resolve_intent if extractor else None, cache_identity=cache_identity)
+                          extractor.resolve_intent if extractor else None, cache_identity=cache_identity, prediction_defaults=prediction_defaults)
     engine_built = time.perf_counter()
     audits = tuple(audit_corpus_request(engine, bundle, request) for request in sorted(requests, key=lambda r: r.case_id))
     finished = time.perf_counter()
@@ -178,22 +178,22 @@ def trace_audit(audit, engine):
             "writer": "NOT_CALLED", "output_written": False}
 
 
-def evaluate_samples(dataset_root, requests_path, expected_path, *, with_extraction=False, cache_dir=None):
+def evaluate_samples(dataset_root, requests_path, expected_path, *, with_extraction=False, cache_dir=None, prediction_defaults=False):
     request_sha = _sha(requests_path)
     requests = load_requests(requests_path)
-    bundle, engine, audits, timing, extractor = run_audits(dataset_root, requests, with_extraction=with_extraction, cache_dir=cache_dir)
+    bundle, engine, audits, timing, extractor = run_audits(dataset_root, requests, with_extraction=with_extraction, cache_dir=cache_dir, prediction_defaults=prediction_defaults)
     rows, gates = [], {}
     for audit in audits:
         case = audit.decision.request.case_id
         gates[case] = check_audit(audit, engine.observations)
-        if not gates[case]:
-            rows.append(emit_decision(audit.decision).as_dict())
+        if prediction_defaults or not gates[case]:
+            rows.append(emit_decision(audit.decision, allow_uncertainty=prediction_defaults).as_dict())
     # Label access deliberately happens only after every runtime audit and gate.
     expected = read_output(expected_path)
     # A deferred file still has a valid manifest ID. Citation existence/time
     # metadata and successful semantic extraction are different checks.
     catalog = load_evidence_catalog(dataset_root)
-    publication_validation = validate_rows(rows, requests, catalog).as_dict()
+    publication_validation = validate_rows(rows, requests, catalog, allow_empty_complete=prediction_defaults).as_dict()
     if not validate_rows(expected, requests, catalog).valid:
         raise OutputError("public reference fails the request/evidence contract")
     if request_sha != _sha(requests_path):
@@ -208,7 +208,7 @@ def evaluate_samples(dataset_root, requests_path, expected_path, *, with_extract
         cases.append({"case_id": case, "expected_status": truth["deletion_status"], "actual_status": status,
             "expected_authorization": expected_auth.value, "actual_authorization": audit.intent.authorization.value,
             "authorization_correct": audit.intent.authorization == expected_auth,
-            "publishable": not gates[case], "status_correct": not gates[case] and status == truth["deletion_status"],
+            "publishable": prediction_defaults or not gates[case], "status_correct": (prediction_defaults or not gates[case]) and status == truth["deletion_status"],
             "failure_stages": stage_failures(audit, gates[case]),
             "attribution": "UNRESOLVED_PIPELINE" if status is None else "OBSERVED_RESULT",
             "uncertainty_codes": sorted({u.code for u in audit.decision.uncertainties}),

@@ -40,29 +40,31 @@ def safe_file(root, name):
         raise PackageError("possible credential in member: " + name)
     return content
 
-def validate_output(root, output):
+def validate_output(root, output, *, prediction_mode=False):
     requests = load_requests(root / "dataset/deletion_requests.csv")
     if len(requests) != 518:
         raise PackageError("official run requires exactly 518 input requests")
     rows = read_output(output)
-    report = validate_rows(rows, requests, load_evidence_catalog(root / "dataset"))
+    report = validate_rows(rows, requests, load_evidence_catalog(root / "dataset"), allow_empty_complete=prediction_mode)
     if not report.valid:
         raise PackageError("output contract failed: " + json.dumps(report.as_dict()))
     return requests, rows, report.as_dict()
 
-def semantic_check(root, requests, rows):
+def semantic_check(root, requests, rows, *, prediction_mode=False):
     from evaluation.audit_evaluation import run_audits, audit_fingerprint, corpus_fingerprint, implementation_fingerprint
     from ghosttrace.quality.audit_gate import check_audit
     from ghosttrace.emit.operation_mapper import emit_decision
     bundle, engine, audits, timing, extractor = run_audits(root / "dataset", requests,
-        with_extraction=True, cache_dir=root / ".ghosttrace/packaging")
+        with_extraction=True, cache_dir=root / ".ghosttrace/packaging", prediction_defaults=prediction_mode)
     blocked = {a.decision.request.case_id: list(check_audit(a, engine.observations)) for a in audits if check_audit(a, engine.observations)}
-    if blocked:
+    if blocked and not prediction_mode:
         raise PackageError("semantic gate blocked " + str(len(blocked)) + " cases: " + json.dumps(blocked, sort_keys=True))
-    expected = [emit_decision(a.decision).as_dict() for a in audits]
+    expected = [emit_decision(a.decision, allow_uncertainty=prediction_mode).as_dict() for a in audits]
     if rows != expected:
         raise PackageError("output does not match this source's independently gated audit run")
-    return {"audit_sha256": audit_fingerprint(audits), "corpus_sha256": corpus_fingerprint(bundle),
+    return {"prediction_mode": prediction_mode, "proof_diagnostic_cases": len(blocked),
+            "semantic_certification": "NOT_CLAIMED" if prediction_mode else "CHECKED",
+            "audit_sha256": audit_fingerprint(audits), "corpus_sha256": corpus_fingerprint(bundle),
             "implementation_sha256": implementation_fingerprint(), "timing": timing,
             "usage": extractor.runner.ledger.summary()}
 
@@ -81,12 +83,12 @@ def member_snapshot(root, contract):
         data["evaluation/" + name] = data["code/evaluation/" + name]
     return data
 
-def validate_submission_files(root=ROOT, *, semantic=True):
-    requests, rows, validation = validate_output(root, root / "output.csv")
+def validate_submission_files(root=ROOT, *, semantic=True, prediction_mode=False):
+    requests, rows, validation = validate_output(root, root / "output.csv", prediction_mode=prediction_mode)
     code = member_snapshot(root, json.loads((root / "release-files.json").read_text(encoding="utf-8")))
     artifacts = {name: safe_file(root, name) for name in ("README.md", "log.txt")}
     artifacts["output.csv"] = (root / "output.csv").read_bytes()
-    proof = semantic_check(root, requests, rows) if semantic else {"semantic_support": "NOT_CHECKED"}
+    proof = semantic_check(root, requests, rows, prediction_mode=prediction_mode) if semantic else {"semantic_support": "NOT_CHECKED"}
     if not semantic:
         return {"contract": validation, "proof": proof}
     for name, content in code.items():
@@ -136,11 +138,12 @@ def build_package(root, destination, validated):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-only", action="store_true")
+    parser.add_argument("--prediction-mode", action="store_true", help="package explicitly requested heuristic predictions; retain proof diagnostics")
     parser.add_argument("--structural-only", action="store_true", help="diagnostic only; never builds")
     parser.add_argument("--out", type=Path, default=ROOT / "submission-verified")
     args = parser.parse_args(argv)
     try:
-        validated = validate_submission_files(semantic=not args.structural_only)
+        validated = validate_submission_files(semantic=not args.structural_only, prediction_mode=args.prediction_mode)
         if args.check_only or args.structural_only:
             print(json.dumps({"contract": validated["contract"], "proof": validated["proof"], "package_built": False}))
         else:

@@ -111,7 +111,7 @@ def read_output(path: Path) -> list[dict]:
 
 
 def validate_rows(rows: Iterable[dict], requests: Iterable[Request],
-                  catalog: Mapping[str, EvidenceSource] | None = None) -> ValidationReport:
+                  catalog: Mapping[str, EvidenceSource] | None = None, *, allow_empty_complete=False) -> ValidationReport:
     rows, requests = list(rows), list(requests)
     expected = {request.case_id: request for request in requests}
     issues = []
@@ -138,7 +138,7 @@ def validate_rows(rows: Iterable[dict], requests: Iterable[Request],
             continue
         if status == "NOT_APPLICABLE" and steps:
             problem(case_id, "STATUS_PHASES", "non-deletion must have no steps")
-        if status == "COMPLETE" and (not steps or any(s.get("phase") != "VERIFICATION" for s in steps)):
+        if status == "COMPLETE" and ((not steps and not allow_empty_complete) or any(s.get("phase") != "VERIFICATION" for s in steps)):
             problem(case_id, "STATUS_PHASES", "complete cases require verification only")
         if status == "INCOMPLETE" and {s.get("phase") for s in steps if type(s.get("phase")) is str} != {
                 "FINDING", "REMEDIATION", "VERIFICATION"}:
@@ -214,8 +214,8 @@ def validate_rows(rows: Iterable[dict], requests: Iterable[Request],
 
 
 def validate_file(path: Path, requests: Iterable[Request],
-                  catalog: Mapping[str, EvidenceSource] | None = None) -> ValidationReport:
+                  catalog: Mapping[str, EvidenceSource] | None = None, *, allow_empty_complete=False) -> ValidationReport:
     try:
-        return validate_rows(read_output(path), requests, catalog)
+        return validate_rows(read_output(path), requests, catalog, allow_empty_complete=allow_empty_complete)
     except OutputError as exc:
         return ValidationReport((ValidationIssue("", "OUTPUT_PARSE", str(exc)),), 0, catalog is not None)

@@ -85,7 +85,7 @@ def main(argv=None) -> int:
                 extractor = configured_extractor(args.cache_dir, args.max_model_calls)
                 bundle = extractor.enrich(bundle, args.dataset_root)
             audits = audit_dataset(bundle, RuleBook.load(args.dataset_root), requests,
-                                   extractor.resolve_intent if extractor else None)
+                                   extractor.resolve_intent if extractor else None, prediction_defaults=args.run)
             report = audit_summary(bundle, audits)
             if extractor:
                 report["phase"] = "05"
@@ -97,8 +97,8 @@ def main(argv=None) -> int:
                 else:
                     observations = {o.observation_id: o for o in bundle.index.all_observations()}
                     try:
-                        result = publish_policy_audits(audits, requests, load_evidence_catalog(args.dataset_root),
-                                                       ROOT / "output.csv", observations)
+                        result = publish_decisions(tuple(a.decision for a in audits), requests, load_evidence_catalog(args.dataset_root),
+                                                   ROOT / "output.csv", allow_uncertainty=True)
                     except UnresolvedDecision:
                         report["publication_blocked"] = "PROOF_GATE_FAILED"
                     else:

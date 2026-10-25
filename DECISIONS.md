@@ -709,3 +709,23 @@ proof; no form deletion is authorized. Final538 tests pass. All280/238 full-case
 outcomes remain unchanged; public verification coverage is58 supported,32 blocked
 at linkage,3 at source/state and18 at policy. Two seeded reports and reference/
 cached full proof agree. Packaging remains blocked for238 cases.
+
+## Emergency prediction freeze — 25 October 2026
+
+The user's emergency directive supersedes strict abstention for competition
+predictions. Keep strict audit APIs, but --run and public sample CLI predict all
+rows; proof diagnostic errors do not block prediction publication or explicit
+--prediction-mode packaging. Missing security retention and active legal-hold
+conditions default to RETAIN; shared support context defaults to REDACT;
+subject-linked attachments default sole-subject unless explicitly false; linked
+restore entries default archive existence when restore permission is known.
+Missing negative PII coverage defaults treated only when no positive PII is seen.
+No established subject-linked resource defaults COMPLETE with an empty array;
+no phantom IDs are emitted. This weakens semantic certainty and is disclosed.
+Explicit email_opt_in contact lookup schema selects secondary-identifier policy.
+No numeric case/resource override is present. All compliant linked obligations
+remain in verification. Only the full-run CLI fixture's old abstention expectation
+was updated; all 538 tests pass, none skipped. New candidate wins the requested
+thresholds: 32/32 statuses, 8/32 exact, 158/193 matching steps versus fallback
+25/32, 5/32 and 137/193. Full output has 518 rows (156/352/10).
+Historical fallback bytes/tag and previous submission are preserved in .rescue/.

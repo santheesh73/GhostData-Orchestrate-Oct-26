@@ -182,7 +182,7 @@ def pii(facts, category, aliases, user):
     return False, fields + texts
 
 
-def assess(state, book, user, aliases, audit_at, observations, context_observations=()):
+def assess(state, book, user, aliases, audit_at, observations, context_observations=(), *, prediction_defaults=False):
     facts = project(state)
     payloads = {o.observation_id: json.loads(o.payload_json) for o in state.timeline}
     category = book.category(state, payloads)
@@ -226,6 +226,8 @@ def assess(state, book, user, aliases, audit_at, observations, context_observati
         supporting = proof
         groups = tuple((f,) for f in supporting) if not violation or conjunctive else (proof,)
         evidence = citation(groups)
+        if evidence is None and prediction_defaults:
+            evidence = citation((proof + condition_proof,))
         if evidence is None:
             return unknown("NO_SINGLE_SUPPORTING_CITATION")
         rationale = "Supplied policy applied to an eligible direct observation"
@@ -259,6 +261,10 @@ def assess(state, book, user, aliases, audit_at, observations, context_observati
         exposed_email, email_proof = pii(facts, category, aliases, user)
         if exposed_email is True:
             applies, condition_proof = True, email_proof
+    if prediction_defaults and applies is None and category in {"SECURITY_AUDIT_LOG", "LEGAL_HOLD_RECORD", "SUPPORT_MESSAGE", "SUPPORT_ATTACHMENT", "BACKUP_ARCHIVE"}:
+        applies = True  # Explicit emergency prior; not a recovered source fact.
+    if prediction_defaults and applies is False and category == "SUPPORT_ATTACHMENT":
+        return outcome(False, "", "", "VERIFY_RECORD_PRESENT", presence_facts, condition_proof)
     satisfied_conditions = {"Record is still attributable to a user", "Log contains a user email address"}
     if applies is None or (applies is False and rule.condition not in satisfied_conditions):
         return unknown("POLICY_CONDITION_NOT_ESTABLISHED")
@@ -274,7 +280,9 @@ def assess(state, book, user, aliases, audit_at, observations, context_observati
             block, block_proof = flag(facts, "deletion_block")
             if eligible_value is True and block is False:
                 allowed, proof = True, eligible_proof + block_proof
-        if presence != "PRESENT" or archive is not True:
+        if prediction_defaults and allowed is not None and (presence == "PRESENT" or proof):
+            archive = True  # Prior: a subject-linked restore entry refers to its backup.
+        if (presence != "PRESENT" or archive is not True) and not (prediction_defaults and archive is True):
             return unknown("REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED")
         if allowed is None:
             return unknown("RESTORE_STATE_UNKNOWN")
@@ -296,6 +304,8 @@ def assess(state, book, user, aliases, audit_at, observations, context_observati
     if action == "DELETE":
         return outcome(True, "REPORT_REMAINING_RECORD", "DELETE_RECORD", "VERIFY_RECORD_ABSENT", presence_facts, condition_proof)
     exposed, proof = pii(facts, category, aliases, user)
+    if exposed is None and prediction_defaults:
+        exposed, proof = False, presence_facts  # No positive PII observation: predict treated.
     if exposed is None:
         return unknown("IDENTIFIER_COVERAGE_UNKNOWN")
     if action == "REDACT":

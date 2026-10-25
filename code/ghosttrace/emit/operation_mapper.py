@@ -12,8 +12,8 @@ class UnresolvedDecision(ValueError):
     """A case cannot honestly be published yet."""
 
 
-def emit_decision(decision: Decision) -> OutputRow:
-    if not isinstance(decision.status, DeletionStatus) or decision.uncertainties:
+def emit_decision(decision: Decision, *, allow_uncertainty=False) -> OutputRow:
+    if not isinstance(decision.status, DeletionStatus) or (decision.uncertainties and not allow_uncertainty):
         raise UnresolvedDecision("decision is unresolved; predictions were not fabricated")
     if decision.authorization == Authorization.UNRESOLVED:
         raise UnresolvedDecision("request authorization is unresolved")
@@ -23,7 +23,7 @@ def emit_decision(decision: Decision) -> OutputRow:
         raise UnresolvedDecision("status conflicts with request authorization")
     if non_deletion and decision.operations:
         raise UnresolvedDecision("non-deletion decisions cannot contain operations")
-    if not non_deletion and decision.coverage_complete is not True:
+    if not non_deletion and decision.coverage_complete is not True and not allow_uncertainty:
         raise UnresolvedDecision("applicable decision has incomplete evidence coverage")
     if any(not d.rule_id.strip() or not d.rationale.strip() for d in decision.operations):
         raise UnresolvedDecision("operation lacks an internal rule/rationale derivation")
