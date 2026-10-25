@@ -8,6 +8,14 @@ from .signals import STRONG_KINDS, signals
 
 
 def _subject(observation, graph, view):
+    data = graph.payloads[observation.observation_id]
+    if observation.claim_kind == "OPERATION_CLAIM" and data.get("event_type") == "LINK_RESOURCE_IDENTITY":
+        match = re.fullmatch(r"Data catalog linked (\S+) \(([^()]*)\) to (\S+) and (\S+)\.", data.get("details", ""))
+        if match and match[1] == observation.resource.resource_id and match[2] == match[4] and match[4] in view.known_users:
+            return {match[4]}, "CATALOG_CLAIM", ()
+        if data.get("catalog_sole_subject") is True and data.get("catalog_subject_reference") in view.known_users:
+            return {data["catalog_subject_reference"]}, "CATALOG_CLAIM", ()
+        return set(), "", ()
     users, aliases, references = signals(graph.payloads[observation.observation_id], view.known_users)
     if users:
         return set(users), "STABLE_REFERENCE", ()
@@ -24,15 +32,11 @@ def _subject(observation, graph, view):
         return users, "IDENTIFIER_OWNERSHIP" if certain else "CONTEXT_IDENTIFIER", proof
     # Dedicated catalog grammar supplies a linkage claim, never proof that an
     # operation succeeded or that a record has a particular state.
-    data = graph.payloads[observation.observation_id]
-    if observation.claim_kind == "OPERATION_CLAIM" and data.get("event_type") == "LINK_RESOURCE_IDENTITY":
-        match = re.fullmatch(r"Data catalog linked (\S+) \(([^()]*)\) to (\S+) and (\S+)\.", data.get("details", ""))
-        if match and match[1] == observation.resource.resource_id:
-            return {match[4]}, "CATALOG_CLAIM", ()
     return set(), "", ()
 
 
 def link_resources(observations, graph, view, subject):
+    from .temporal_replay import extract_facts
     direct = {o.observation_id: _subject(o, graph, view) for o in observations}
     traces = defaultdict(list)
     for observation in observations:
@@ -69,7 +73,9 @@ def link_resources(observations, graph, view, subject):
         if len(users) > 1:
             status = "AMBIGUOUS"
         elif all(b in {"CONTEXT_IDENTIFIER", "TRACE_CONTEXT", "CATALOG_CLAIM"} for b in bases):
-            status = "PROVISIONAL"
+            readbacks = [o for o in observations if o.resource.system_id == system and o.resource.resource_id == resource
+                         and extract_facts(o)]
+            status = "LINKED" if "CATALOG_CLAIM" in bases and readbacks else "PROVISIONAL"
         else:
             status = "LINKED"
         result.append(ResourceLink(system, resource, tuple(sorted(users)), status,

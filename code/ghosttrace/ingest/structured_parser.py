@@ -3,6 +3,7 @@
 import hashlib
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import csv
+import re
 import sqlite3
 
 from ..models import EvidenceSource
@@ -85,7 +86,7 @@ def load_context_sources(dataset_root: Path) -> tuple[ParseResult, ...]:
     """Context snapshots are non-citeable; audit/activity rows retain real IDs."""
     results = []
     definitions = (
-        ("user_identities.csv", ("user_id", "name", "email", "phone", "email_hash", "updated_at"), "updated_at", None, "IDENTITY_CONTEXT"),
+        ("user_identities.csv", ("user_id", "name", "email", "phone", "email_hash", "updated_at"), "updated_at", None, "IDENTITY_REGISTRY_ENTRY"),
         ("user_audit_log.csv", ("audit_id", "user_id", "event_time", "field_name", "old_value", "new_value"), "event_time", "audit_id", "IDENTITY_CHANGE_CLAIM"),
         ("system_activity.csv", ("activity_id", "event_time", "event_type", "source_system", "target_system", "resource_id", "reported_result", "details"), "event_time", "activity_id", "OPERATION_CLAIM"),
         ("deletion_rules.csv", ("rule_id", "data_category", "condition", "required_action"), None, None, "POLICY_CONTEXT"),
@@ -123,7 +124,16 @@ def load_context_sources(dataset_root: Path) -> tuple[ParseResult, ...]:
                         diagnostics.append(ParseDiagnostic("INVALID_EVIDENCE_ID", location, "blank, padded, or duplicate event ID", "ERROR"))
                     ids.add(value)
                     source = EvidenceSource(value, clock, kind, filename)
-                observations.append(make_observation(source, digest, location, record,
+                values = dict(record)
+                if kind == "OPERATION_CLAIM" and record.get("event_type") == "LINK_RESOURCE_IDENTITY":
+                    match = re.fullmatch(r"Data catalog linked (\S+) \(([^()]*)\) to (\S+) and (\S+)\.", record["details"])
+                    if match and match[1] == record["resource_id"] and match[2] == match[4]:
+                        values.update(catalog_subject_reference=match[4], catalog_email=match[3])
+                    attachment = re.fullmatch(r"Attachment catalog confirmed (\S+) \(([^()]*)\) belongs only to (\S+) and (\S+); no other subject is linked\.", record["details"])
+                    if attachment and attachment[1] == record["resource_id"]:
+                        values.update(catalog_subject_reference=attachment[4], catalog_email=attachment[3], catalog_sole_subject=True,
+                                      catalog_filename=attachment[2])
+                observations.append(make_observation(source, digest, location, values,
                     system=record.get("target_system", ""), resource=record.get("resource_id", ""),
                     category=record.get("data_category", ""), observed_at=clock,
                     time_basis=time_key or "unknown", claim_kind=kind))

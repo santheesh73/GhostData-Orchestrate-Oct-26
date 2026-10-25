@@ -18,6 +18,17 @@ def classify_request(text):
     if not normalized.strip():
         return Intent(Authorization.UNRESOLVED, "EMPTY_REQUEST")
     if any(unicodedata.category(char).startswith("L") and "LATIN" not in unicodedata.name(char, "") for char in normalized):
+        if re.search(r'[`"“”]|ignore .*instructions|system prompt', normalized):
+            return Intent(Authorization.UNRESOLVED, "QUOTED_OR_HYPOTHETICAL_REQUEST")
+        for subject, deletion, cue, negative in (
+            (r"アカウント|個人情報", r"削除", r"削除(?:を|の)?(?:依頼|お願い|要求)|削除して(?:ください|ほしい)", r"削除しない|削除せず|削除を希望しません|削除しません"),
+            (r"계정|개인정보", r"삭제", r"삭제(?:를)?\s*(?:요청|부탁)|삭제해\s?주세요", r"삭제하지|삭제를 원하지|삭제\s?말"),
+        ):
+            if re.search(subject, normalized) and re.search(deletion, normalized):
+                if re.search(negative, normalized):
+                    return Intent(Authorization.NON_DELETION, "EXPLICIT_NEGATED_DELETION")
+                if re.search(cue, normalized):
+                    return Intent(Authorization.DELETION, "EXPLICIT_MULTILINGUAL_DELETION_REQUEST")
         return Intent(Authorization.UNRESOLVED, "UNSUPPORTED_REQUEST_LANGUAGE")
     # Explicitly unsupported interpretation; do not execute instructions nested
     # inside a quoted example, a role override, or a hypothetical question.
@@ -78,6 +89,15 @@ def classify_request(text):
         return Intent(Authorization.UNRESOLVED, "CONFLICTING_AUTHORIZATION")
     if positive:
         return Intent(Authorization.DELETION, "EXPLICIT_DELETION_REQUEST")
+    # Continuing an explicitly personal privacy/deletion review can authorize
+    # verification without repeating an imperative erasure command. A bare
+    # status/policy question has no prior-request context and stays unresolved.
+    review = (account_context and re.search(r"\b(my|i)\b", normalized)
+              and re.search(r"\b(request|report|told|before deleting)\b", normalized)
+              and re.search(r"\b(privacy|delet\w*|eras\w*|gone|removed)\b", normalized)
+              and re.search(r"\bplease (?:check|inspect|confirm|handle)\b", normalized))
+    if review and not negative:
+        return Intent(Authorization.DELETION, "CONTINUING_PERSONAL_DELETION_REVIEW")
     if unresolved_mention:
         return Intent(Authorization.UNRESOLVED, "UNSCOPED_DELETION_MENTION")
     if other or negative:

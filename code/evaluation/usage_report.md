@@ -1,4 +1,20 @@
-# GHOSTTRACE usage status through Phase 06
+# Phase 06 repair usage — current status
+
+Two real guarded full-input runs, both public-evaluation configurations and the
+cached/reference comparisons used **0 provider calls, 0 input/output tokens and
+USD0 model-service cost**. Per-request native tokens/cost are zero; per-model totals
+are empty because no model/provider was selected. Cached model-build usage is
+also zero. This excludes Codex development usage/local compute. No packages were
+installed and no paid model call occurred.
+
+Both fresh full runs process 518 requests and exit 3: 375 audits resolve and 143
+remain unresolved. No root output.csv was published. These are diagnostic/blocked
+publication usage figures, not a successful final prediction run. The required
+final-run report remains unavailable; its presence on disk is not readiness.
+
+---
+
+# Archived initial Phase 06 usage
 
 Phase 06 public evaluation (32 requests in each of structured and extraction-
 augmented modes), the 518-request alternating reference/cache benchmark and two

@@ -71,7 +71,7 @@ def test_other_actions_and_negations_do_not_authorize_deletion(text):
     "My colleague said delete my account.",
     "Please delete my account. Please do not delete anything.",
     "The account deletion process exists. Please follow the correct treatment.",
-    "アカウントを削除してください",  # unsupported language is explicit unknown
+    "Παρακαλώ διαγράψτε τον λογαριασμό μου.",  # unsupported language is explicit unknown
 ])
 def test_ambiguous_unsupported_or_embedded_commands_stay_unresolved(text):
     assert classify_request(text).authorization == Authorization.UNRESOLVED
@@ -244,8 +244,8 @@ def test_proof_gate_independently_protects_retained_categories(rules):
 def test_backup_is_retained_and_restore_access_is_blocked(rules, allowed):
     result, engine = audit(rules, record("backup", "BACKUP_ARCHIVE", {"restore_allowed": allowed, "archive_present": True}))
     assert "DELETE_RECORD" not in operations(result)
-    assert operations(result) == (["REPORT_RESTORE_RISK", "BLOCK_RESTORE", "VERIFY_RECORD_PRESENT", "VERIFY_RESTORE_BLOCKED"]
-                                  if allowed else ["VERIFY_RECORD_PRESENT", "VERIFY_RESTORE_BLOCKED"])
+    assert operations(result) == (["REPORT_RESTORE_RISK", "BLOCK_RESTORE", "VERIFY_RESTORE_BLOCKED"]
+                                  if allowed else ["VERIFY_RESTORE_BLOCKED"])
     assert not check_audit(result, engine.observations)
 
 

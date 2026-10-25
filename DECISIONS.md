@@ -534,3 +534,108 @@ authorization and exhaustive resource/copy coverage need additional work before
 freeze. No root output.csv, submission archive or submission-readiness claim is
 created. Updated evaluation/usage reports distinguish these observed failures
 from the passing implementation regressions. Phase 07 remains unstarted.
+
+## Phase 06 repair — evidence-supported progress, incomplete exit gate
+
+The user asked to resolve all remaining Phase 06 blockers. After an initial
+clarification response, the user confirmed no official correction/clarification
+was available and requested a recommendation. The recommended course is to keep
+official inputs and evidence/cutoff restrictions intact, fix supported code
+defects, and report remaining missing facts rather than inventing mappings.
+No organizer was contacted and no paid model/provider was selected.
+
+### Corrected mechanisms
+
+The supplied canonical current-identity table now has its own internal registry
+claim kind. Its updated_at anchors identity validity; it never becomes a file
+capture time or a citeable state finding. Only the canonical non-citeable path
+and update-time schema can supply that anchor. Future entries, conflicting history
+and reassigned aliases remain guarded. Generic undated snapshots remain context.
+Immutable registry ownership objects are cached within a fixed graph; cutoff-
+specific filtering, audit history and replay are rebuilt. Reference/cached
+complete Audit fingerprints agree on all 518 inputs, including candidate plans.
+
+Catalog link descriptions use explicit parsed subject/resource bindings, without
+trusting operation outcomes as stored-state evidence. A catalog claim needs an
+eligible direct resource readback to qualify the link. Workflow-only groups no
+longer form extra empty physical copies when a real state scope exists. Explicit
+attachment-only catalog declarations are preserved separately; they cannot make
+an unobserved object present or deleted.
+
+Native request grammar supports direct Japanese/Korean erasure requests and
+negation, while verification-only questions, quotations and instruction overrides
+remain guarded. Continuing personal privacy/deletion reviews can authorize a
+check without repeating an erasure command. Bare status questions do not.
+Unsupported-language provider/caching tests now use Greek instead of the newly
+supported Japanese; the optional model seam is retained and remains zero-call.
+
+State adapters recognize 404 with an explicitly null profile, positive available
+export downloads, eligible restore candidates, typed handover states, case-
+insensitive deleted tombstones, archive locators and supplied retained-until
+metadata. An unavailable download never proves deletion. Support conversation
+context needs explicit schema/content evidence; a literal redaction marker does
+not override exposed direct fields. Unknown/false conditions never default to a
+destructive action. Restore-block verification still requires archive-presence
+proof, but no longer emits an unrelated extra public archive-presence operation.
+
+Business-schema adapters interpret explicit positive resource panels, single-
+customer correction forms and signed retention extracts with split-line dates.
+They bind resource literals/source hashes and preserve supporting observation
+locators. No OCR character substitution, absent-record inference from empty OCR,
+or post-cutoff identifier lexicon is allowed. They remain limited interpretation;
+six matching-document coverage checks still need semantic work.
+
+The finite supplied corpus now has a coverage certificate rather than a permanent
+false premise. It requires accounted source/context files, resolved identity,
+linked direct states, and interpretation of matching text-only documents. It
+does not assert coverage beyond supplied data, and low-level audits with generic
+bundles still require an explicit coverage premise. Source/condition uncertainty
+continues to block publication. The new --run CLI permits atomic root publication
+only for all 518 official-path inputs passing every audit/proof/CSV check.
+
+### Measured result and limits
+
+Resolved full-input audits improve from 10 to 375: 115 COMPLETE, 250 INCOMPLETE,
+10 NOT_APPLICABLE; 143 remain unresolved. These are computed outcomes, not hidden
+accuracy. Augmented public authorization is 32/32, published status agreement
+16/32 and exact sequences 2/32. The 78 publishable steps all match reference
+steps; their recall is only 78/193. Abstentions and incomplete sequences are
+failures. Candidate diagnostics are separate from predictions.
+
+The independent repair fixtures add registry authority/clocks, multilingual
+positive/negative/status pairs, explicit state schemas, source-corpus checks,
+retention/tombstones, literal document/panel extraction and actual 518-row CLI
+publication/preservation. Current evaluation/usage evidence, fresh-run hashes,
+performance measurements and exact test output are in the evaluation report.
+No packages, dataset modifications, root output or submission bundle were created.
+
+The remaining issues are not all declared impossible: some need additional
+semantic interpretation. Four reproducible public examples also show absent
+subject/resource bindings or linking records captured after the cutoff. Those
+cannot be repaired by numeric ID patterns or future evidence. EVIDENCE-GAPS.md
+records the concrete paths/IDs and unestablished policy conditions.
+
+### Current risk register
+
+| Priority | Risk | Control / next requirement |
+|---|---|---|
+| 1 | 143 unresolved cases block the required 518-row artifact | Preserve the previous output; do not insert fallback labels. |
+| 2 | Only 2/32 exact public sequences | Keep full step/field/sequence diffs and distinguish status agreement. |
+| 3 | Absent/deidentified records lack subject bindings | Obtain explicit eligible links or official clarification. |
+| 4 | Some older identifying rows were captured after audit_at | Enforce both clocks; request a legitimate metadata correction if erroneous. |
+| 5 | Retention/shared-context/sole-subject conditions are unestablished | Preserve records; do not guess policy applicability. |
+| 6 | Six matching-document interpretations are incomplete | Review the actual content and retain quoted/located support. |
+| 7 | OCR identifiers can be ambiguous | Literal IDs only; no silent correction or identifier reuse across views. |
+| 8 | Corpus coverage is limited to supplied data | Document the certificate boundary; no real-world exhaustiveness claim. |
+| 9 | Optional provider behavior/semantic recall are unmeasured | Native runs stay zero-call; a model cannot recover absent facts. |
+| 10 | No successful final run or final usage evidence | Keep Phase 07 freeze/packaging blocked and update reports honestly. |
+
+Phase 06 remains incomplete at its quality exit gate. This repair is a verified
+improvement, not a successful submission or a reason to relax evidence rules.
+
+The final repair regression invocation passed 413 tests in 10.47 seconds.
+Document identifier lexicons filter both availability and observation time.
+Signed audit records with no supplied expiry are conservatively preserved rather
+than deleted; the verification asserts presence, not an invented retention date.
+An explicit invalid or expired retention date still blocks publication. This
+preservation choice and the remaining missing expiry facts are reported openly.

@@ -37,7 +37,10 @@ def check_audit(audit, observations):
         errors.add("AUDIT_PROOF_MISSING")
     for oid in audit.identity_observation_ids:
         observation = observations.get(oid)
-        if observation is None or eligible(observation, decision.request.audit_at) != "ELIGIBLE":
+        registry = (observation is not None and observation.claim_kind == "IDENTITY_REGISTRY_ENTRY"
+                    and observation.evidence.path == "user_identities.csv" and not observation.evidence.citeable
+                    and observation.observed_at is not None and observation.observed_at <= decision.request.audit_at)
+        if not registry and (observation is None or eligible(observation, decision.request.audit_at) != "ELIGIBLE"):
             errors.add("IDENTITY_PROOF_TIME")
     incomplete = any(a.outcome == "VIOLATION" for a in audit.assessments)
     if decision.status != (DeletionStatus.INCOMPLETE if incomplete else DeletionStatus.COMPLETE):

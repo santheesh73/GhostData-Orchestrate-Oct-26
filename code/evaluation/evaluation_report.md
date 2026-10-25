@@ -1,4 +1,175 @@
-# GHOSTTRACE Phase 06 evaluation report
+# Phase 06 repair — current measured result
+
+## Readiness: failed, with substantial implementation fixes
+
+The user requested resolving the Phase 06 blockers. Current full-input audits
+resolve **375/518**, versus 10/518 before this repair; **143 remain unresolved**.
+Computed statuses are 115 COMPLETE, 250 INCOMPLETE and 10 NOT_APPLICABLE. These
+counts are not hidden-label accuracy. No root output.csv or submission archive
+exists. A corrected dataset/official clarification was not available. The failed
+quality gate is recorded in EVIDENCE-GAPS.md; Phase 06 is not declared complete.
+
+## Changes, requirements and verdicts
+
+| Change | Requirement / observed failure | Regression control | Verdict |
+|---|---|---|---|
+| Canonical identity validity anchor | The supplied identity registry was incorrectly treated as undated generic context. | Only the canonical non-citeable updated_at schema anchors membership; future rows/untrusted paths and broken/reassigned histories do not resolve identity. No capture time is fabricated. | SHIP |
+| Catalog grammar and state readbacks | Explicit catalog subject/target links were skipped; operation-only groups became phantom physical copies. | Catalog membership needs a direct eligible readback; claims never establish state; copy proofs remain separate. | SHIP |
+| Native request interpretation | Supported Japanese/Korean and continuing personal deletion reviews abstained. | Native multilingual/negation/injection and neighboring status-question controls; unsupported Greek fixtures still exercise provider translation/caching. | SHIP |
+| State/policy adapters | 404/null profile, availability, uppercase tombstone, archive locator and retained-until schemas were missed. | Explicit counterfactuals; unavailable download alone never means absent; unsupported/malformed conditions remain unknown. | SHIP |
+| Business schemas | Captured panels/forms and split-line retention dates were not interpreted. | Positive panel/form signatures, explicit resource literals and provenance; no OCR ID correction or empty-text absence. Multi-customer forms reject the single-subject adapter. | SHIP |
+| Supplied-corpus coverage | An unconditional false premise blocked every applicable result. | A source-bound certificate checks required sources, linked state, ownership and matching uninterpreted documents; generic low-level audits still default to incomplete coverage. | SHIP |
+| Guarded full-run CLI | Only diagnostic/demo routes were exposed. | All 518 official inputs and independent proof/CSV gates are mandatory; blocked runs preserve previous output. Positive synthetic CLI route actually writes/revalidates 518 non-deletion rows. | SHIP |
+| Restore verification | Backup plans redundantly verified archive presence as an extra public operation. | Archive-presence proof remains a condition of safe restore verification; backup deletion remains forbidden. | SHIP |
+
+Signed audit records without a supplied expiry are conservatively preserved;
+this does not invent an expiry date. Explicit expired/malformed expiry remains
+unknown and cannot authorize deletion. This is a documented preservation choice,
+not a claim that an unspecified retention interval was measured.
+
+These are general schemas and linguistic mechanisms, without runtime case-family
+predicates, sample sentences, expected labels or after-cutoff facts. The registry
+anchor uses the participant contract's canonical current-identity input; it does
+not generalize to arbitrary undated snapshots. Business-schema projections are
+limited native interpretation, not measured complete semantic extraction.
+
+## Actual evaluation
+
+Both configurations finish inference/gates before opening the already-inspected
+public development labels. They are not held-out trials. Missing/abstained rows
+count against all 32 requests; candidate probes do not count as predictions.
+
+| Measurement | Previous Phase 06 | Current structured-only | Current augmented |
+|---|---:|---:|---:|
+| Authorization agreement | 27/32 | 32/32 | 32/32 |
+| Publishable rows / abstentions | 0 / 32 | 0 / 32 | 16 / 16 |
+| Published status agreement | 0/32 | 0/32 | 16/32 |
+| Exact rows / sequences | 0/32 | 0/32 | 2/32 |
+| Step precision | undefined | undefined | 1.0 |
+| Step recall | 0/193 | 0/193 | 78/193 (40.41%) |
+| Step F1 | 0 | 0 | 0.575646 |
+| Field agreement | 0/1,351 | 0/1,351 | 522/1,351 (38.64%) |
+
+The structured-only mode still has 15 deferred documents, so it has no corpus
+certificate. Augmented capture accounts for all 94 manifest files and includes
+4 additional business-schema projections. Six relevant document interpretations
+remain unresolved in full-input coverage checks. In the augmented sample, 28
+scopes are compliant, 39 violate policy and 17 are unknown. Candidate diagnostics
+contain 134 steps with 132 overlapping reference steps, precision 0.985075,
+recall 0.683938 and F1 0.807339. Their field agreement is 877/1,358. They remain
+separate from the 78 published steps and are never written as final answers.
+
+All 16 publishable sample statuses match, but missing records/links and conditions
+still prevent exact whole-case plans. This conditional status agreement must not
+be described as 100% overall accuracy. Full/hidden accuracy and extraction recall
+remain unmeasured. No official score or model-quality estimate is inferred.
+
+## Public case-level report
+
+ABSTAIN means there is no publishable row. Candidate/reference step counts are
+diagnostic; an unguarded but incomplete sequence is still a failed exact row.
+
+| Case | Public expected | Actual status | Candidate/reference steps | Remaining audit issue |
+|---|---|---|---:|---|
+| case_01 | COMPLETE | ABSTAIN | 0/1 | EVIDENCE_COVERAGE_NOT_ESTABLISHED, NO_ASSESSED_RESOURCES |
+| case_02 | COMPLETE | ABSTAIN | 0/1 | EVIDENCE_COVERAGE_NOT_ESTABLISHED, NO_ASSESSED_RESOURCES |
+| case_03 | COMPLETE | COMPLETE | 2/3 | no audit guard; see step diff |
+| case_04 | COMPLETE | ABSTAIN | 0/2 | EVIDENCE_COVERAGE_NOT_ESTABLISHED, NO_ASSESSED_RESOURCES |
+| case_05 | INCOMPLETE | INCOMPLETE | 3/3 | no audit guard; see step diff |
+| case_06 | INCOMPLETE | INCOMPLETE | 3/4 | no audit guard; see step diff |
+| case_07 | INCOMPLETE | ABSTAIN | 3/4 | EVIDENCE_COVERAGE_NOT_ESTABLISHED, RESOURCE_LINK_NOT_ESTABLISHED |
+| case_08 | INCOMPLETE | INCOMPLETE | 3/4 | no audit guard; see step diff |
+| case_09 | INCOMPLETE | INCOMPLETE | 3/5 | no audit guard; see step diff |
+| case_10 | INCOMPLETE | ABSTAIN | 0/4 | POLICY_CONDITION_NOT_ESTABLISHED |
+| case_11 | INCOMPLETE | ABSTAIN | 13/14 | POLICY_CONDITION_NOT_ESTABLISHED |
+| case_12 | INCOMPLETE | ABSTAIN | 1/5 | POLICY_CONDITION_NOT_ESTABLISHED, UNMAPPED_POLICY_CATEGORY |
+| case_13 | INCOMPLETE | ABSTAIN | 4/8 | POLICY_CONDITION_NOT_ESTABLISHED |
+| case_14 | INCOMPLETE | ABSTAIN | 4/5 | POLICY_CONDITION_NOT_ESTABLISHED |
+| case_15 | INCOMPLETE | ABSTAIN | 4/5 | EVIDENCE_COVERAGE_NOT_ESTABLISHED, POLICY_CONDITION_NOT_ESTABLISHED |
+| case_16 | INCOMPLETE | INCOMPLETE | 7/7 | no audit guard; see step diff |
+| case_17 | INCOMPLETE | ABSTAIN | 5/5 | EVIDENCE_COVERAGE_NOT_ESTABLISHED, POLICY_CONDITION_NOT_ESTABLISHED, RESOURCE_LINK_NOT_ESTABLISHED |
+| case_18 | INCOMPLETE | ABSTAIN | 9/14 | POLICY_CONDITION_NOT_ESTABLISHED |
+| case_19 | INCOMPLETE | ABSTAIN | 4/8 | POLICY_CONDITION_NOT_ESTABLISHED |
+| case_20 | INCOMPLETE | INCOMPLETE | 6/8 | no audit guard; see step diff |
+| case_21 | COMPLETE | COMPLETE | 1/3 | no audit guard; see step diff |
+| case_22 | INCOMPLETE | INCOMPLETE | 7/8 | no audit guard; see step diff |
+| case_23 | INCOMPLETE | INCOMPLETE | 6/8 | no audit guard; see step diff |
+| case_24 | INCOMPLETE | INCOMPLETE | 6/7 | no audit guard; see step diff |
+| case_25 | COMPLETE | COMPLETE | 1/3 | no audit guard; see step diff |
+| case_26 | COMPLETE | ABSTAIN | 3/6 | IDENTIFIER_COVERAGE_UNKNOWN |
+| case_27 | COMPLETE | ABSTAIN | 3/6 | IDENTIFIER_COVERAGE_UNKNOWN |
+| case_28 | COMPLETE | ABSTAIN | 3/6 | IDENTIFIER_COVERAGE_UNKNOWN |
+| case_29 | INCOMPLETE | INCOMPLETE | 12/14 | no audit guard; see step diff |
+| case_30 | INCOMPLETE | INCOMPLETE | 12/14 | no audit guard; see step diff |
+| case_31 | COMPLETE | COMPLETE | 2/3 | no audit guard; see step diff |
+| case_32 | INCOMPLETE | INCOMPLETE | 4/5 | no audit guard; see step diff |
+
+Exact step mismatches are retained in the raw comparator output. Concrete missing
+linkage examples and scope counts are in EVIDENCE-GAPS.md; not every remaining
+failure has been proved to be a dataset defect. No public answer mapping is
+imported by the runtime to repair those gaps.
+
+## Executed verification
+
+`python -B -m pytest -q -p no:cacheprovider code/tests`: **413 passed in 10.47
+seconds**. This retains 384 prior checks (updated where Japanese/Korean became
+native and backup verification semantics were corrected) and adds 29 independent
+repair cases. New scenarios cover canonical registry authority/future clocks,
+reassigned/broken identity, multilingual negative/injection pairs, HTTP readbacks,
+corpus certificates/matching documents, uppercase tombstones, explicit archive
+locators, business forms/retention dates, literal UI IDs and guarded actual
+518-row CLI publication/preservation. The document lexicon also checks both source availability and observation time;
+three counterexamples prevent future observations or late captures from enabling
+earlier document interpretation. Unsupported-language provider integration
+remains tested using Greek instead of now-supported Japanese; no provider test
+was removed or counted as a live model call.
+
+Two fresh full commands using PYTHONHASHSEED=0 and 12345:
+
+```text
+python -B code/main.py --run --with-extraction --cache-dir .ghosttrace/phase05-verify
+```
+
+Both exit **3**, produce identical entire JSON reports and preserve the absent
+root output. A separate cached/uncached augmented comparison on **all 518**
+requests has identical complete Audit fingerprints, including candidate plans.
+No official dataset, AGENTS.md or problem statement was changed.
+
+The repeated performance experiment uses 32 augmented samples, three alternating
+trials per configuration and one shared untimed warm-up. Median engine+audit time
+is 2.474560 seconds reference versus 1.993726 seconds cached (1.2412× locally).
+Ranges: 2.411653–2.482095 and 1.981385–2.003094 seconds. Startup, ingestion,
+label I/O and fingerprints are excluded. All fingerprints agree. The earlier
+1.89× 518-request benchmark below applies to the older code and is not a current
+speed claim. Document lexicon preprocessing is outside the measured processing
+interval; the last two-clock guard preserves the complete audit results. Peak
+memory is unmeasured. No dependencies or paid calls were used.
+
+## Source/run provenance and usage
+
+| Evidence | SHA-256 |
+|---|---|
+| Runtime implementation | ffcf1cf93e74e150866d5b1686b099306502e1ce9e2d5e068f1284a6b30f4b1c |
+| CLI entry point | 7ac5d51e9830437f1fac89b7eaf45a3c7f685f3356d3f21d80f6e1670c53ec98 |
+| Public requests | b3802bdb242ab4869d84191a6c0d3f7d1601afbc6114833f9184c323d319c7e6 |
+| Public reference | 72ef6b14f504a72a674deefad08c66e397f8d8c05bd23d9791e41db6ef184d91 |
+| Evidence/context bytes+paths | f5049da0e32fc967628fc6f597a0e79434cf74c72da5962d791c974a0c158d43 |
+| Manifest | bcb1d0b909dfe2b29dd461f9d7e90d8a031803de21858d5f18f52c771ab0d614 |
+| Rules | 17332f5566e776d2f7bcff36e93cf23c9d8594dc2ff1e9c247ad2614539dc40f |
+| Full complete Audit comparison | 1bc21338867116377a2cea89d2b1f4b95c4c0b8bd0b72a5283ae035e8721741b |
+| Fresh full diagnostic/publication-block proof | ca007dcdacee11ad5d789cea14aad601d1fbe47ffda6b4523e5fd70cb101da51 |
+| Augmented sample semantic comparison | 19551d3d96ddca09e70b89e0dac30b8056c6d8ffdbbddb1d0aa8c7d39d8084ba |
+
+All actual runs have provider calls/input/output tokens 0/0/0 and USD0 model
+service cost. Local compute/Codex development usage are excluded. The required
+usage report for a final output-producing run remains unavailable because no
+such run succeeded. Raw comparison, missing-fact and linkage audits remain
+ignored under .ghosttrace/phase06-repair/. Transcript entries are authentic;
+no skill-effectiveness trial or organizer-only truth was used.
+
+---
+
+# Archived initial Phase 06 evaluation report
 
 ## Result and readiness
 

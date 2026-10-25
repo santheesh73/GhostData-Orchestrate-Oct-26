@@ -26,6 +26,7 @@ class SelectiveExtractor:
     def __init__(self, cache, runner, reader=read_document):
         self.cache, self.runner, self.reader = cache, runner, reader
         self.files, self.intents = [], []
+        self.business_records = 0
         self.backend = backend_identity()
 
     def source(self, root, previous):
@@ -97,7 +98,11 @@ class SelectiveExtractor:
         files = tuple(self.source(root, result) if result.status == ParseStatus.DEFERRED and
                       result.format in {"pdf", "png", "jpg", "jpeg"} else result for result in bundle.files)
         observations = [o for result in (*files, *bundle.context) for o in result.observations]
-        return IngestionBundle(files, bundle.context, EvidenceIndex(observations), bundle.diagnostics)
+        from .business import enrich_business_documents
+        result = enrich_business_documents(IngestionBundle(files, bundle.context, EvidenceIndex(observations), bundle.diagnostics))
+        self.business_records = sum(o.claim_kind == "RECORD_SNAPSHOT" and o.location.startswith("business-schema/")
+                                    for o in result.index.all_observations())
+        return result
 
     def resolve_intent(self, request, native):
         if native.authorization != Authorization.UNRESOLVED or native.reason not in {
@@ -123,6 +128,7 @@ class SelectiveExtractor:
         return {"phase": "05", "files": self.files, "document_status_counts": dict(Counter(f["status"] for f in self.files)),
                 "text_units": sum(f.get("units", 0) for f in self.files),
                 "record_observations": sum(f.get("records", 0) for f in self.files),
+                "business_schema_records": self.business_records,
                 "intent_tasks": self.intents, "model_diagnostics": dict(sorted(Counter(self.runner.diagnostics).items())),
                 "cache": {"hits": self.cache.hits, "misses": self.cache.misses, "rejected": self.cache.rejected},
                 "usage": self.runner.ledger.summary(), "audit_complete": False,

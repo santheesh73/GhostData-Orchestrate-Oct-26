@@ -131,6 +131,12 @@ def parse_text(text, source, digest):
                 payload = dict(recorded_at=timestamp, system=system, resource_id=resource,
                                record_type=category, result=result, subject_reference=reference,
                                raw_line=raw)
+                if category == "DATA_FLOW" and result in {"ACTIVE", "DISABLED"}:
+                    payload["enabled"] = result == "ACTIVE"
+                if category == "BACKUP_ARCHIVE" and result in {"ACTIVE", "BLOCKED"}:
+                    payload.update(restore_allowed=result == "ACTIVE", archive_present=True)
+                if result in {"IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
+                    payload["identifier_treatment"] = result
                 observations.append(make_observation(source, digest, location, payload,
                     system=system, resource=resource, category=category, observed_at=observed,
                     time_basis="recorded_at" if observed else "unknown", claim_kind="RECORD_SNAPSHOT"))

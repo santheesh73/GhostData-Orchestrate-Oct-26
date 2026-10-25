@@ -73,6 +73,21 @@ def extract_facts(observation):
         presence.append("PRESENT" if result.upper() in {"FOUND", "HIT"} else "ABSENT")
     if event == "profile_lookup_completed" and str(data.get("http_status")) == "404":
         presence.append("ABSENT")
+    if str(data.get("status_code")) == "404" and "profile" in data and data["profile"] is None:
+        presence.append("ABSENT")
+    if event == "export_download_check_completed" and _boolean(data.get("available")) is True:
+        presence.append("PRESENT")
+    if event == "restore_candidate_evaluated" and _boolean(data.get("eligible")) is True:
+        presence.append("PRESENT")
+        add("/archive_present", True)
+    category = data.get("record_type", observation.resource.category)
+    if kind == "RECORD_SNAPSHOT" and category == "DATA_FLOW" and result in {"ACTIVE", "DISABLED"}:
+        add("/enabled", result == "ACTIVE")
+    if kind == "RECORD_SNAPSHOT" and category == "BACKUP_ARCHIVE" and result in {"ACTIVE", "BLOCKED"}:
+        add("/restore_allowed", result == "ACTIVE")
+        add("/archive_present", True)
+    if kind == "RECORD_SNAPSHOT" and result in {"IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
+        add("/identifier_treatment", result)
     if isinstance(hits, dict) and isinstance(hits.get("documents"), list) and hits["documents"]:
         presence.append("PRESENT")
     if not presence and kind in {"RECORD_SNAPSHOT", "SQL_RECORD"}:
@@ -124,7 +139,14 @@ def replay(observations, cutoff):
             key = (observation.resource.system_id, observation.resource.resource_id, observation.resource.physical_copy)
             groups[key].append(observation)
     result = []
+    direct_resources = {(o.resource.system_id, o.resource.resource_id) for group in groups.values()
+                        for o in group if extract_facts(o)}
     for _, timeline in sorted(groups.items()):
+        if (all(o.claim_kind == "OPERATION_CLAIM" for o in timeline)
+                and (timeline[0].resource.system_id, timeline[0].resource.resource_id) in direct_resources):
+            # A workflow/catalog row has no physical-copy identity. Preserve it
+            # in reconstruction/link proofs, not as an extra empty data copy.
+            continue
         timeline.sort(key=lambda o: (o.observed_at, o.observation_id))
         facts = resolve_facts(f for observation in timeline for f in extract_facts(observation))
         uncertainties = []

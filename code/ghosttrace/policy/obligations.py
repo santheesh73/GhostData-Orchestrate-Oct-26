@@ -28,11 +28,19 @@ def condition(rule, facts, user, audit_at):
     if text == "Always":
         return True, ()
     if text == "Conversation contains shared customer, agent, or order context that must be retained":
-        return flag(facts, "shared_context")
+        explicit, proof = flag(facts, "shared_context")
+        if explicit is not None or proof:
+            return explicit, proof
+        context = named(facts, "ticket_id", "channel", "message_text", "message_excerpt", "identifier_treatment")
+        if ((named(facts, "ticket_id") and named(facts, "channel")) or named(facts, "identifier_treatment")
+                or any(isinstance(decoded(f), str) and re.search(r"\b(order|delivery|parcel|support)\b", decoded(f), re.I)
+                       for f in named(facts, "message_text", "message_excerpt"))):
+            return True, context
+        return None, context
     if text == "Attachment belongs only to the deletion subject":
         return flag(facts, "sole_subject")
     if text == "Record is still attributable to a user":
-        fields = named(facts, *(DIRECT_FIELDS | REFERENCE_FIELDS))
+        fields = named(facts, *(DIRECT_FIELDS | REFERENCE_FIELDS)) + tuple(f for f in facts if f.dimension == "scan_match")
         if any(isinstance(decoded(f), str) and decoded(f).strip() for f in fields):
             return True, fields
         if fields and all(decoded(f) in (None, "") for f in fields):
@@ -47,6 +55,10 @@ def condition(rule, facts, user, audit_at):
         fields = named(facts, "retention_until", "retention_from")
         until = named(facts, "retention_until")
         try:
+            if not until and named(facts, "integrity_seal", "event_name"):
+                # A signed retained audit record with no supplied expiry is
+                # preserved; this never authorizes erasure or invents a date.
+                return True, named(facts, "integrity_seal", "event_name")
             if len(until) != 1 or not isinstance(decoded(until[0]), str):
                 return None, fields
             start = named(facts, "retention_from")
@@ -55,7 +67,16 @@ def condition(rule, facts, user, audit_at):
         except (InputError, TypeError):
             return None, fields
     if text == "A supplied legal hold is active":
-        return flag(facts, "hold_active", "legal_hold_active")
+        explicit, proof = flag(facts, "hold_active", "legal_hold_active")
+        if explicit is not None or proof:
+            return explicit, proof
+        until, reason = named(facts, "retained_until"), named(facts, "retention_reason")
+        if len(until) == 1 and len(reason) == 1 and isinstance(decoded(reason[0]), str) and decoded(reason[0]):
+            try:
+                return audit_at < parse_timestamp(decoded(until[0]), "retained_until"), until + reason
+            except InputError:
+                pass
+        return None, until + reason
     if text == "Restore access can be blocked":
         supported, proof = flag(facts, "restore_block_supported")
         if supported is not None:
@@ -70,7 +91,7 @@ def condition(rule, facts, user, audit_at):
     if text == "Account is deleted and only a stable internal user_id is needed to preserve references to retained records":
         fields = named(facts, "account_status")
         refs = named(facts, *REFERENCE_FIELDS)
-        if len(fields) == 1 and decoded(fields[0]) == "deleted" and any(decoded(f) == user for f in refs):
+        if len(fields) == 1 and isinstance(decoded(fields[0]), str) and decoded(fields[0]).casefold() == "deleted" and any(decoded(f) == user for f in refs):
             return True, fields + refs
         return None, fields + refs
     return None, ()
@@ -99,6 +120,12 @@ def pii(facts, category, aliases, user):
     positive.extend(scans)
     if positive:
         return True, tuple(positive)
+    treatments = named(facts, "identifier_treatment")
+    if len(treatments) == 1 and decoded(treatments[0]) in {"IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
+        return decoded(treatments[0]) == "IDENTIFIABLE", treatments
+    if category == "SUPPORT_MESSAGE" and texts and all(
+            isinstance(decoded(f), str) and re.fullmatch(r"\[(?:REDACTED|REMOVED)\]", decoded(f), re.I) for f in texts):
+        return False, texts
     present = set()
     for fact in fields:
         if decoded(fact) not in (None, ""):
@@ -188,6 +215,10 @@ def assess(state, book, user, aliases, audit_at, observations):
     if category == "BACKUP_ARCHIVE":
         allowed, proof = flag(facts, "restore_allowed")
         archive, archive_proof = flag(facts, "archive_present")
+        if archive is None and not archive_proof:
+            paths = named(facts, "archive_path", "archive_key")
+            if any(isinstance(decoded(f), str) and decoded(f).strip() for f in paths):
+                archive, archive_proof = True, paths
         if allowed is None:
             eligible_value, eligible_proof = flag(facts, "eligible")
             block, block_proof = flag(facts, "deletion_block")
@@ -200,7 +231,7 @@ def assess(state, book, user, aliases, audit_at, observations):
         if allowed is False and archive is not True:
             return unknown("REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED")
         result = outcome(allowed, "REPORT_RESTORE_RISK", "BLOCK_RESTORE", "VERIFY_RESTORE_BLOCKED",
-                         proof, condition_proof + presence_facts + archive_proof, retained=True, conjunctive=True)
+                         proof, condition_proof + presence_facts + archive_proof, conjunctive=True)
         return result
     if action == "RETAIN":
         if presence != "PRESENT":

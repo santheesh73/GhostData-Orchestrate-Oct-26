@@ -10,6 +10,7 @@ from ..ingest.normalization import normalize_identifier, strict_json
 
 STRONG_KINDS = {"email", "email_hash", "phone"}
 REFERENCE_KEYS = {"customer_reference", "subject_reference", "subject_ref", "stable_user_id",
+                  "catalog_subject_reference", "subject_selector",
                   "user_id", "lookup_key", "match_key", "subject_key", "correlation_key",
                   "query", "lookup_value", "scan_key"}
 LOOKUP_KEYS = {"query", "lookup_key", "match_key", "subject_key", "correlation_key", "scan_key"}

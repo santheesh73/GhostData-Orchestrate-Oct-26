@@ -17,7 +17,7 @@ from ghosttrace.emit.operation_mapper import emit_decision
 from ghosttrace.ingest.corpus import ingest_dataset
 from ghosttrace.ingest.loader import load_evidence_catalog, load_requests
 from ghosttrace.models import Authorization
-from ghosttrace.policy.engine import PolicyEngine
+from ghosttrace.policy.engine import PolicyEngine, audit_corpus_request
 from ghosttrace.policy.rulebook import RuleBook
 from ghosttrace.quality.audit_gate import check_audit
 from ghosttrace.quality.validator import OutputError, read_output, validate_rows
@@ -64,7 +64,7 @@ def run_audits(dataset_root, requests, *, with_extraction=False, cache_dir=None,
     engine = PolicyEngine(bundle.index, RuleBook.load(dataset_root),
                           extractor.resolve_intent if extractor else None, cache_identity=cache_identity)
     engine_built = time.perf_counter()
-    audits = tuple(engine.audit(request) for request in sorted(requests, key=lambda r: r.case_id))
+    audits = tuple(audit_corpus_request(engine, bundle, request) for request in sorted(requests, key=lambda r: r.case_id))
     finished = time.perf_counter()
     return bundle, engine, audits, {"ingestion_seconds": ingested - started,
         "engine_seconds": engine_built - ingested, "audit_seconds": finished - engine_built,
@@ -85,7 +85,7 @@ def benchmark_audits(dataset_root, requests_path, *, repetitions=3, with_extract
             started = time.perf_counter()
             engine = PolicyEngine(bundle.index, rules, cache_identity=cached)
             built = time.perf_counter()
-            audits = tuple(engine.audit(r) for r in sorted(requests, key=lambda r: r.case_id))
+            audits = tuple(audit_corpus_request(engine, bundle, r) for r in sorted(requests, key=lambda r: r.case_id))
             finished = time.perf_counter()
             digest = audit_fingerprint(audits)  # Outside the timed interval.
             hashes.add(digest)
@@ -174,6 +174,7 @@ def trace_audit(audit, engine):
             "candidate_steps": candidate_steps(audit), "gate_errors": list(gate),
             "decision_status": audit.decision.status.value if audit.decision.status else None,
             "uncertainty_codes": sorted({u.code for u in audit.decision.uncertainties}),
+            "coverage_blockers": list(audit.coverage_blockers),
             "writer": "NOT_CALLED", "output_written": False}
 
 
@@ -212,6 +213,7 @@ def evaluate_samples(dataset_root, requests_path, expected_path, *, with_extract
             "attribution": "UNRESOLVED_PIPELINE" if status is None else "OBSERVED_RESULT",
             "uncertainty_codes": sorted({u.code for u in audit.decision.uncertainties}),
             "gate_errors": list(gates[case]), "candidate_steps": candidate_steps(audit),
+            "coverage_blockers": list(audit.coverage_blockers),
             "expected_steps": truth["steps_json"]})
     metrics = compare_rows(rows, expected)
     count = len(cases)

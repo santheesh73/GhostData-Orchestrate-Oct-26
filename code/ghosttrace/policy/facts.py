@@ -13,6 +13,8 @@ REFERENCE_FIELDS = {"user_id", "stable_user_id", "customer_reference", "subject_
                     "owner_user_id", "subject_selector"}
 TEXT_FIELDS = {"message_text", "message_excerpt", "body", "text", "notes"}
 EXTRA_FIELDS = {"account_status", "shared_context", "sole_subject", "hold_active", "legal_hold_active",
+                "identifier_treatment", "ticket_id", "channel", "archive_path", "archive_key", "integrity_seal", "event_name", "integrity_check",
+                "retained_until", "retention_reason", "order_reference",
                 "retention_until", "retention_from", "restore_block_supported", "eligible", "deletion_block",
                 "source_resource_id", "target_resource_id", "source_system", "target_system", "destination_system"}
 BOOLEAN_FIELDS = BOOL_FIELDS | {"shared_context", "sole_subject", "hold_active", "legal_hold_active",

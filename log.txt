@@ -293,3 +293,120 @@ Final review and superseding Phase 06 measurements (same user turn):
 * Review restored the informational-question guard for explain/what/when/does; added two independent negative requests so supported question wording cannot become deletion authorization. Final full regression invocation: 384 passed in 12.12 seconds, including 44 new Phase 06 checks and all 340 prior tests.
 * Repeated the serial alternating full benchmark after that correction: reference median processing 12.872485 seconds (range 12.720762-14.212807), cached median 6.816385 (4.499196-7.250012), 1.8885x local speedup. Local timing varied; reports use this latest observation and include ranges instead of choosing the faster earlier repeat. All six trials plus warm-up still share complete-audit SHA e61502c6e6ade0f1a058aaa57f3a4071c96bad96d36cc4ccbce7620fda28344b.
 * Repeated both real public evaluation modes and both fresh full augmented hash-seed runs on the final code. Entire full reports match the earlier proof; sample semantic digest remains 9d7bce4c978fdb1ab35b095de0a529820056f75d7a52a337cbb86eef0cf479b7, with 27/32 authorization agreement, zero publishable sample rows and 508 unresolved full cases. Final runtime SHA 558f08aa0267f57755b59ad47508e94d014abd8d7e1ced03539543a03b558f8f. The manifest hash is also bound in diagnostics/reports. No prediction or submission artifact exists; readiness still fails.
+
+## [2026-10-25T08:31:03+05:30] Phase 07 preliminary inspection interrupted
+
+User Prompt (verbatim, secrets redacted):
+Start Phase 7
+
+Agent Response Summary:
+Started the requested Phase 07 readiness inspection by reading the official instructions, problem statement, kickoff phase scope and packaging/submission skills. The turn was interrupted before any implementation or packaging changes; the previously reported Phase 06 accuracy gate remains failed. No final artifact or readiness claim was produced.
+
+Actions:
+* Read repository contract, packaging skill instructions and existing publication CLI.
+* Verified Phase 06 baseline commit 635ba19750aae461342fb2f80b40327b303b22ae; no project changes made during interrupted inspection.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T08:31:03+05:30] Clarify Phase 06 completion status
+
+User Prompt (verbatim, secrets redacted):
+Whether the Phase 6 is completed
+
+Agent Response Summary:
+Clarified that Phase 06 evaluation/optimization implementation, regression checks and push are complete, while its accuracy/readiness exit gate has not passed. All 384 tests passed in the observed Phase 06 run, but all 32 public samples abstain and 508 of 518 full cases remain unresolved, so Phase 06 is not fully complete for submission readiness.
+
+Actions:
+* Reported the distinction between completed implementation and a failed quality exit gate.
+* No new prediction, packaging artifact or implementation change.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T08:32:34+05:30] Resolve Phase 06 accuracy and coverage blockers
+
+User Prompt (verbatim, secrets redacted):
+Solve all these and complete the phase 6
+
+Agent Response Summary:
+The user explicitly requested resolving the remaining Phase 06 blockers before completion. Investigating authorization, time-qualified identity, content-grounded resource linkage, policy interpretation and exhaustive scoped evidence accounting without changing official inputs or using public answers in inference. Implementation, evaluation and reproducibility work continue; no readiness claim is made until the exit gates pass.
+
+Actions:
+* Read testing/evidence skills and current identity, ingestion, temporal and policy code.
+* Inspected participant input schemas and existing provider configuration presence only; no provider is configured.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+Phase 06 repair completion evidence (original solve-all request remains unmet):
+* Implemented canonical registry validity anchoring without inventing file availability; retained generic snapshot uncertainty and future/reassignment/history checks. Parsed explicit catalog relations and removed activity-only phantom physical copies while requiring direct state readbacks. Extended immutable anchor caching with reference-equivalence checks.
+* Added native Japanese/Korean positive, negation, status-question and injection controls plus continuing personal deletion-review grammar. Existing provider/caching integration now uses genuinely unsupported Greek fixtures. No provider was configured/called and no packages were installed.
+* Corrected explicit 404/null profile, download availability, typed handover states, uppercase tombstones, archive locator and retained-until schemas; derived support context only from supplied fields/content. Kept unsupported conditions and unknown state blocked. Signed audit records without an expiry are conservatively preserved, not assigned an invented retention date; explicit invalid/expired periods remain unknown. Removed an extra backup-presence output operation while retaining actual archive-presence proof for restore checks.
+* Added source-bound positive panel/form/retention document adapters. No OCR ID correction or empty-text absence. Document resource lexicons filter both source availability and observation time; independent future/late-capture tests verify that boundary. Four additional business-schema projections occur on the actual supplied corpus; semantic recall is not claimed.
+* Added finite supplied-corpus coverage certificates requiring accounted context/files, resolved identity, direct linked states and interpretation of matching documents. Low-level/generic audits still default to incomplete coverage. Added --run for all 518 official-path requests, atomic publication only after audit/proof/independent CSV checks, and preservation on unresolved runs.
+* Final full test command: python -B -m pytest -q -p no:cacheprovider code/tests; 413 passed in 10.47 seconds, including 29 independent repair cases. Actual synthetic CLI success verifies 518 non-deletion rows; actual unresolved CLI tests preserve existing output. Original regressions and live local PDF/OCR controls remain passing; no fake provider test is described as a live model run.
+* Final fresh full commands with hash seeds 0 and 12345 returned identical entire reports, exit 3: 375 resolved (115 COMPLETE, 250 INCOMPLETE, 10 NOT_APPLICABLE), 143 unresolved. Full authorization is 508 DELETION and 10 NON_DELETION. No root output.csv was produced. Full diagnostic proof ca007dcdacee11ad5d789cea14aad601d1fbe47ffda6b4523e5fd70cb101da51. Cached/reference full complete Audit fingerprint 1bc21338867116377a2cea89d2b1f4b95c4c0b8bd0b72a5283ae035e8721741b; final stricter guards preserve all actual results.
+* Both public configurations were rerun with final code. Authorization agreement 32/32. Structured-only remains unpublished while documents are deferred. Augmented mode publishes 16 in-memory comparison rows, all 16 statuses correct (50% over all 32), with 16 abstentions, 2 exact rows/sequences, 78/193 matching steps and precision1.0, field agreement522/1351. Separate unpublishable candidates134 with132 overlap. No development label is imported by inference. Hidden accuracy and semantic recall remain unmeasured.
+* A 32-sample augmented alternating 3-trial benchmark measured median engine+audit 2.474560 seconds reference versus1.993726 cached (1.2412x locally), with complete proof equality. Document lexicon preprocessing is outside the timed interval. Old 1.89x full-run timing applies to the earlier code only; no new full-run speed claim or peak-memory claim is made.
+* All actual provider calls/input/output tokens/model-service cost are0/0/0/USD0; local compute and Codex development usage excluded. No final prediction-producing usage run exists. Final runtime SHA ffcf1cf93e74e150866d5b1686b099306502e1ce9e2d5e068f1284a6b30f4b1c.
+* Added EVIDENCE-GAPS.md with reproducible missing/pre-cutoff linkage examples, remaining native policy/semantic blockers and next requirements. Updated README, DECISIONS/risk register and evaluation/usage reports. Some remaining failures still need interpretation; not every unknown is claimed impossible. The supplied data, AGENTS.md and problem_statement.md are unchanged. No archive, submission package, external message or upload was created. Phase 06 remains incomplete at its quality gate; preparing commit/push of verified repairs to the existing GhostData origin/main.
+
+## [2026-10-25T09:15:10+05:30] Request actual official clarification or corrected inputs
+
+User Prompt (verbatim, secrets redacted):
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_f74e6362c65449d4b805422c87e833ac\",0]","question":"Several public answers refer to resources whose supplied records contain no subject identifier or whose linking evidence was captured after audit_at. Is there an official clarification or corrected participant dataset for these missing links? I’ll continue fixing the independent code defects while preserving those evidence restrictions.","answer":"I have an official clarification or corrected dataset"}]
+</send_user_message_question_reply>
+
+Agent Response Summary:
+The user selected that an official clarification or corrected dataset existed. Asked for its actual text or local path before using it to resolve missing evidence. Continued independent parser, policy, document and regression repairs without inventing the clarification.
+
+Actions:
+* Requested the actual clarification/path through the text question tool.
+* No new dataset was supplied or used.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none
+
+## [2026-10-25T09:15:10+05:30] Recommend preserving evidence restrictions and report remaining gaps
+
+User Prompt (verbatim, secrets redacted):
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_23cc71775f454146abca1bb1b4fa599d\",0]","question":"Please paste the official clarification, or give the local filesystem path to the corrected participant dataset. I need its actual contents to resolve the missing links and policy conditions accurately.","answer":"I didn't have it \nRecommend me what to do"}]
+</send_user_message_question_reply>
+
+Agent Response Summary:
+The user corrected the earlier answer: no clarification was available, and asked for a recommendation. Recommended keeping official inputs/evidence cutoffs intact, completing supported code repairs and documenting remaining missing facts and interpretation limits. Delivered verified repairs improving resolved audits from10 to375 with413 passing tests, while honestly retaining143 unresolved cases and a failed Phase06 exit gate.
+
+Actions:
+* Added EVIDENCE-GAPS.md and source-bound evaluation/usage results.
+* Implemented and verified general repairs under the continuing solve-all request; no fallback answers or final package fabricated.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=C:\Users\SANTHEESH\OneDrive\Documents\ChatGPT\Hackerrank Orchestrate OCT-26
+worktree=main
+parent_agent=none

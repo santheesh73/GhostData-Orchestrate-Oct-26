@@ -89,7 +89,7 @@ def audit_dataset(bundle, rulebook, requests, intent_resolver=None):
     audits = []
     for request in sorted(requests, key=lambda r: r.case_id):
         try:
-            audits.append(engine.audit(request))
+            audits.append(audit_corpus_request(engine, bundle, request))
         except (ValueError, TypeError, OSError) as exc:
             intent = classify_request(request.request_text)
             audits.append(Audit(Decision(request, intent.authorization, uncertainties=(
@@ -97,16 +97,29 @@ def audit_dataset(bundle, rulebook, requests, intent_resolver=None):
     return tuple(audits)
 
 
+def audit_corpus_request(engine, bundle, request):
+    from .coverage import certify
+    initial = engine.audit(request)
+    if initial.intent.authorization != Authorization.DELETION:
+        return initial
+    reconstruction = engine.reconstruction.reconstruct(request)
+    coverage = certify(bundle, engine, request, reconstruction)
+    result = engine.audit(request, coverage_complete=True) if coverage.complete else initial
+    return replace(result, coverage_blockers=coverage.blockers, coverage_source_ids=coverage.source_ids)
+
+
 def audit_summary(bundle, audits):
     cases = [{"case_id": a.decision.request.case_id, "authorization": a.intent.authorization.value,
               "intent_reason": a.intent.reason, "deletion_status": a.decision.status.value if a.decision.status else None,
               "assessment_counts": dict(sorted(Counter(s.outcome for s in a.assessments).items())),
               "candidate_operations": len(a.candidate_operations),
+              "coverage_blockers": list(a.coverage_blockers),
               "uncertainty_codes": sorted({u.code for u in a.decision.uncertainties})} for a in audits]
     # Bind source/condition/operation provenance without exposing PII in stdout.
     proof = {"sources": sorted((r.source.path, r.source_sha256) for r in (*bundle.files, *bundle.context)),
              "audits": [{"decision": asdict(a.decision), "assessments": [asdict(s) for s in a.assessments],
-                         "identity_proof": a.identity_observation_ids} for a in audits]}
+                         "identity_proof": a.identity_observation_ids, "coverage_sources": a.coverage_source_ids,
+                         "coverage_blockers": a.coverage_blockers} for a in audits]}
     encoded = json.dumps(proof, default=lambda value: value.isoformat(), sort_keys=True, ensure_ascii=False, separators=(",", ":"))
     return {"phase": "04", "request_count": len(audits),
             "resolved_count": sum(a.decision.status is not None for a in audits),

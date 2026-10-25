@@ -221,8 +221,8 @@ def test_large_input_and_zero_call_budget_never_invoke_provider(tmp_path):
 
 
 def test_duplicate_unresolved_request_text_reuses_one_model_result(tmp_path):
-    text = "アカウントを削除してください"
-    data = {"authorization": "DELETION", "language": "ja", "english_translation": "Please delete my account.", "quote": text}
+    text = "Παρακαλώ διαγράψτε τον λογαριασμό μου."
+    data = {"authorization": "DELETION", "language": "el", "english_translation": "Please delete my account.", "quote": text}
     run, provider = runner(tmp_path, [reply(data)])
     extractor = SelectiveExtractor(run.cache, run)
     for case in ("first", "second"):
@@ -266,16 +266,16 @@ def test_transport_errors_are_sanitized_not_echoed():
 
 
 def test_intent_translation_keeps_negation_and_requires_literal_quote():
-    text = "アカウントを削除しないでください"
-    data = {"authorization": "NON_DELETION", "language": "ja", "english_translation": "Do not delete my account.", "quote": text}
+    text = "Μην διαγράψετε τον λογαριασμό μου."
+    data = {"authorization": "NON_DELETION", "language": "el", "english_translation": "Do not delete my account.", "quote": text}
     assert validate_intent(data, text) == data
     with pytest.raises(ExtractionError): validate_intent({**data, "authorization": "DELETION"}, text)
     with pytest.raises(ExtractionError): validate_intent({**data, "quote": "unrelated"}, text)
 
 
 def test_only_unresolved_request_text_is_sent_for_interpretation(tmp_path):
-    text = "アカウントを削除してください"
-    data = {"authorization": "DELETION", "language": "ja", "english_translation": "Please delete my account.", "quote": text}
+    text = "Παρακαλώ διαγράψτε τον λογαριασμό μου."
+    data = {"authorization": "DELETION", "language": "el", "english_translation": "Please delete my account.", "quote": text}
     run, provider = runner(tmp_path, [reply(data)])
     extractor = SelectiveExtractor(run.cache, run)
     english = replace(request(), request_text="Please delete my account.")
@@ -292,7 +292,7 @@ def test_only_unresolved_request_text_is_sent_for_interpretation(tmp_path):
 def test_missing_provider_and_zero_budget_leave_intent_unresolved(tmp_path):
     run = ModelRunner(None, ExtractionCache(tmp_path), UsageLedger())
     extractor = SelectiveExtractor(run.cache, run)
-    req = replace(request(), request_text="アカウントを削除してください")
+    req = replace(request(), request_text="Παρακαλώ διαγράψτε τον λογαριασμό μου.")
     result = extractor.resolve_intent(req, classify_request(req.request_text))
     assert result.authorization == Authorization.UNRESOLVED and not run.ledger.calls
 
@@ -310,8 +310,8 @@ def test_model_intent_is_consumed_by_policy_without_mandatory_provider_calls(tmp
     from ghosttrace.ingest.evidence_index import EvidenceIndex
     from ghosttrace.policy.engine import PolicyEngine
     from ghosttrace.policy.rulebook import RuleBook
-    text = "アカウントを削除しないでください"
-    value = {"authorization": "NON_DELETION", "language": "ja", "english_translation": "Do not delete my account.", "quote": text}
+    text = "Μην διαγράψετε τον λογαριασμό μου."
+    value = {"authorization": "NON_DELETION", "language": "el", "english_translation": "Do not delete my account.", "quote": text}
     run, provider = runner(tmp_path, [reply(value)])
     extractor = SelectiveExtractor(run.cache, run)
     engine = PolicyEngine(EvidenceIndex(), RuleBook.load(ROOT / "dataset"), extractor.resolve_intent)
@@ -457,7 +457,7 @@ def test_extraction_cli_uses_only_selected_work_and_preserves_existing_predictio
     monkeypatch.setattr(module, "configured_extractor", lambda *args: extractor)
     monkeypatch.setattr(corpus, "ingest_dataset", lambda path: bundle)
     monkeypatch.setattr(cli, "ROOT", tmp_path)
-    monkeypatch.setattr(cli, "load_requests", lambda path: [replace(request(), request_text="アカウントを削除してください")])
+    monkeypatch.setattr(cli, "load_requests", lambda path: [replace(request(), request_text="Παρακαλώ διαγράψτε τον λογαριασμό μου.")])
     sentinel = tmp_path / "output.csv"
     sentinel.write_text("previous", encoding="utf-8")
     assert cli.main(["--extract-evidence"]) == 0

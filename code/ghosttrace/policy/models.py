@@ -36,3 +36,5 @@ class Audit:
     assessments: tuple[Assessment, ...] = ()
     candidate_operations: tuple[OperationDerivation, ...] = ()
     identity_observation_ids: tuple[str, ...] = ()
+    coverage_blockers: tuple[str, ...] = ()
+    coverage_source_ids: tuple[str, ...] = ()

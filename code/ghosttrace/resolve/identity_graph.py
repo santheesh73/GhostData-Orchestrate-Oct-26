@@ -30,19 +30,30 @@ class IdentityGraph:
         self.observations = tuple(observations)
         self.payloads = {o.observation_id: payload(o) for o in self.observations}
         self.known_users = frozenset(p["user_id"] for o in self.observations
-            if o.claim_kind in {"IDENTITY_CONTEXT", "IDENTITY_CHANGE_CLAIM"}
+            if o.claim_kind in {"IDENTITY_CONTEXT", "IDENTITY_REGISTRY_ENTRY", "IDENTITY_CHANGE_CLAIM"}
             and isinstance((p := self.payloads[o.observation_id]).get("user_id"), str) and p["user_id"])
         self.subject_signals = {o.observation_id: signals(self.payloads[o.observation_id], self.known_users)
                                 for o in self.observations}
         self.pairs = {o.observation_id: paired_aliases(self.payloads[o.observation_id], self.known_users)
                       for o in self.observations}
         self.context_records = tuple(o for o in self.observations if o.claim_kind == "IDENTITY_CONTEXT")
+        self.registry_records = tuple(o for o in self.observations if o.claim_kind == "IDENTITY_REGISTRY_ENTRY"
+            and o.evidence.path == "user_identities.csv" and not o.evidence.citeable and o.time_basis == "updated_at")
         self.history_records = tuple(o for o in self.observations if o.claim_kind == "IDENTITY_CHANGE_CLAIM")
         self.pair_records = tuple(o for o in self.observations
             if len(self.subject_signals[o.observation_id][0]) == 1
             and self.pairs[o.observation_id]
             and {f.value_json for f in extract_facts(o) if f.dimension == "presence"} == {'"PRESENT"'})
         self.context_users = frozenset(self.payloads[o.observation_id].get("user_id") for o in self.context_records)
+        self.registry_owners = {}
+        if cache_context:
+            for observation in self.registry_records:
+                data = self.payloads[observation.observation_id]
+                user = data.get("user_id", "")
+                self.registry_owners[observation.observation_id] = tuple(
+                    Ownership(user, kind, value, observation.observed_at, None, None,
+                              (observation.observation_id,), "CURRENT_IDENTITY_REGISTRY")
+                    for kind in sorted(STRONG_KINDS) if user and (value := _value(kind, data.get(kind))))
         if cache_context:
             # These undated candidates never become temporal proof. Share only
             # immutable normalization/index work within this fixed input graph.
@@ -68,6 +79,8 @@ class IdentityGraph:
         ownership, context, issues = [], [], defaultdict(list)
         changes = defaultdict(list)
         known_at_cutoff = set(self.context_users)
+        registry = tuple(o for o in self.registry_records if o.observed_at is not None and o.observed_at <= cutoff)
+        known_at_cutoff.update(self.payloads[o.observation_id].get("user_id") for o in registry)
         known_at_cutoff.update(self.payloads[o.observation_id].get("user_id") for o in self.history_records
                                if eligible(o, cutoff) == "ELIGIBLE")
         if self.cache_context:
@@ -138,6 +151,21 @@ class IdentityGraph:
                 if broken and old:
                     ownership.append(Ownership(user, kind, old, None, clock, available, proof,
                                                "AUDIT_HISTORY", certain=False))
+        # The challenge explicitly supplies a canonical current-identity table.
+        # Its update time anchors identity validity, never a stored-record state
+        # or invented file-capture time. Generic undated snapshots stay hints.
+        for observation in registry:
+            if self.cache_context:
+                ownership.extend(owner for owner in self.registry_owners[observation.observation_id]
+                                 if (owner.user_id, owner.kind) not in changes)
+                continue
+            data = self.payloads[observation.observation_id]
+            user = data.get("user_id", "")
+            for kind in sorted(STRONG_KINDS):
+                value = _value(kind, data.get(kind))
+                if user and value and (user, kind) not in changes:
+                    ownership.append(Ownership(user, kind, value, observation.observed_at, None, None,
+                        (observation.observation_id,), "CURRENT_IDENTITY_REGISTRY"))
         return IdentityView(cutoff, ownership, context, issues, frozenset(known_at_cutoff),
                             context_index=self.context_aliases if self.cache_context else None,
                             context_by_user=self.context_by_user if self.cache_context else None)

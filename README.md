@@ -1,441 +1,106 @@
-# GHOSTTRACE — Phase 06
+# GHOSTTRACE — Phase 06 repair
 
-Evaluation now runs the actual audit engines before opening the public reference.
-It reports status, exact-row, step, field and sequence agreement, counts abstentions
-as failures, and separates unpublishable candidate plans from predictions.
+GHOSTTRACE audits deletion requests against the supplied identity registry,
+historical changes, policy, activity stream and evidence. It resolves identity,
+replays state at audit_at, plans policy-safe remediation and validates output.
+
+**Phase 06 is still incomplete.** The current full run resolves **375/518**
+audits (115 COMPLETE, 250 INCOMPLETE, 10 NOT_APPLICABLE), with **143 unresolved**.
+These are computed outcomes, not measured hidden-label accuracy. No final
+output.csv exists; the full-run command exits 3 and preserves any previous file.
+See [EVIDENCE-GAPS.md](EVIDENCE-GAPS.md) for the remaining conditions and explicit
+public-reference linkage gaps. No corrected dataset or official clarification
+was available. Phase 07 freeze/packaging has not proceeded.
+
+## Setup
+
+Run from the repository root with Python 3.11+; this environment was verified with
+CPython 3.14.3. Core parsing/policy/output code uses the standard library.
 
 ```text
-python -B code/evaluation/main.py --audit-samples
+python -m pip install -r code/requirements-dev.txt
+python -m pip install -r code/requirements-extract.txt
+```
+
+These files list test and optional document dependencies. No packages were
+installed during this repair. PyMuPDF/Pillow and Windows OCR en-US were already
+available. Windows image extraction uses the reviewed Windows PowerShell 5.1
+helper without changing execution policy. Other platforms need the optional
+Tesseract executable/English data; that fallback has not been verified here.
+Place the unchanged participant dataset at dataset/. Do not use organizer files.
+
+## Audit and guarded full run
+
+```text
+python -B code/main.py --audit-policy --with-extraction
+python -B code/main.py --run --with-extraction
+```
+
+The audit command prints diagnostics without writing predictions. The run command
+attempts root output.csv only for all 518 requests from the official repository
+paths. All audits, proof gates, complete case coverage and the independent CSV
+validator must pass before atomic publication. It never inserts fallback labels
+or writes a partial root file. Exit 3 means unresolved audits/publication blocked;
+1 means ingestion errors; 2 means invalid input/invocation; 0 means the requested
+operation succeeded. Current real --run exits 3. Required output columns are
+case_id,deletion_status,steps_json; rows and typed steps follow the official order.
+
+Document/usage caches stay under ignored .ghosttrace/extraction/. --cache-dir can
+select another directory within .ghosttrace/. Captured text is not automatically
+understood evidence. Positive business-panel and form adapters preserve source
+hashes/locators; ambiguous OCR identifiers are never corrected by guessing.
+
+## Evaluation and traces
+
+```text
 python -B code/evaluation/main.py --audit-samples --with-extraction
 python -B code/evaluation/main.py --trace-case case_29 --with-extraction
-python -B code/evaluation/main.py --benchmark-audits --requests dataset/deletion_requests.csv --repetitions 3
-```
-
-These commands write JSON diagnostics to stdout and never create output.csv.
-Sample evaluation exits **1** for imperfect results, **0** for exact agreement,
-and **2** for invalid inputs. Trace and benchmark exit 0 on successful diagnostics;
-a benchmark proof mismatch exits 2. Extraction caches stay under `.ghosttrace/`.
-Model calls are disabled in this offline evaluation path. Public labels are
-development references already inspected in earlier phases, not a held-out set.
-
-Native authorization agreement improved from **18/32 to 27/32** through general
-grammar fixes with positive/negative controls. End-to-end public-sample status,
-exact-row, field and sequence accuracy remain **0%**: all 32 cases
-abstain. Nine candidate steps match the 193 reference steps, but incomplete
-coverage, identity timing and policy interpretation prevent their publication.
-Full-dataset/hidden accuracy and semantic extraction recall remain unmeasured.
-
-The identity optimization reuses immutable, undated context normalization and
-indexes within a fixed input graph. Every audit still filters time-qualified
-ownership at its own cutoff; a snapshot never becomes temporal proof. The
-benchmark compares a retained uncached reference path, alternates trial order,
-and requires identical complete audit fingerprints, including candidate plans.
-Three alternating trials on all 518 requests measured median processing time of
-12.872 seconds for the reference and 6.816 seconds with caching (**1.89×** locally).
-Ingestion/startup are excluded; this does not change the unresolved outcomes.
-See `code/evaluation/evaluation_report.md` for measurements and case-level failures.
-
-**384 tests pass. Submission readiness is blocked.** No root output.csv or
-submission archive exists. Phase 07 freeze and packaging have not started.
-
-## Phase 05 extraction baseline
-
-Selective document/image/text extraction is implemented with literal source
-grounding, content-addressed caches, bounded optional model calls and usage
-accounting. The existing identity, policy and output boundaries remain in place.
-
-```text
-python code/main.py --extract-evidence
-python code/main.py --audit-policy --with-extraction
-```
-
-Both commands default to **zero model calls**. Extraction-only exit 0 means text
-capture completed without source errors; it does not prove semantic recall or
-deletion completeness. The audit command exits 3 while any case is unresolved.
-Neither command publishes predictions. The cache stays under ignored
-`.ghosttrace/extraction/`; `--cache-dir` may select another directory there.
-
-The local run reads all **4 PDFs and 11 PNGs**, covering **18 pages/images and
-992 text units**. One explicitly anchored record is normalized; other content
-remains candidate text or partially interpreted. All **340 tests** pass. The
-augmented audit processes 518 requests with 10 NOT_APPLICABLE and 508 unresolved;
-no root output.csv has been generated. Capture coverage is not answer accuracy.
-
-## Local extraction dependencies
-
-The baseline CLI remains standard-library-only. Optional PDF/image commands use
-the tested extras in `code/requirements-extract.txt` (PyMuPDF and Pillow).
-This development environment already supplied both; nothing was installed.
-On Windows, OCR uses the existing Windows OCR en-US recognizer through Windows
-PowerShell 5.1. No execution-policy/profile settings are changed. Other systems
-need Tesseract with its English data on PATH. Missing dependencies or unreadable
-pages remain explicit failures/partial results.
-
-OCR text, boxes, page/block/line locators, file hashes and source clocks survive
-normalization. Unrecognized layouts remain candidate text. Missing text never
-becomes an absent record, redacted field or disabled process. Extraction metadata
-is excluded from business identity and policy fields.
-
-## Optional model configuration
-
-The OpenAI Responses adapter requires a user-selected compatible model in
-`GHOSTTRACE_MODEL` and credentials in `OPENAI_API_KEY`. Configure secrets outside
-the transcript and repository. Calls remain disabled unless an explicit budget
-is passed, for example:
-
-```text
-python code/main.py --audit-policy --with-extraction --max-model-calls 8
-```
-
-This opts into external model requests when configured. The hard run limit is
-64 attempts; each selected task gets at most 3 attempts and 2,048 output tokens
-per call. Only unresolved document facts or request interpretation are selected;
-ordinary supported requests do not require a model. Prompts live in
-`code/ghosttrace/extract/prompts/`. The model returns observations/authorization,
-never CSV decisions or remediation. Strict local validation runs on responses
-and cache replays. Missing configuration leaves tasks unresolved.
-
-Actual input/output/cache tokens and unknown usage are tracked per provider/model.
-Optional user-verified USD-per-million rates use
-`GHOSTTRACE_INPUT_USD_PER_MILLION`, `GHOSTTRACE_OUTPUT_USD_PER_MILLION` and
-`GHOSTTRACE_CACHED_INPUT_USD_PER_MILLION`. No prices are assumed. Cache-build
-attempts, including retries, are reported separately from current replay calls.
-Unknown usage/pricing yields unknown cost rather than a fabricated zero.
-
-Live model calls were not exercised because no provider was configured. Tests
-use injected providers/transports; they do not measure live model accuracy.
-Source availability, exhaustive coverage and unresolved identities still require
-evidence. See `code/evaluation/evaluation_report.md` for the Phase 06 results.
-
-## Phase 04 policy baseline
-
-The policy/risk engine is implemented: request authorization, supplied rule
-conditions, retention safeguards, tombstones, residual identifiers, active flows,
-restore risks, and canonical remediation plans with source proofs.
-
-```text
-python code/main.py --audit-policy
-```
-
-This audits all selected requests and prints JSON diagnostics. It writes no CSV.
-Exit **3** means some cases remain unresolved; **0** means every requested audit
-resolved; **1** reports ingestion errors; **2** reports invalid input/invocation.
-`--requests` and `--dataset-root` select other participant inputs. The no-argument
-runner remains a lightweight boundary diagnostic (`POLICY_AUDIT_NOT_RUN`); use
-`--audit-policy` to run the actual engines.
-
-Current full run: **518 processed**, **10 NOT_APPLICABLE**, **508 unresolved**.
-Authorization grammar recognizes 484 deletion requests; 24 requests require later
-language interpretation. The engine records 134 violating, 42 compliant, and
-1,769 unknown resource-scope assessments. These are coverage counts, not measured
-accuracy, and a compliant scope is not a complete case.
-
-- Rules come from `deletion_rules.csv`; unknown conditions never default to delete.
-- Retained records and backups are preserved. Tombstones retain stable references
-  while direct identifiers require redaction. Analytics must also lose stable
-  subject links to qualify as anonymized.
-- Positive findings retain exact source/observation proofs. Omitted fields,
-  unsupported narrative, ambiguous ownership and malformed controls remain unknown.
-- Risk controls precede destructive changes. Copy-policy or dependency conflicts
-  block publication rather than violating canonical order or retention policy.
-- Policy-audit publication checks proof/operation consistency and eligibility,
-  then uses the existing independent structural validator and atomic writer.
-
-All **285 tests** pass, including the earlier 209 regressions. Three independent
-synthetic cases exercise COMPLETE, INCOMPLETE and NOT_APPLICABLE with exact steps
-and citations. They assert exhaustive synthetic coverage explicitly; parser
-success is not an exhaustive-coverage certificate for the real corpus. Fifteen
-PDF/PNG sources, provisional identities, unsupported conditions and incomplete
-coverage still block real deletion answers. No full prediction file or final
-submission has been generated. Phase 05 extraction additions are described above.
-
-## Phase 03 reconstruction baseline
-
-Historical identity ownership, resource linkage, audit-cutoff replay, and
-conflict handling support the policy engine. This section retains the earlier
-Phase 03 measurements; its reconstruction-only command still makes no decisions.
-
-## Identity and historical-state diagnostics
-
-```text
-python code/main.py --reconstruct-evidence
-```
-
-This reads the selected requests and evidence, then prints a JSON coverage report
-with case IDs, uncertainty codes, counts, and proof fingerprints. It writes no
-predictions and makes no model/network calls. `--requests` and `--dataset-root`
-select other participant datasets. Exit 0 means diagnostics completed without
-ingestion errors, not that every identity or deletion has been established.
-
-- Audit history defines half-open ownership intervals. Exact stable references
-  can connect multiple accounts; shared/reassigned aliases never union people.
-- An undated current snapshot supplies provisional identity candidates. It does
-  not acquire an availability time from its `updated_at` field.
-- Resource links retain ownership evidence, trace proofs, and ambiguous owners.
-  Trace continuation is confined to one file/service/instance and causal order.
-- Replay filters both source availability and observation time at `audit_at`.
-  It keeps operation SUCCESS claims separate from direct state readbacks.
-- Copies/instances remain separate. Equal-time contradictions remain unresolved;
-  omitted fields remain unknown, distinct from explicit JSON null/redaction.
-- Facts represent the latest eligible observation of a dimension, with its own
-  time and source proof. They do not establish continuous coverage through audit
-  time, complete evidence discovery, or compliance with deletion policy.
-
-Measured full-run coverage: 101 time-qualified subject resolutions, 417
-provisional snapshot matches, 680 grounded resource links, and 523 provisional
-links. Link support is independent of request-to-subject certainty. The 2,046
-source-specific copy/instance scopes are not a count of proven distinct storage
-replicas. No-hit searches never prove deletion. Fifteen PDF/PNG files remain
-deferred to Phase 05.
-
-All **209 tests** pass, including the previous 149 regressions. Full diagnostics
-were identical across fresh processes with hash seeds 0 and 12345 on these fixed
-inputs. Identity, temporal-state and deletion accuracy remain unmeasured.
-See `code/evaluation/evaluation_report.md` for commands, fingerprint and limits.
-Phase 04 policy diagnostics are described above.
-
-## Phase 02 ingestion baseline
-
-```text
-python code/main.py --ingest-evidence
-python code/evaluation/main.py --ingestion-coverage
-```
-
-The supplied corpus has 79 structured evidence files (28 JSON, 24 SQL, 26 logs,
-1 text) and 15 documents/images explicitly pending Phase 05 extraction. Four
-context CSV sources are also loaded. A generic CSV evidence adapter is available.
-The current measured run indexes 9,736 observations, including scope metadata and
-operational claims; this is not a count of proven privacy violations.
-
-- Exit 0 means ingestion has no failed/partial/empty structured sources. Expected
-  PDF/image deferrals remain explicit and do not imply a complete audit.
-- Exit 1 reports ingestion gaps; exit 2 indicates an invalid invocation/manifest.
-- No predictions are written. The normal runner still exits 3 for unresolved cases.
-- Candidate lookup retains competing copies and reports excluded future/unknown
-  timestamps. No lookup result establishes absence or identity ownership.
-- Identity snapshots/policies are non-citeable context; actual file/activity/audit
-  IDs remain separate. Source capture and observation clocks remain distinct.
-- SQL is processed only in bounded, restricted in-memory SQLite. Evidence files
-  and any supplied database paths are never opened for writing.
-
-Runtime remains standard-library-only and requires Python with SQLite support.
-See `code/evaluation/evaluation_report.md` and `DECISIONS.md` for actual results,
-parser boundaries, safety limits, and remaining risks. Phase 03 consumes this
-index without treating lookup results as proof of absence.
-
-## Phase 01 contract baseline
-
-Phase 01 implements the contract compiler, independent structural validator,
-synthetic end-to-end demonstration, request diagnostics, and development-only
-public sample comparator. It does **not** yet audit deletion evidence or produce
-supported predictions for the 518 real requests. The original starter guidance
-is preserved below.
-
-## Current setup and commands
-
-Use Python 3.11+; the runtime has no third-party dependencies. Tests use pytest
-(the development runner is recorded in `code/requirements-dev.txt`). No model
-provider or credentials are required in this phase.
-
-For a fresh test environment, install the declared test-only dependency with
-`python -m pip install -r code/requirements-dev.txt`. Runtime commands need no
-package installation. This implementation session used the existing runner.
-
-From the repository root:
-
-```text
-python code/main.py --validate-inputs-only
-python code/main.py
-python code/main.py --demo
-python code/main.py --validate-output dataset/sample_output.csv --requests dataset/sample_deletion_requests.csv
-python code/evaluation/main.py --inspect-samples
+python -B code/evaluation/main.py --benchmark-audits --with-extraction --repetitions 3
 python -B -m pytest -q -p no:cacheprovider code/tests
 ```
 
-- Input-only mode checks request schemas and reports the count; it writes no predictions.
-- The normal runner exits **3** and reports unresolved real cases. Missing engines
-  never become fabricated COMPLETE/INCOMPLETE/NOT_APPLICABLE values.
-- `--demo` compiles **synthetic premises**, writes `.ghosttrace/phase01-demo.csv`,
-  and cannot overwrite the official dataset or root submission. It is not a
-  production prediction or evidence of challenge accuracy.
-- Output validation checks structure, plan relationships, ID existence, and
-  metadata cutoff eligibility. Its `semantic_support=NOT_CHECKED` remains explicit:
-  citation meaning, subject linkage, policy safety, and evidence completeness
-  need later engines.
-- Sample inspection describes the public reference format; it is not prediction
-  evaluation. It is isolated from the normal runner.
+These development commands never write predictions. The evaluator finishes
+inference/gates before opening the public labels, which are already-inspected
+development references rather than a held-out set. Sample comparison exits 1
+when imperfect, 0 for exact agreement, 2 for input errors. Successful native
+trace/benchmark diagnostics exit 0; a proof mismatch aborts the benchmark.
 
-To compare a future candidate with public reference answers:
+**413 tests passed.** Current augmented public results: authorization 32/32;
+published status agreement 16/32 (16 abstentions); exact rows/sequences 2/32;
+78/193 step recall with precision 1.0; field agreement 522/1,351. The 134 diagnostic
+candidate steps are separate and are not predictions. Hidden/full-dataset accuracy
+and semantic extraction recall remain unmeasured. Full details and historical
+measurements are in code/evaluation/evaluation_report.md.
 
-```text
-python code/evaluation/main.py --predictions <candidate.csv> --expected dataset/sample_output.csv --requests dataset/sample_deletion_requests.csv
-```
+## Model configuration and usage
 
-Exit codes: **0** successful requested check/demo; **1** invalid output or a
-comparison with differences; **2** malformed input, invalid invocation, or I/O
-failure; **3** unresolved production decisions. The emitter writes only after
-validation and rechecks staged CSV bytes before atomic replacement.
+Ordinary supported requests use native parsing, including Japanese/Korean
+authorization and negation. The optional provider adapter is selective: only
+unresolved interpretation can request a model. Calls default to zero. The offline
+evaluation path disables providers entirely. Actual repair runs used 0 provider
+calls, 0 input/output tokens and USD0 model-service cost, excluding development
+session usage and local compute. No final prediction-producing usage run exists.
 
-See `DECISIONS.md` for the architecture boundary and
-`code/evaluation/evaluation_report.md` for actual Phase 01 measurements.
-The event deadline is not configured; no deadline or ranking is assumed.
+Optional provider/model configuration uses OPENAI_API_KEY and GHOSTTRACE_MODEL,
+kept outside Git and transcripts. --max-model-calls requires an explicit extraction
+mode and an opt-in budget (maximum 64 attempts, at most 3 per task). No provider
+or model was selected or called in this repair. Prices are never assumed;
+optional verified per-million rates use GHOSTTRACE_INPUT_USD_PER_MILLION,
+GHOSTTRACE_OUTPUT_USD_PER_MILLION and GHOSTTRACE_CACHED_INPUT_USD_PER_MILLION.
+Unknown usage/pricing stays unknown. See code/evaluation/usage_report.md.
 
----
+## Evidence boundaries
 
-# HackerRank Orchestrate - October 2026
+The official canonical identity table's updated_at anchors identity validity;
+it does not become a capture timestamp or a citeable record-state observation.
+Undated generic snapshots remain provisional. All record-state observations still
+need both availability and observation clocks at/before audit_at. Future captures,
+reported workflow results, resource-name suffixes and public labels cannot supply
+missing identity/state proof.
 
-## Ghost Data Still Exists
-
-Build an AI agent that audits whether a user's personal data was actually deleted.
-
-A deletion workflow may report **Complete** while data still exists in databases, logs, support attachments, exports, search indexes, archives, or backups. Sync and restore processes may also bring deleted data back.
-
-For each request, the agent must first determine whether deletion was actually requested. It then returns `COMPLETE`, `INCOMPLETE`, or `NOT_APPLICABLE`, reports any remaining data or recreation risk, and produces the ordered remediation and verification steps required to finish an authorized deletion safely.
-
-Read [`problem_statement.md`](./problem_statement.md) for the complete challenge contract.
-
----
-
-## Quick Start
-
-Clone the repository and move into the project directory:
-
-```bash
-git clone https://github.com/interviewstreet/hackerrank-orchestrate-october26.git
-cd hackerrank-orchestrate-october26
-```
-
-Start your AI coding tool from the **repository root** so it automatically reads [`AGENTS.md`](./AGENTS.md) and logs your session turns to `log.txt` in the root directory.
-
-Build your solution in `code/main.py`, or use another language and document its setup and run command clearly in your README.
-
-Your solution must:
-
-- Read the input files from `dataset/`
-- Generate one prediction row for every request in `dataset/deletion_requests.csv`
-- Write the final predictions to `output.csv` in the repository root
-
-Run the starter Python entry point with:
-
-```bash
-python3 code/main.py
-```
-
-The blank template at `dataset/output.csv` is provided as a reference. Your final generated file for submission must be the root-level `output.csv`.
-
-
-## Dataset
-
-All participant-facing files are in `dataset/`:
-
-| File | Contents |
-| --- | --- |
-| `deletion_requests.csv` | 518 requests |
-| `sample_deletion_requests.csv` | 32 sample requests |
-| `sample_output.csv` | Correct sample answers |
-| `user_identities.csv` | Current user identities |
-| `user_audit_log.csv` | Historical identity changes |
-| `system_activity.csv` | Activity across services and data processes |
-| `deletion_rules.csv` | Required treatment for each data category |
-| `evidence_files.csv` | Manifest of supplied evidence files |
-| `output.csv` | Blank output template |
-
-Evidence is stored under `dataset/evidence/` and may include PDFs, images, logs, JSON, plain text, or SQL snapshot exports. SQL captures may contain a primary database, regional replicas, a reporting replica, or a failover replica so replication drift can be investigated directly. The `.sql` files are readable as text and executable with SQLite.
-
-Only `deletion_requests.csv` requires answers. The other files provide evidence and context.
-
----
-
-## Output
-
-Create `output.csv` with these columns in this exact order:
-
-```text
-case_id,deletion_status,steps_json
-```
-
-Produce exactly one row per request. `deletion_status` is `COMPLETE`, `INCOMPLETE`, or `NOT_APPLICABLE`. `steps_json` is an ordered JSON array containing findings, remediation actions, and verification checks. Use an empty array (`[]`) for `NOT_APPLICABLE`. Evidence references may be a `file_id`, `activity_id`, or `audit_id`. Determine the resource state at `audit_at` from the available evidence; reported workflow statuses and operation results are claims. Use `dataset/sample_output.csv` as the format reference.
-
-The final file must contain 518 data rows sorted by `case_id` (plus the header row). The grader parses `steps_json` as JSON, so object-key order and whitespace do not matter; array order does. Order findings, remediation, and verification in that phase order. Within a phase, follow the operation order in the problem statement, then sort by `system_id` and `resource_id`.
-
----
-
-## Evaluation
-
-`output.csv` will be compared with hidden canonical answers. Scoring considers:
-
-- deletion assessment accuracy;
-- current and historical identity resolution;
-- discovery of remaining data and recreation risks;
-- correct policy application and evidence references; and
-- completeness and ordering of remediation and verification steps.
-
-Your `code.zip` must include:
-
-```text
-code/evaluation/evaluation_report.md
-code/evaluation/usage_report.md
-```
-
-- `evaluation_report.md` must cover case, row, field, and sequence accuracy, at least three additional evaluation cases created by you, failures found, and improvements made.
-- `usage_report.md` must cover the final full-dataset run, including model providers and names, model calls, input and output tokens, total and average tokens per request, and estimated total and per-request cost. Include per-model and overall totals when using multiple models.
-
-**Important:** Place `evaluation_report.md` and `usage_report.md` inside `code/evaluation/` (matching `code/evaluation/main.py` in this starter layout), write your complete evaluation metrics, custom evaluation test cases, and token/cost breakdowns directly inside those Markdown files, and keep prompts in source code or Markdown files. Automated code evaluation ignores raw data files (`.csv`, `.tsv`, `.json`, `.jsonl`, `.sql`, `.log`), so content stored only in those formats will not be visible to the code judge or AI interviewer.
-
----
-
-## Chat Transcript
-
-This repository includes [`AGENTS.md`](./AGENTS.md), which instructs compatible AI coding tools to append conversation summaries to `log.txt` in the repository root:
-
-| Platform | Path |
-| --- | --- |
-| macOS / Linux | `<repo root>/log.txt` |
-| Windows | `<repo root>\log.txt` |
-
-- Always launch your AI coding agent from the repository root (or explicitly ask it to read `./AGENTS.md` first) so every turn is logged to `log.txt` with the required `User Prompt`, `Agent Response Summary`, `Actions`, and `Context` sections.
-- Upload `log.txt` directly as your `chat_transcript` submission on HackerRank.
-- Do not include API keys, tokens, credentials, or secrets in prompts, code, configuration, or `log.txt`.
-
----
-
-## Packaging `code.zip` and Submission
-
-| Item | Description |
-| --- | --- |
-| `code.zip` | Runnable solution, prompts, configuration, `README.md`, and `evaluation/` reports |
-| `output.csv` | One answer row for each of the 518 requests in `dataset/deletion_requests.csv` |
-| `chat_transcript` | The root `log.txt` file generated by your coding agent |
-| AI interview | Live explanation of your architecture, approach, and evaluation |
-
-You may use any programming language, model, framework, or retrieval approach. Include clear setup and execution instructions in `README.md` inside `code.zip`.
-
-To package `code.zip` from the repository root without bundling the dataset:
-
-**macOS / Linux:**
-
-```bash
-zip -r code.zip README.md code -x "*/__pycache__/*" "*/.venv/*" "*/venv/*" "*/node_modules/*" "*/.git/*" "*/.DS_Store"
-```
-
-**Windows (PowerShell):**
-
-```powershell
-Compress-Archive -Path README.md, code -DestinationPath code.zip -Force
-```
-
-When packaging `code.zip`:
-
-- Keep your evaluation reports in `code/evaluation/` so they are bundled automatically with `code` (or add `evaluation` to the archive command above if you placed them in a top-level `evaluation/` directory).
-- Do **not** include `dataset/`, virtual environments (`.venv`, `venv`, `node_modules`), or build caches (`__pycache__`). On Windows, keep `.venv` at the repository root (outside `code/`) and remove any `code/__pycache__` folders before running `Compress-Archive`.
-- Do **not** include nested archives (`.zip`, `.tar`, `.gz`, `.tgz`, `.7z`, `.rar`) inside `code.zip` — submissions containing nested archive files will be rejected.
-
-Before submitting, confirm that:
-
-- `output.csv` has the exact header `case_id,deletion_status,steps_json` and contains all 518 data rows sorted by `case_id`;
-- every `steps_json` value is a valid JSON array with consecutive step numbers starting at `1`;
-- findings cite valid evidence IDs, and `COMPLETE` verification steps cite evidence proving the current state;
-- proposed remediation and future verification steps use an empty `evidence_id` (`""`);
-- `code.zip` includes your runnable code, `README.md`, `code/evaluation/evaluation_report.md`, and `code/evaluation/usage_report.md`;
-- `log.txt` follows the `AGENTS.md` turn format and is uploaded to the `chat_transcript` slot; and
-- no API keys, credentials, real personal data, or sensitive configuration values are included.
+Finite-corpus coverage requires accounted input sources, resolved identity,
+linked resource state and interpretation of matching documents. It does not claim
+knowledge outside the supplied dataset. Unknown shared-context, retention,
+attachment ownership, restore or flow facts remain blockers. Engineering choices
+and the current risk register are in DECISIONS.md. The authentic transcript is
+log.txt; no submission archive or upload has been produced.
