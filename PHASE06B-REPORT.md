@@ -5,7 +5,8 @@
 Started from clean main atd302f177cdedabd7e30f97ea49cdac09fce80b8d. The original
 stash and historical submission remain preserved. No old stash was applied.
 Current changes are Phase06B incremental repairs, not a restarted architecture.
-Final source checkpoint/reproduction evidence is appended after verification.
+Tested source checkpoint: 9a3e683b8eadd03d921e33ce613ddacc422f3c20.
+The final documentation checkpoint follows it without changing runtime code.
 
 ## B. Reproduced baseline
 
@@ -202,8 +203,8 @@ rejected merely because they need no remediation.
 
 ## L. Release, reproducibility and traces
 
-The final production publication, optimized-Python packaging check and fresh
-source reproduction are recorded below when executed. No new release bundle
+The production publication and optimized-Python packaging checks remain blocked.
+Fresh committed-source reproduction is recorded below. No new release bundle
 will be built unless all518 semantic/contract gates pass. The historical
 submission remains preserved and uncertified. The active Codex session cannot
 have a complete final trace export until it ends; follow agent_trace_instructions
@@ -261,5 +262,42 @@ root CSV. The reference and cached full proofs match. Optimized Python packaging
 check exits1 with PACKAGE BLOCKED for238 cases; no new archive is built. The
 explicit prospective inventory contains103 members and passes the configured
 path/secret-pattern checks. These checks do not certify arbitrary secret absence.
-Final clean-source reproduction and checkpoint hashes are recorded below after
-the committed-source run. No historical bundle or provided evidence was changed.
+Final clean-source reproduction and checkpoint hashes follow below. No historical bundle or provided evidence was changed.
+
+## Committed-source verification
+
+- Source commit: `9a3e683b8eadd03d921e33ce613ddacc422f3c20`.
+- A new Git source export was extracted into `.ghosttrace/phase06b/clean-9a3e683/`;
+  no old extraction cache or root output was copied. The actual participant input
+  files were copied byte-for-byte and verified against the working dataset.
+- Fresh command: `python -B code/main.py --run --with-extraction`.
+  Exit 3 in 77.596 seconds: 280 resolved, 238 unresolved, 88 COMPLETE,
+  182 INCOMPLETE and 10 NOT_APPLICABLE. No root output.csv was created there.
+- Every case report and the full-run proof hash match the prior two seeded runs.
+  Main-report proof SHA-256:
+  `a933265317752b0fced286f1b074d3e10a14e7ffaeff25ffb01d2b2ace4a8f75`.
+  The separate evaluator audit fingerprint is
+  `0840374fe612bbf73b85ab576ff2fc4241afaa32d848027694afffc75226b928`;
+  these hash different representations and are not interchangeable.
+- Source-export SHA-256:
+  `01d75e8d0326ccfeefc2f7175fdc9cb26a9a42f0d0526b1582751402961f7417`.
+  This ignored diagnostic source export is not a submission code.zip.
+- Runtime: Python 3.14.3, PyMuPDF 1.27.2.3, Pillow 12.2.0, native Windows OCR.
+  Existing documented dependencies were reused. A fresh-machine dependency
+  installation was not tested; no packages were installed this phase.
+- The final public rerun has identical published and candidate metrics. Comparing
+  its entire diagnostic report with the older canonical checkpoint initially
+  failed: only case_07 changed from an uninterpreted-document blocker to an
+  unestablished exclusive-ownership condition after form recovery. This expected
+  diagnostic change was inspected; no candidate-step or status change occurred.
+- Final full suite: 538 passed in 24.63 seconds, including all 503 protected tests.
+- Historical stash `569016ae1ab137511cab88551be761b4f1621384`, participant files,
+  historical submission and prior root output are preserved.
+- Detailed checks: `evaluation/phase06b/clean_source_reproduction.json`,
+  `final_public_check.json`, `release_checks.json` and `integrity.json`.
+- Genuine trace export is pending session closure. Prepared instructions are in
+  `evaluation/phase06b/TRACE-EXPORT.md`. No complete trace archive is claimed.
+
+No corrected 518-row prediction file, new submission bundle or external upload
+was produced. The publication and packaging failures are unresolved readiness
+gates, not successful final runs.

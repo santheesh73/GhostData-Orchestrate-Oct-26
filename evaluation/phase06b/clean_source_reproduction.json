@@ -1,0 +1,27 @@
+{
+  "source_commit": "9a3e683b8eadd03d921e33ce613ddacc422f3c20",
+  "source_export_sha256": "01d75e8d0326ccfeefc2f7175fdc9cb26a9a42f0d0526b1582751402961f7417",
+  "fresh_directory": "C:\\Users\\SANTHEESH\\OneDrive\\Documents\\ChatGPT\\Hackerrank Orchestrate OCT-26\\.ghosttrace\\phase06b\\clean-9a3e683",
+  "command": "python -B code/main.py --run --with-extraction",
+  "exit_code": 3,
+  "seconds": 77.596,
+  "resolved_count": 280,
+  "unresolved_count": 238,
+  "status_counts": {
+    "COMPLETE": 88,
+    "INCOMPLETE": 182,
+    "NOT_APPLICABLE": 10
+  },
+  "proof_sha256": "a933265317752b0fced286f1b074d3e10a14e7ffaeff25ffb01d2b2ace4a8f75",
+  "same_proof_as_seeded_run": true,
+  "same_cases_as_seeded_run": true,
+  "output_exists": false,
+  "dataset_byte_identical": true,
+  "fresh_cache": true,
+  "python": "3.14.3",
+  "installed_dependencies": {
+    "PyMuPDF": "1.27.2.3",
+    "Pillow": "12.2.0"
+  },
+  "clean_environment_install": "NOT_PERFORMED; documented existing runtime reused"
+}

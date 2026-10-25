@@ -21,5 +21,20 @@
       "total_seconds": 70.8393333999993
     },
     "model_calls": 0
-  }
+  },
+  "final_committed_source": "9a3e683b8eadd03d921e33ce613ddacc422f3c20",
+  "final_optimized_package_check": {
+    "command": "python -B -O scripts/package.py --check-only",
+    "exit_code": 1,
+    "seconds": 50.828,
+    "package_built": false,
+    "reason": "semantic gate blocked 238 cases"
+  },
+  "final_tests": {
+    "passed": 538,
+    "protected_baseline_passed": 503,
+    "new_controls": 35,
+    "seconds": 24.63
+  },
+  "clean_source_reproduction": "clean_source_reproduction.json"
 }

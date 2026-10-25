@@ -1,0 +1,53 @@
+{
+  "source_commit": "9a3e683b8eadd03d921e33ce613ddacc422f3c20",
+  "metrics_identical_to_prior": true,
+  "candidate_metrics_identical_to_prior": true,
+  "trace_changes": [
+    {
+      "case_id": "case_07",
+      "fields": {
+        "failure_stages": {
+          "before": [
+            "COVERAGE",
+            "PUBLICATION_GATE"
+          ],
+          "after": [
+            "POLICY_OR_INTERPRETATION",
+            "PUBLICATION_GATE"
+          ]
+        },
+        "uncertainty_codes": {
+          "before": [
+            "EVIDENCE_COVERAGE_NOT_ESTABLISHED"
+          ],
+          "after": [
+            "POLICY_CONDITION_NOT_ESTABLISHED"
+          ]
+        },
+        "gate_errors": {
+          "before": [
+            "ASSESSMENT_STATUS_MISMATCH",
+            "AUDIT_PREREQUISITE_MISSING",
+            "PLAN_COVERAGE_MISMATCH",
+            "UNRESOLVED_DECISION"
+          ],
+          "after": [
+            "ASSESSMENT_STATUS_MISMATCH",
+            "AUDIT_PREREQUISITE_MISSING",
+            "PLAN_COVERAGE_MISMATCH",
+            "STATE_PROOF_MISSING",
+            "UNRESOLVED_ASSESSMENT",
+            "UNRESOLVED_DECISION"
+          ]
+        },
+        "coverage_blockers": {
+          "before": [
+            "MATCHING_DOCUMENT_NOT_INTERPRETED"
+          ],
+          "after": []
+        }
+      }
+    }
+  ],
+  "comparison_note": "An initial exact-report comparison failed because the prior canonical run predates form-properties recovery. Only case_07 diagnostic blockers changed; output metrics, candidate steps and published statuses did not."
+}

@@ -8,5 +8,8 @@
     "submission/output.csv": "5cfdd86eb54a26585ad9f2565d212e455c0066e8ed049f164623f5352ff216c9"
   },
   "provider_calls": 0,
-  "hidden_accuracy": "NOT_MEASURED"
+  "hidden_accuracy": "NOT_MEASURED",
+  "preserved_root_output_sha256": "894d367de51dabd3fcd5c5930211c5f9dfd23d064d904c13ddf211411f7b5420",
+  "preserved_root_output_mtime_utc": "2026-10-25T09:14:47.116618+00:00",
+  "root_output_note": "Legacy root candidate predates this task and differs from submission/output.csv; neither is a corrected release. Guarded runs preserve it."
 }

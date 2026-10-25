@@ -60,3 +60,12 @@ development-only, candidates separate, hidden accuracy NOT MEASURED.
 | case_30 | INCOMPLETE | 12 | FIELD,MISSING_STEP,SEQUENCE |
 | case_31 | ABSTAIN | 1 | POLICY_CONDITION_NOT_ESTABLISHED |
 | case_32 | ABSTAIN | 3 | POLICY_CONDITION_NOT_ESTABLISHED |
+
+Committed-source verification: 9a3e683, fresh cache and byte-identical dataset,
+exit 3 in 77.596 seconds, 280 resolved / 238 unknown. All case reports and
+main-report proof match seeded production runs. No root output was created.
+Existing Python 3.14.3 / PyMuPDF 1.27.2.3 / Pillow 12.2.0 runtime reused;
+a fresh dependency installation was not performed. Final public metrics and
+candidate steps are unchanged; case_07 diagnostic blocker moved to its policy
+condition after attachment presence recovery. See PHASE06B-REPORT.md and
+evaluation/phase06b/clean_source_reproduction.json.
