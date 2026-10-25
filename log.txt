@@ -933,3 +933,38 @@ All stale content: the 375/143 figures, "Phase 06 incomplete", "NOT READY", exit
 5. Print: the files to upload (code.zip only; output.csv unchanged) and the commit hash.
 
 Final README check passed: exactly seven requested sections, five architecture lines, three limitation bullets, exact run commands and final metrics. Before packaging, tracked changes were Markdown only except mandatory append-only log.txt. Same packaging script rebuilt the 103-member code ZIP; member-by-member comparison proves README.md is the only changed payload, with evaluation/evaluation_report.md and evaluation/usage_report.md at ZIP root. Extracted archive fresh-cache run exits 0 in 83.616s and reproduces submitted output.csv byte-identically. Root and submission CSV SHA-256 values unchanged; no code or dataset changes. New code ZIP SHA-256: 4d30f8780a98cf6c7a37c57816b946457031c6ac4f3ab721c986257e9673b509. Preparing Final README for submission commit/push before 17:46 IST. Upload code.zip only; output.csv unchanged.
+
+## [2026-10-25T14:18:22Z] SESSION START
+
+tool=Claude Code
+model=claude-opus-5-5
+Repo Root: /home/user/GhostData-Orchestrate-Oct-26
+Branch: claude/sleepy-fermi-9kty6a
+Worktree: main
+Parent Agent: none
+Language: py
+Time Remaining: not configured
+
+## [2026-10-25T14:25:56Z] Accuracy gap analysis of public sample predictions
+
+User Prompt (verbatim, secrets redacted):
+You are senior developer
+Analyze this completely 
+Inspect the Gaps and what makes the accuracy fall
+
+Agent Response Summary:
+Reproduced the final pipeline on Linux with Tesseract and diffed sample predictions against dataset/sample_output.csv: 32/32 statuses, 9/32 exact rows, 158 matched steps, 0 extra, 35 missing. All 35 missing steps are VERIFICATION steps in three families: identifier-free account absence (21), identifier-free anonymized analytics (7), and retained security audit records (7) that only appear in post-audit_at evidence or nowhere. Also found OCR-backend sensitivity (7 eval rows differ between Windows OCR and Tesseract, 6 flip to COMPLETE) and no public NOT_APPLICABLE coverage. No code, dataset, or submitted output.csv changes.
+
+Actions:
+* Installed PyMuPDF/Pillow and tesseract-ocr in the container
+* Ran python -B code/main.py --run --with-extraction (then restored submitted output.csv byte-identically)
+* Wrote scratchpad scripts to emit sample predictions and diff step-by-step against sample_output.csv
+* Grepped system_activity.csv and evidence for linkage of each missing resource
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=claude/sleepy-fermi-9kty6a
+repo_root=/home/user/GhostData-Orchestrate-Oct-26
+worktree=main
+parent_agent=none
