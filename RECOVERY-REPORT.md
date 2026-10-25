@@ -128,7 +128,10 @@ Current full statuses:88 COMPLETE,180 INCOMPLETE,10 NOT_APPLICABLE,240 unresolve
 Public authorization32/32; F1=54.89%. Safety fixes reduced coverage/recall; this is
 not represented as overall accuracy improvement. Candidates are separate from
 published steps. All32 public case dispositions and failure causes are in the
-canonical evaluation report. Hidden accuracy/semantic recall remain NOT MEASURED.
+canonical evaluation report; evaluation/recovery_public_cases.json contains
+per-case taxonomy tags, uncertainties and separate candidate/reference steps.
+These are reference differences, not authorization to emit missing operations.
+Hidden accuracy/semantic recall remain NOT MEASURED.
 Full observed native runtime was55.277s with competing
 verification processes; this is not a controlled speed benchmark. Provider usage
 and service cost are0, excluding development sessions and local compute.
@@ -214,3 +217,27 @@ is necessary to describe these blockers honestly.
 ## M. Final verdict
 
 NOT READY — CRITICAL BLOCKERS REMAIN
+
+## Final clean-source verification checkpoint
+
+Corrected application source commit:e0e4538f50acc141d460a5cc051cfb3505299cf9.
+A new committed-source export with exact unchanged participant evidence bytes
+reproduces the same case diagnostics and full proof as the working tree.
+`python -B code/main.py --run --with-extraction` exits3;240 unresolved;
+88 COMPLETE,180 INCOMPLETE,10 NOT_APPLICABLE; no root output is created.
+Observed fresh-cache run81.271s, not a speed benchmark. Existing documented
+dependencies were verified (PyMuPDF1.27.2.3,Pillow12.2.0,pytest9.1.1); no clean
+machine dependency installation or cross-platform run is claimed.
+
+Clean source snapshot SHA256 (diagnostic export, not a submission code.zip):
+`f7d5baef0e98ee6e1ab1a172dec05080557d37095b95a65a1396c3470ae296f3`.
+Explicit prospective inventory/secret-pattern scan accepts99 archive members
+and the transcript; this is a pattern check, not proof of absence of every possible
+secret. No new release archive was built because the semantic gate blocks240.
+The actual old bundle and output hashes are in evaluation/recovery_integrity.json.
+
+Additional final evidence files:evaluation/recovery_public_cases.json (all32
+public dispositions and diagnostic taxonomy), evaluation/clean_reproduction.json
+and updated evaluation/recovery_integrity.json. RECOVERY-REPORT.md is part of the
+explicit prospective release inventory. The final documentation commit changes
+no application logic relative to the verified source checkpoint.

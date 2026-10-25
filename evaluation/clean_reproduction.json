@@ -1,0 +1,20 @@
+{
+  "source_commit": "e0e4538f50acc141d460a5cc051cfb3505299cf9",
+  "exit": 3,
+  "seconds": 81.2712872000011,
+  "status_counts": {
+    "COMPLETE": 88,
+    "INCOMPLETE": 180,
+    "NOT_APPLICABLE": 10
+  },
+  "unresolved_count": 240,
+  "same_cases": true,
+  "same_proof": true,
+  "root_output_created": false,
+  "documented_dependencies": {
+    "PyMuPDF": "1.27.2.3",
+    "Pillow": "12.2.0",
+    "pytest": "9.1.1"
+  },
+  "source_archive_sha256": "f7d5baef0e98ee6e1ab1a172dec05080557d37095b95a65a1396c3470ae296f3"
+}

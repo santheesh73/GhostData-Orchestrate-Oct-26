@@ -8,5 +8,30 @@
   "input_tokens": 0,
   "output_tokens": 0,
   "model_cost_usd": 0,
-  "hidden_accuracy": "NOT_MEASURED"
+  "hidden_accuracy": "NOT_MEASURED",
+  "verified_source_commit": "e0e4538f50acc141d460a5cc051cfb3505299cf9",
+  "clean_source_export": {
+    "source_commit": "e0e4538f50acc141d460a5cc051cfb3505299cf9",
+    "exit": 3,
+    "seconds": 81.2712872000011,
+    "status_counts": {
+      "COMPLETE": 88,
+      "INCOMPLETE": 180,
+      "NOT_APPLICABLE": 10
+    },
+    "unresolved_count": 240,
+    "same_cases": true,
+    "same_proof": true,
+    "root_output_created": false,
+    "documented_dependencies": {
+      "PyMuPDF": "1.27.2.3",
+      "Pillow": "12.2.0",
+      "pytest": "9.1.1"
+    },
+    "source_archive_sha256": "f7d5baef0e98ee6e1ab1a172dec05080557d37095b95a65a1396c3470ae296f3"
+  },
+  "historical_artifacts_sha256": {
+    "submission/code.zip": "b795b31d6ca1e3bd34b9b04cdf2abf79986761a4f863ee3f855d08d401cdc420",
+    "submission/output.csv": "5cfdd86eb54a26585ad9f2565d212e455c0066e8ed049f164623f5352ff216c9"
+  }
 }
