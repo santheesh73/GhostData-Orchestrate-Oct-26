@@ -143,9 +143,10 @@ def document(text, origin="support_platform"):
 
 
 def test_business_form_binds_literal_resource_and_rejects_multiple_customer_contacts():
-    text = "DELIVERY ADDRESS CORRECTION REQUEST\nSupport reference CS-other / opaque-form\nowner@example.invalid\nuploader customer"
+    text = "DELIVERY ADDRESS CORRECTION REQUEST\nAttachment ID: opaque-form\nowner@example.invalid\nuploader customer"
     rows = project_document(document(text), {})
     assert len(rows) == 1 and rows[0].resource.resource_id == "opaque-form"
+    assert "sole_subject" not in json.loads(rows[0].payload_json)
     assert project_document(document(text + "\nother@example.invalid"), {}) == ()
     assert project_document(document("blank form"), {}) == ()
 
@@ -155,7 +156,10 @@ def test_signed_retention_document_requires_actual_expiry_and_known_subject():
     rows = project_document(document(text, "security_service"), {})
     assert len(rows) == 1 and rows[0].resource.resource_id == "opaque-event"
     assert '2031-05-12T04:15:00+00:00' in rows[0].payload_json
-    assert project_document(document(text.replace("retain until", "unlabeled"), "security_service"), {}) == ()
+    # The explicit event/reference may be captured, but cannot acquire an
+    # invented expiry or satisfy retention policy without the labeled date.
+    partial = project_document(document(text.replace("retain until", "unlabeled"), "security_service"), {})
+    assert all("retention_until" not in json.loads(o.payload_json) for o in partial)
 
 
 def test_positive_ui_panel_never_repairs_ocr_ids_or_infers_absence():

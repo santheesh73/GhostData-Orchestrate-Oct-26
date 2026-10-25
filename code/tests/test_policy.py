@@ -250,7 +250,7 @@ def test_backup_is_retained_and_restore_access_is_blocked(rules, allowed):
 
 
 def test_restore_eligibility_and_missing_block_establish_risk_together(rules):
-    result, _ = audit(rules, record("restore", "BACKUP_ARCHIVE", {"eligible": True, "deletion_block": False}))
+    result, _ = audit(rules, record("restore", "BACKUP_ARCHIVE", {"eligible": True, "deletion_block": False, "archive_present": True}))
     assert "REPORT_RESTORE_RISK" in operations(result)
 
 

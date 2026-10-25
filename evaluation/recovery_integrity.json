@@ -1,0 +1,12 @@
+{
+  "baseline_commit": "9f534cacf965690e4e0ccf32c9060479b0d6a15a",
+  "official_inputs_unchanged": true,
+  "participant_inventory_sha256": "05414935e3cddc995ff17c56a0e00206fe5646bcdd8b59943619e62eae6ce73e",
+  "implementation_sha256": "7edf1764137195e513f6ceae1620efc20e0c36e1d905baee811b94d9f8511ec4",
+  "audit_sha256": "d6bf711ea6f0e412ee9dc923958979d06844be9ffdb1c8490425c4d6c8cab23b",
+  "provider_calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "model_cost_usd": 0,
+  "hidden_accuracy": "NOT_MEASURED"
+}

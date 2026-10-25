@@ -1,112 +1,155 @@
 #!/usr/bin/env python3
-"""Package the Ghost Data Still Exists submission bundle according to AGENTS.md §6.9."""
-
-import csv
+"""Validate source-grounded predictions and atomically build a NEW local bundle."""
+import argparse
+import hashlib
 import json
-import os
+from pathlib import Path, PurePosixPath
+import re
 import shutil
+import subprocess
 import sys
+import tempfile
 import zipfile
-from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SUBMISSION = ROOT / "submission"
+sys.path.insert(0, str(ROOT / "code"))
+from ghosttrace.ingest.loader import load_requests, load_evidence_catalog
+from ghosttrace.quality.validator import read_output, validate_rows, OutputError
 
-SKIP_NAMES = {
-    ".git", ".venv", "venv", "__pycache__", "dataset", ".pytest_cache",
-    "submission", "node_modules", ".agents", "scratch", ".ghosttrace",
-    ".idea", ".vscode"
-}
-SKIP_EXTS = {".pyc", ".pyo", ".pyd"}
+class PackageError(ValueError):
+    pass
 
-def validate_submission_files():
-    print("=== Validating Submission Files ===")
-    
-    # 1. Check output.csv
-    out_csv = ROOT / "output.csv"
-    assert out_csv.exists(), "output.csv does not exist at root"
-    with open(out_csv, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        header = next(reader)
-        assert header == ["case_id", "deletion_status", "steps_json"], f"Invalid header: {header}"
-        rows = list(reader)
-        assert len(rows) == 518, f"Expected 518 rows, got {len(rows)}"
-        case_ids = [r[0] for r in rows]
-        assert case_ids == sorted(case_ids), "output.csv rows must be sorted by case_id"
-        for r in rows:
-            assert r[1] in {"COMPLETE", "INCOMPLETE", "NOT_APPLICABLE"}, f"Invalid status: {r[1]}"
-            steps = json.loads(r[2])
-            assert isinstance(steps, list), "steps_json must be a JSON array"
-    print(f"PASS: output.csv is valid (518 sorted cases, exact columns)")
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
 
-    # 2. Check evaluation reports
-    eval_rep = ROOT / "evaluation" / "evaluation_report.md"
-    usage_rep = ROOT / "evaluation" / "usage_report.md"
-    assert eval_rep.exists(), "evaluation/evaluation_report.md missing"
-    assert usage_rep.exists(), "evaluation/usage_report.md missing"
-    print("PASS: evaluation reports exist")
+def safe_file(root, name):
+    path = PurePosixPath(name)
+    forbidden = {"dataset", ".git", ".agents", ".ghosttrace", "__pycache__", "venv", ".venv", "node_modules"}
+    if (not name or path.as_posix() != name or "\\" in name or path.is_absolute() or ":" in name or any(ord(c) < 32 for c in name)
+            or any(p in {"", ".", ".."} or p.casefold() in forbidden for p in path.parts)):
+        raise PackageError("unsafe archive member: " + name)
+    source = root.joinpath(*path.parts)
+    if source.suffix.casefold() in {".zip", ".tar", ".gz", ".7z", ".pem", ".key", ".pyc", ".pyo", ".db"} or source.name.startswith(".env") or source.name.casefold() in {"auth.json", "config.toml", "credentials.json"}:
+        raise PackageError("forbidden archive member: " + name)
+    if not source.resolve().is_relative_to(root.resolve()) or any(p.is_symlink() for p in (source, *source.parents)):
+        raise PackageError("linked or escaping member: " + name)
+    if not source.is_file() or source.stat().st_size == 0:
+        raise PackageError("missing or empty member: " + name)
+    content = source.read_bytes()
+    if re.search(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|(?:sk-proj-|ghp_)[A-Za-z0-9_-]{20,}", content):
+        raise PackageError("possible credential in member: " + name)
+    return content
 
-    # 3. Check README.md and log.txt
-    readme = ROOT / "README.md"
-    log = ROOT / "log.txt"
-    assert readme.exists(), "README.md missing"
-    assert log.exists(), "log.txt missing"
-    print("PASS: README.md and log.txt exist")
+def validate_output(root, output):
+    requests = load_requests(root / "dataset/deletion_requests.csv")
+    if len(requests) != 518:
+        raise PackageError("official run requires exactly 518 input requests")
+    rows = read_output(output)
+    report = validate_rows(rows, requests, load_evidence_catalog(root / "dataset"))
+    if not report.valid:
+        raise PackageError("output contract failed: " + json.dumps(report.as_dict()))
+    return requests, rows, report.as_dict()
 
-def build_package():
-    SUBMISSION.mkdir(exist_ok=True)
-    
-    # Copy root output.csv to submission/
-    shutil.copy2(ROOT / "output.csv", SUBMISSION / "output.csv")
-    shutil.copy2(ROOT / "README.md", SUBMISSION / "README.md")
-    shutil.copy2(ROOT / "log.txt", SUBMISSION / "log.txt")
-    
-    # Copy evaluation folder
-    sub_eval = SUBMISSION / "evaluation"
-    sub_eval.mkdir(exist_ok=True)
-    shutil.copy2(ROOT / "evaluation" / "evaluation_report.md", sub_eval / "evaluation_report.md")
-    shutil.copy2(ROOT / "evaluation" / "usage_report.md", sub_eval / "usage_report.md")
+def semantic_check(root, requests, rows):
+    from evaluation.audit_evaluation import run_audits, audit_fingerprint, corpus_fingerprint, implementation_fingerprint
+    from ghosttrace.quality.audit_gate import check_audit
+    from ghosttrace.emit.operation_mapper import emit_decision
+    bundle, engine, audits, timing, extractor = run_audits(root / "dataset", requests,
+        with_extraction=True, cache_dir=root / ".ghosttrace/packaging")
+    blocked = {a.decision.request.case_id: list(check_audit(a, engine.observations)) for a in audits if check_audit(a, engine.observations)}
+    if blocked:
+        raise PackageError("semantic gate blocked " + str(len(blocked)) + " cases: " + json.dumps(blocked, sort_keys=True))
+    expected = [emit_decision(a.decision).as_dict() for a in audits]
+    if rows != expected:
+        raise PackageError("output does not match this source's independently gated audit run")
+    return {"audit_sha256": audit_fingerprint(audits), "corpus_sha256": corpus_fingerprint(bundle),
+            "implementation_sha256": implementation_fingerprint(), "timing": timing,
+            "usage": extractor.runner.ledger.summary()}
 
-    # Build code.zip
-    zip_path = SUBMISSION / "code.zip"
-    included_files = []
-    
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        # Add code/
-        for p in (ROOT / "code").rglob("*"):
-            if not p.is_file():
-                continue
-            if any(part in SKIP_NAMES for part in p.parts):
-                continue
-            if p.suffix in SKIP_EXTS:
-                continue
-            rel = p.relative_to(ROOT)
-            zf.write(p, rel.as_posix())
-            included_files.append(rel.as_posix())
-            
-        # Add evaluation/
-        for p in (ROOT / "evaluation").rglob("*"):
-            if not p.is_file():
-                continue
-            rel = p.relative_to(ROOT)
-            zf.write(p, rel.as_posix())
-            included_files.append(rel.as_posix())
-            
-        # Add top-level docs required
-        for doc in ["README.md", "DECISIONS.md", "problem_statement.md", "AGENTS.md"]:
-            p = ROOT / doc
-            if p.exists():
-                zf.write(p, doc)
-                included_files.append(doc)
+def member_snapshot(root, contract):
+    if type(contract) is not dict or set(contract) != {"code_files"} or type(contract["code_files"]) is not list or not contract["code_files"]:
+        raise PackageError("invalid explicit release-files contract")
+    names = contract["code_files"]
+    if any(type(n) is not str for n in names) or len({n.casefold() for n in names}) != len(names):
+        raise PackageError("duplicate or invalid archive members")
+    required = {"code/main.py", "README.md", "code/evaluation/evaluation_report.md", "code/evaluation/usage_report.md"}
+    if not required <= set(names):
+        raise PackageError("required code/report files not in contract")
+    data = {n: safe_file(root, n) for n in sorted(names)}
+    # Official archive report paths; these bytes are the same canonical reports.
+    for name in ("evaluation_report.md", "usage_report.md"):
+        data["evaluation/" + name] = data["code/evaluation/" + name]
+    return data
 
-    print(f"\nBuilt {zip_path} ({zip_path.stat().st_size} bytes)")
-    print(f"Total files in code.zip: {len(included_files)}")
-    print("\nSubmission folder contents:")
-    for item in sorted(SUBMISSION.rglob("*")):
-        if item.is_file():
-            print(f"  {item.relative_to(SUBMISSION)} ({item.stat().st_size} bytes)")
+def validate_submission_files(root=ROOT, *, semantic=True):
+    requests, rows, validation = validate_output(root, root / "output.csv")
+    code = member_snapshot(root, json.loads((root / "release-files.json").read_text(encoding="utf-8")))
+    artifacts = {name: safe_file(root, name) for name in ("README.md", "log.txt")}
+    artifacts["output.csv"] = (root / "output.csv").read_bytes()
+    proof = semantic_check(root, requests, rows) if semantic else {"semantic_support": "NOT_CHECKED"}
+    if not semantic:
+        return {"contract": validation, "proof": proof}
+    for name, content in code.items():
+        source = "code/" + name if name.startswith("evaluation/") else name
+        if safe_file(root, source) != content:
+            raise PackageError("source changed during semantic validation: " + source)
+    if (root / "output.csv").read_bytes() != artifacts["output.csv"]:
+        raise PackageError("output changed during semantic validation")
+    return {"contract": validation, "proof": proof, "code": code, "artifacts": artifacts}
+
+def build_package(root, destination, validated):
+    destination = destination.resolve()
+    if destination.exists() or not destination.parent.is_dir():
+        raise PackageError("bundle destination must be new with an existing parent")
+    if not destination.is_relative_to(root.resolve()) or any(p in {"dataset", "code", ".git"} for p in destination.relative_to(root.resolve()).parts):
+        raise PackageError("bundle destination must be inside the repository and outside input directories")
+    if "semantic_support" in validated["proof"]:
+        raise PackageError("structural-only diagnostics cannot build a bundle")
+    try:
+        commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+    except (OSError, subprocess.SubprocessError):
+        commit = None
+    # Bytes/hashes identify exact sources, including any uncommitted edits. Git
+    # HEAD is context, never a claim that dirty files equal that commit.
+    manifest = {"source_commit_context": commit, "proof": validated["proof"],
+        "members": {n: sha(b) for n, b in validated["code"].items()},
+        "artifacts": {n: sha(b) for n, b in validated["artifacts"].items()}, "readiness": "LOCAL_CHECKS_PASSED"}
+    with tempfile.TemporaryDirectory(prefix="ghosttrace-package-", dir=destination.parent) as temp:
+        stage = Path(temp) / "bundle"
+        stage.mkdir()
+        with zipfile.ZipFile(stage / "code.zip", "w", zipfile.ZIP_DEFLATED) as archive:
+            for name, content in validated["code"].items():
+                archive.writestr(name, content)
+        with zipfile.ZipFile(stage / "code.zip") as archive:
+            if archive.testzip() is not None or set(archive.namelist()) != set(validated["code"]):
+                raise PackageError("archive integrity or inventory mismatch")
+            for name, digest in manifest["members"].items():
+                if sha(archive.read(name)) != digest:
+                    raise PackageError("archive member hash mismatch")
+        for name, content in validated["artifacts"].items():
+            (stage / name).write_bytes(content)
+        manifest["code_zip_sha256"] = sha((stage / "code.zip").read_bytes())
+        (stage / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        stage.rename(destination)
+    return manifest
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check-only", action="store_true")
+    parser.add_argument("--structural-only", action="store_true", help="diagnostic only; never builds")
+    parser.add_argument("--out", type=Path, default=ROOT / "submission-verified")
+    args = parser.parse_args(argv)
+    try:
+        validated = validate_submission_files(semantic=not args.structural_only)
+        if args.check_only or args.structural_only:
+            print(json.dumps({"contract": validated["contract"], "proof": validated["proof"], "package_built": False}))
+        else:
+            manifest = build_package(ROOT, args.out, validated)
+            print(json.dumps({"result": "PACKAGE BUILT", "path": str(args.out), "manifest": manifest}))
+        return 0
+    except (PackageError, OutputError, ValueError, OSError) as exc:
+        print(json.dumps({"result": "PACKAGE BLOCKED", "reason": str(exc), "package_built": False}))
+        return 1
 
 if __name__ == "__main__":
-    validate_submission_files()
-    build_package()
-    print("\nALL CHECKS PASSED: READY FOR SUBMISSION!")
+    raise SystemExit(main())

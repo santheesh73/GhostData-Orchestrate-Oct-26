@@ -11,6 +11,9 @@ from .normalization import MAX_UNITS, ParseDiagnostic, finish, make_observation,
 
 _KV = re.compile(r'(?<![A-Za-z0-9_.-])([A-Za-z_][A-Za-z0-9_.-]{0,127})=("(?:\\.|[^"\\])*"|[^\s]+)')
 _PREFIX = re.compile(r'^(\d{4}-\d\d-\d\dT\S+)\s+(.*)$')
+# The manifest names the logical owning service; replica process names remain
+# in the payload and physical instance, rather than becoming public systems.
+SERVICE_ALIASES = {"support_replica": "support_platform"}
 
 
 def _atoms(text, diagnostics, location):
@@ -93,6 +96,8 @@ def parse_log(text, source, digest):
         # Raw line preserves duplicates, quoting, and any non-KV text for review.
         fields["raw_line"] = raw
         system = fields.get("system", fields.get("origin_system", fields.get("service", "")))
+        if "system" not in fields and "origin_system" not in fields and SERVICE_ALIASES.get(system) == source.source_kind:
+            system = source.source_kind
         resource = fields.get("resource_id", "")
         trace = fields.get("trace_id", "")
         observations.append(make_observation(source, digest, location, fields,
@@ -100,7 +105,36 @@ def parse_log(text, source, digest):
             category=str(fields.get("record_type", "")), physical_copy=str(fields.get("instance", "")),
             observed_at=clock, time_basis=basis, claim_kind="LOG_EVENT" if recognized else "RAW_UNPARSED",
             trace_id=str(trace) if trace is not None else ""))
-    return finish(source, "log", digest, observations, diagnostics, seen, parsed)
+    # Transfer only causal query metadata, inside this file/service/instance and
+    # trace. Resolve by timestamps, not physical line order, and reject tied
+    # conflicting starts rather than selecting an arbitrary backend.
+    starts = {}
+    for observation in observations:
+        data = strict_json(observation.payload_json)
+        if observation.trace_id and observation.observed_at is not None and str(data.get("event", "")).endswith("_started") and isinstance(data.get("source"), str):
+            key = (observation.resource.system_id, observation.resource.physical_copy, observation.trace_id, data["event"].removesuffix("_started"))
+            starts.setdefault(key, []).append((observation.observed_at, data["source"], observation.location))
+    normalized = []
+    for observation in observations:
+        data = strict_json(observation.payload_json)
+        key = (observation.resource.system_id, observation.resource.physical_copy, observation.trace_id, str(data.get("event", "")).removesuffix("_completed"))
+        eligible_starts = [s for s in starts.get(key, ()) if observation.observed_at is not None and s[0] <= observation.observed_at]
+        if observation.trace_id and str(data.get("event", "")).endswith("_completed") and eligible_starts:
+            clock = max(s[0] for s in eligible_starts)
+            latest = [s for s in eligible_starts if s[0] == clock]
+            backends = {s[1] for s in latest}
+            if len(backends) == 1:
+                backend = next(iter(backends))
+                if "lookup_source" not in data or data["lookup_source"] == backend:
+                    data["lookup_source"] = backend
+                    data["lookup_source_locator"] = sorted(s[2] for s in latest)
+                    observation = make_observation(source, digest, observation.location, data,
+                        system=observation.resource.system_id, resource=observation.resource.resource_id,
+                        category=observation.resource.category, physical_copy=observation.resource.physical_copy,
+                        observed_at=observation.observed_at, time_basis=observation.time_basis,
+                        claim_kind=observation.claim_kind, trace_id=observation.trace_id)
+        normalized.append(observation)
+    return finish(source, "log", digest, normalized, diagnostics, seen, parsed)
 
 
 def parse_text(text, source, digest):

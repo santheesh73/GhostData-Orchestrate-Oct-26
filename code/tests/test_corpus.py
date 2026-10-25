@@ -146,6 +146,8 @@ def test_context_or_unknown_capture_cannot_be_used_as_a_citation(rows, context):
 
 
 def test_ingestion_cli_and_coverage_cli_account_for_all_sources():
+    output = ROOT / "output.csv"
+    before = output.read_bytes() if output.exists() else None
     for relative, flag in [("code/main.py", "--ingest-evidence"),
                            ("code/evaluation/main.py", "--ingestion-coverage")]:
         process = subprocess.run([sys.executable, "-B", str(ROOT / relative), flag], capture_output=True, text=True)
@@ -153,4 +155,4 @@ def test_ingestion_cli_and_coverage_cli_account_for_all_sources():
         report = json.loads(process.stdout)
         assert report["manifest_files"] == 94
         assert report["has_ingestion_errors"] is False
-    assert not (ROOT / "output.csv").exists()
+    assert (output.read_bytes() if output.exists() else None) == before

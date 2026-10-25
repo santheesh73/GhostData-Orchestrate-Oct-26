@@ -88,7 +88,7 @@ def validate_records(data, transcript, system, category):
             seen.add(fact["name"])
             _quote(fact["quote"], fact["locator"], units)
             label = fact["name"].replace("_", " ")
-            if not re.match(re.escape(label) + r"\s*[:=]?\s+", fact["quote"], re.IGNORECASE):
+            if not re.match(r"[ _]".join(re.escape(part) for part in fact["name"].split("_")) + r"\s*[:=]?\s+", fact["quote"], re.IGNORECASE):
                 raise ExtractionError("FIELD_LABEL_MISMATCH")
             value = strict_json(fact["value_json"])
             if fact["name"] in BOOL_NAMES:

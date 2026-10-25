@@ -111,7 +111,7 @@ def identifiers_from(payload: dict, evidence_id: str) -> tuple[Identifier, ...]:
                     add("phone", value)
                 elif name in {"name", "full_name", "display_name", "requester_name"}:
                     add("name", value)
-                elif name in {"user_id", "stable_user_id"}:
+                elif name in {"user_id", "stable_user_id", "owner_user_id"}:
                     add("user_id", value)
                 elif name in {"resource_id", "source_resource_id"}:
                     add("resource_id", value)

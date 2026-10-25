@@ -66,41 +66,12 @@ class RuleBook:
             event_category = EVENT_CATEGORIES.get(event_name)
             if canonical:
                 categories.add(canonical)
-            if event_name == "contact_lookup_completed":
-                if state.resource.system_id == "analytics_platform" or state.resource.resource_id.startswith("analytics_"):
-                    categories.add("ANALYTICS_PROFILE")
-                else:
-                    categories.add("SUPPORT_MESSAGE")
-            elif event_category:
+            if event_name == "contact_lookup_completed" and state.resource.system_id == "analytics_platform":
+                event_category = "ANALYTICS_PROFILE"
+            if event_name == "contact_query_completed" and data.get("lookup_source", data.get("source")) == "legacy_contact_index":
+                event_category = "SECONDARY_IDENTIFIER"
+            if event_category:
                 categories.add(event_category)
         if len(categories) == 1:
             return next(iter(categories))
-        if not categories:
-            res_id = state.resource.resource_id or ""
-            if res_id.startswith("support_"):
-                return "SUPPORT_MESSAGE"
-            if res_id.startswith("analytics_"):
-                return "ANALYTICS_PROFILE"
-            if res_id.startswith("search_"):
-                return "SEARCH_INDEX_ENTRY"
-            if res_id.startswith("account_"):
-                return "USER_PROFILE"
-            if res_id.startswith("data_flow_"):
-                return "DATA_FLOW"
-            if res_id.startswith("backup_"):
-                return "BACKUP_ARCHIVE"
-            if res_id.startswith("audit_record_"):
-                return "SECURITY_AUDIT_LOG"
-            if res_id.startswith("export_"):
-                return "USER_EXPORT"
-            if res_id.startswith("tombstone_"):
-                return "ACCOUNT_TOMBSTONE"
-            if res_id.startswith("legal_hold_"):
-                return "LEGAL_HOLD_RECORD"
-            return {"account_service": "USER_PROFILE", "search_service": "SEARCH_INDEX_ENTRY",
-                    "analytics_platform": "ANALYTICS_PROFILE", "support_platform": "SUPPORT_MESSAGE",
-                    "export_service": "USER_EXPORT", "security_service": "SECURITY_AUDIT_LOG",
-                    "legal_service": "LEGAL_HOLD_RECORD", "backup_service": "BACKUP_ARCHIVE",
-                    "integration_service": "DATA_FLOW", "identity_service": "ACCOUNT_TOMBSTONE",
-                    "notification_service": "EMAIL_DELIVERY_LOG", "email_delivery_service": "EMAIL_DELIVERY_LOG"}.get(state.resource.system_id)
         return None

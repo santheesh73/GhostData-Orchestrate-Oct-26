@@ -1,20 +1,26 @@
-# Phase 06 evidence gaps and recommendation
+# CURRENT LIMITATIONS — 25 October 2026 recovery
 
-## Current outcome
+Corrected diagnostics resolve278/518;240 are unresolved. Known unsafe defaults
+were removed. The exact affected cases/resources and condition codes are in
+evaluation/recovery_blockers.json. Resource-scope counts follow; categories can
+overlap within a case. Some are missing source facts, others remain incomplete
+interpretation. No universal impossibility claim is made.
 
-The requested repair reduces unresolved full-input audits from 508 to **143**;
-375 are resolved internally. Public authorization is 32/32, published status
-agreement 16/32, exact ordered output 2/32. Unresolved cases are failures, not
-successful deletions. No final 518-row prediction file exists.
+| Unknown prerequisite | Scopes |
+|---|---:|
+| BACKUP_ARCHIVE:REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED | 3 |
+| LEGAL_HOLD_RECORD:POLICY_CONDITION_NOT_ESTABLISHED | 1 |
+| SECURITY_AUDIT_LOG:POLICY_CONDITION_NOT_ESTABLISHED | 337 |
+| SUPPORT_ATTACHMENT:POLICY_CONDITION_NOT_ESTABLISHED | 3 |
+| SUPPORT_MESSAGE:POLICY_CONDITION_NOT_ESTABLISHED | 127 |
+| UNMAPPED:RESOURCE_LINK_NOT_ESTABLISHED | 4 |
+| UNMAPPED:UNMAPPED_POLICY_CATEGORY | 2 |
 
-The user confirmed no official clarification/corrected dataset is available.
-Recommendation: keep the official data unchanged, preserve the evidence/cutoff
-rules, and keep the Phase 06 readiness gate open. Seek organizer clarification
-for the concrete linkage/policy omissions below if available; do not reconstruct
-IDs from case/user number suffixes or copy the public expected answer into code.
-No message was sent to organizers. Additional semantic interpretation work is
-still needed for some artifacts; this report does not claim every remaining
-failure has been proved impossible to solve.
+A source schema scan found retention_until/retained_until fields on some records,
+but they are not supplied in every relevant record/cutoff. A signed or present
+record alone does not establish its effective retention interval. Matching a
+subject identifier does not establish exclusive ownership. Restore permission
+does not establish archive existence. Uninterpreted text remains unknown.
 
 ## Reproducible linkage examples
 
@@ -33,42 +39,11 @@ No after-cutoff artifact was used to fill those links. The source audit is
 reproducible from the listed IDs/paths and audit times. Raw private diagnostics
 are under ignored .ghosttrace/phase06-repair/, with no organizer-only files read.
 
-## Remaining native assessment gaps
 
-Counts below are **resource scopes**, which can overlap within the 143 unresolved
-cases. UNKNOWN means the implementation has not established the condition; it
-is not a hidden truth label or proof of deletion.
 
-| Category | Unestablished fact | Scopes |
-|---|---|---:|
-| BACKUP_ARCHIVE | POLICY_CONDITION_NOT_ESTABLISHED | 2 |
-| BACKUP_ARCHIVE | REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED | 1 |
-| DATA_FLOW | FLOW_STATE_UNKNOWN | 7 |
-| LEGAL_HOLD_RECORD | POLICY_CONDITION_NOT_ESTABLISHED | 1 |
-| SECURITY_AUDIT_LOG | POLICY_CONDITION_NOT_ESTABLISHED | 87 |
-| SUPPORT_ATTACHMENT | POLICY_CONDITION_NOT_ESTABLISHED | 3 |
-| SUPPORT_MESSAGE | IDENTIFIER_COVERAGE_UNKNOWN | 13 |
-| SUPPORT_MESSAGE | POLICY_CONDITION_NOT_ESTABLISHED | 51 |
-| UNMAPPED | RESOURCE_LINK_NOT_ESTABLISHED | 2 |
-| UNMAPPED | UNMAPPED_POLICY_CATEGORY | 1 |
-
-Corpus checks additionally report 11 cases without complete linked resource
-state, 6 with matching documents not fully interpreted, 2 catalog targets without
-state, and 2 unresolved resource-ownership checks. These sets overlap.
-
-Priorities are: explicit pre-cutoff subject/resource bindings for deidentified or
-absent records; retention/shared-context/sole-subject facts required by policy;
-remaining narrative/document interpretation; and supported interpretation of
-ambiguous process/restore controls. A configured model may assist reading
-available business artifacts, but cannot supply facts absent from those artifacts.
-
-## Publication decision
-
-Two fresh --run --with-extraction processes exit 3 with identical entire reports:
-115 COMPLETE, 250 INCOMPLETE, 10 NOT_APPLICABLE, 143 unresolved. The root output
-remains absent. The independent atomic writer still requires all 518 checked
-cases; existing files survive a blocked run. No fake NOT_APPLICABLE/COMPLETE rows,
-partial root CSV, code.zip or submission package was generated.
-
-Verified Phase 06 code improvements remain separate from any claim of full
-completion. **Phase 06 is not complete while this exit gate fails.**
+No clarification or corrected dataset was supplied. The earlier claim that all
+518 internally resolved constituted readiness is superseded. Publication and
+packaging stay blocked rather than inserting unsupported official labels. The
+historical all518 CSV/bundle are preserved; they are not a safe corrected release.
+A live model could assist existing artifact interpretation only with approved
+configuration/budget; it cannot create missing evidence.

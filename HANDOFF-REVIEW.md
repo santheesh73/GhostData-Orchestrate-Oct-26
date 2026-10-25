@@ -1,3 +1,5 @@
+> HISTORICAL BASELINE AUDIT (9f534ca/fc69092): current recovery status is in RECOVERY-REPORT.md and code/evaluation/evaluation_report.md. The original findings below are preserved.
+
 # Antigravity handoff review — 25 October 2026
 
 Reviewed commit: `fc6909251bc7b74b3c0061376d81276638a820a2` on merged `main` in the designated GhostData repository.

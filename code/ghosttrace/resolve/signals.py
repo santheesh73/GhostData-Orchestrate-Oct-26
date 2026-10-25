@@ -11,7 +11,7 @@ from ..ingest.normalization import normalize_identifier, strict_json
 STRONG_KINDS = {"email", "email_hash", "phone"}
 REFERENCE_KEYS = {"customer_reference", "subject_reference", "subject_ref", "stable_user_id",
                   "catalog_subject_reference", "subject_selector",
-                  "user_id", "lookup_key", "match_key", "subject_key", "correlation_key",
+                  "user_id", "owner_user_id", "lookup_key", "match_key", "subject_key", "correlation_key",
                   "query", "lookup_value", "scan_key"}
 LOOKUP_KEYS = {"query", "lookup_key", "match_key", "subject_key", "correlation_key", "scan_key"}
 SKIP = {"raw_line", "record_json", "message", "header_fields", "message_fields", "details", "extraction_proof"}
@@ -36,8 +36,9 @@ def signals(value, known_users):
                 pending.append(val)
             elif isinstance(val, list):
                 pending.extend(v for v in val if isinstance(v, dict))
+                pending.extend({key: v} for v in val if isinstance(v, str))
             elif isinstance(val, str) and val.strip() and val.casefold() not in {"null", "none"}:
-                if key in {"user_id", "stable_user_id"}:
+                if key in {"user_id", "stable_user_id", "owner_user_id"}:
                     users.add(val.strip())
                 elif key in REFERENCE_KEYS:
                     if val.strip() in known_users:

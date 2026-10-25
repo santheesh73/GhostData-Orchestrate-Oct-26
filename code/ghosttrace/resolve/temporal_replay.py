@@ -77,20 +77,17 @@ def extract_facts(observation):
         presence.append("ABSENT")
     if event == "export_download_check_completed" and _boolean(data.get("available")) is True:
         presence.append("PRESENT")
-    if event == "restore_candidate_evaluated" and _boolean(data.get("eligible")) is True:
+    if _boolean(data.get("archive_present")) is True:
         presence.append("PRESENT")
         add("/archive_present", True)
     category = data.get("record_type", observation.resource.category)
-    sys_id = observation.resource.system_id
-    res_id = observation.resource.resource_id or ""
-    is_flow = category == "DATA_FLOW" or sys_id == "integration_service" or res_id.startswith("data_flow_")
-    is_backup = category == "BACKUP_ARCHIVE" or sys_id == "backup_service" or res_id.startswith("backup_")
-    if is_flow and result in {"ACTIVE", "DISABLED"}:
+    typed_readback = kind == "RECORD_SNAPSHOT" or (kind == "LOG_EVENT" and event == "record_lookup")
+    if typed_readback and category == "DATA_FLOW" and result in {"ACTIVE", "DISABLED"}:
         add("/enabled", result == "ACTIVE")
-    if is_backup and result in {"ACTIVE", "BLOCKED"}:
+    if typed_readback and category == "BACKUP_ARCHIVE" and result in {"ACTIVE", "BLOCKED"}:
         add("/restore_allowed", result == "ACTIVE")
         add("/archive_present", True)
-    if result in {"IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
+    if typed_readback and result in {"IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
         add("/identifier_treatment", result)
     if isinstance(hits, dict) and isinstance(hits.get("documents"), list) and hits["documents"]:
         presence.append("PRESENT")
@@ -132,8 +129,7 @@ def extract_facts(observation):
     if event in {"restore_authorization_completed", "restore_candidate_evaluated"}:
         if data.get("decision") in {"allow", "deny"}:
             add("/restore_allowed", data["decision"] == "allow")
-            add("/archive_present", True)
-            add("presence", "PRESENT")
+
     return tuple(values)
 
 

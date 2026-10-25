@@ -1,106 +1,56 @@
-# GHOSTTRACE — Phase 06 repair
+# GHOSTTRACE — current recovery status
 
-GHOSTTRACE audits deletion requests against the supplied identity registry,
-historical changes, policy, activity stream and evidence. It resolves identity,
-replays state at audit_at, plans policy-safe remediation and validates output.
+**NOT READY — CRITICAL BLOCKERS REMAIN.** Known unsafe document/policy defaults
+were repaired.503 tests pass;278/518 requests resolve and240 remain unknown.
+Public development agreement is16/32 statuses and1/32 exact rows. These are not
+hidden accuracy measurements. No new corrected final output or bundle is claimed.
 
-**Phase 06 is still incomplete.** The current full run resolves **375/518**
-audits (115 COMPLETE, 250 INCOMPLETE, 10 NOT_APPLICABLE), with **143 unresolved**.
-These are computed outcomes, not measured hidden-label accuracy. No final
-output.csv exists; the full-run command exits 3 and preserves any previous file.
-See [EVIDENCE-GAPS.md](EVIDENCE-GAPS.md) for the remaining conditions and explicit
-public-reference linkage gaps. No corrected dataset or official clarification
-was available. Phase 07 freeze/packaging has not proceeded.
+## Setup and run
 
-## Setup
-
-Run from the repository root with Python 3.11+; this environment was verified with
-CPython 3.14.3. Core parsing/policy/output code uses the standard library.
+Python3.11+; verified on Windows CPython3.14.3. Core uses the standard library.
+Optional document dependencies are pinned in code/requirements-extract.txt;
+tests use code/requirements-dev.txt. They were already installed locally; no new
+installation was needed. Native Windows OCR uses the preserved Win32 stream
+bridge. Other platforms require Tesseract/English data and are unverified here.
 
 ```text
-python -m pip install -r code/requirements-dev.txt
 python -m pip install -r code/requirements-extract.txt
-```
-
-These files list test and optional document dependencies. No packages were
-installed during this repair. PyMuPDF/Pillow and Windows OCR en-US were already
-available. Windows image extraction uses the reviewed Windows PowerShell 5.1
-helper without changing execution policy. Other platforms need the optional
-Tesseract executable/English data; that fallback has not been verified here.
-Place the unchanged participant dataset at dataset/. Do not use organizer files.
-
-## Audit and guarded full run
-
-```text
+python -m pip install -r code/requirements-dev.txt
 python -B code/main.py --audit-policy --with-extraction
 python -B code/main.py --run --with-extraction
-```
-
-The audit command prints diagnostics without writing predictions. The run command
-attempts root output.csv only for all 518 requests from the official repository
-paths. All audits, proof gates, complete case coverage and the independent CSV
-validator must pass before atomic publication. It never inserts fallback labels
-or writes a partial root file. Exit 3 means unresolved audits/publication blocked;
-1 means ingestion errors; 2 means invalid input/invocation; 0 means the requested
-operation succeeded. Current real --run exits 3. Required output columns are
-case_id,deletion_status,steps_json; rows and typed steps follow the official order.
-
-Document/usage caches stay under ignored .ghosttrace/extraction/. --cache-dir can
-select another directory within .ghosttrace/. Captured text is not automatically
-understood evidence. Positive business-panel and form adapters preserve source
-hashes/locators; ambiguous OCR identifiers are never corrected by guessing.
-
-## Evaluation and traces
-
-```text
-python -B code/evaluation/main.py --audit-samples --with-extraction
-python -B code/evaluation/main.py --trace-case case_29 --with-extraction
-python -B code/evaluation/main.py --benchmark-audits --with-extraction --repetitions 3
 python -B -m pytest -q -p no:cacheprovider code/tests
+python -B code/evaluation/main.py --audit-samples --with-extraction
+python -B scripts/package.py --structural-only
+python -B scripts/package.py --check-only
 ```
 
-These development commands never write predictions. The evaluator finishes
-inference/gates before opening the public labels, which are already-inspected
-development references rather than a held-out set. Sample comparison exits 1
-when imperfect, 0 for exact agreement, 2 for input errors. Successful native
-trace/benchmark diagnostics exit 0; a proof mismatch aborts the benchmark.
+Supply the unchanged participant dataset under dataset/. Do not use organizer
+files. --run attempts root output.csv only for all518 official requests passing
+proof and full-contract checks. Exit3 blocks publication and preserves any older
+output. Existing root output/submission/ artifacts are the historical unsafe
+baseline, not regenerated/certified corrected predictions. Do not submit them as
+this recovery's result. Imperfect public comparison exits1.
 
-**413 tests passed.** Current augmented public results: authorization 32/32;
-published status agreement 16/32 (16 abstentions); exact rows/sequences 2/32;
-78/193 step recall with precision 1.0; field agreement 522/1,351. The 134 diagnostic
-candidate steps are separate and are not predictions. Hidden/full-dataset accuracy
-and semantic extraction recall remain unmeasured. Full details and historical
-measurements are in code/evaluation/evaluation_report.md.
+The package script uses release-files.json, the independent output oracle and a
+fresh source-grounded audit comparison. --structural-only is diagnostic; it
+cannot build a release. --check-only currently blocks. When all gates pass,
+`python -B scripts/package.py --out submission-verified` builds a NEW directory
+and manifest; existing bundles are never overwritten. It does not upload anything.
 
-## Model configuration and usage
+Provider calls default tozero. Optional OPENAI_API_KEY/GHOSTTRACE_MODEL values
+belong in local environment only; no paid run was approved or used. The offline
+evaluator disables providers. All recovery provider tokens/cost are0, excluding
+local compute and development sessions. Cache/diagnostics stay in .ghosttrace/.
 
-Ordinary supported requests use native parsing, including Japanese/Korean
-authorization and negation. The optional provider adapter is selective: only
-unresolved interpretation can request a model. Calls default to zero. The offline
-evaluation path disables providers entirely. Actual repair runs used 0 provider
-calls, 0 input/output tokens and USD0 model-service cost, excluding development
-session usage and local compute. No final prediction-producing usage run exists.
+DESIGN.md describes actual stages and uncertainty; INTERVIEW.md has preparation
+notes and constant provenance. Canonical current evaluation/usage reports are
+under code/evaluation/ and mirrored at evaluation/. RECOVERY-REPORT.md gives the
+phase matrix and release verdict. evaluation/recovery_blockers.json identifies
+every affected case/resource. Earlier reports and claims are explicitly historical
+under evaluation/history/ and Git history; PHASE-AUDIT/HANDOFF-REVIEW describe the
+pre-repair baseline. Official data and authentic append-only log.txt are intact.
 
-Optional provider/model configuration uses OPENAI_API_KEY and GHOSTTRACE_MODEL,
-kept outside Git and transcripts. --max-model-calls requires an explicit extraction
-mode and an opt-in budget (maximum 64 attempts, at most 3 per task). No provider
-or model was selected or called in this repair. Prices are never assumed;
-optional verified per-million rates use GHOSTTRACE_INPUT_USD_PER_MILLION,
-GHOSTTRACE_OUTPUT_USD_PER_MILLION and GHOSTTRACE_CACHED_INPUT_USD_PER_MILLION.
-Unknown usage/pricing stays unknown. See code/evaluation/usage_report.md.
-
-## Evidence boundaries
-
-The official canonical identity table's updated_at anchors identity validity;
-it does not become a capture timestamp or a citeable record-state observation.
-Undated generic snapshots remain provisional. All record-state observations still
-need both availability and observation clocks at/before audit_at. Future captures,
-reported workflow results, resource-name suffixes and public labels cannot supply
-missing identity/state proof.
-
-Finite-corpus coverage requires accounted input sources, resolved identity,
-linked resource state and interpretation of matching documents. It does not claim
-knowledge outside the supplied dataset. Unknown shared-context, retention,
-attachment ownership, restore or flow facts remain blockers. Engineering choices
-and the current risk register are in DECISIONS.md. The authentic transcript is
-log.txt; no submission archive or upload has been produced.
+Before final trace packaging, finish sessions and quit the tools as directed by
+agent_trace_instructions.md. This active Codex trace cannot yet be finalized.
+Project-matching Antigravity traces were located, but no complete reviewed multi-
+harness trace archive is claimed. No external submission occurred.

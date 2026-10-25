@@ -29,18 +29,96 @@ PANELS = {
 }
 
 
-def project_document(result, known_resources):
+def _ui_records(lines, text, origin, known_subjects):
+    """Read explicit panel/column bindings without a pre-existing ID catalog.
+
+    Identifier syntax locates visible text only; it never determines a policy
+    category or verdict. Category comes from the declared business component.
+    Ambiguous or unequal columns remain uninterpreted.
+    """
+    rows = []
+    email_pattern = r"[\w.!#$%&'*+/=?^`{|}~-]+@[\w.-]+\.[A-Za-z]{2,}"
+    if origin == "export_service":
+        ids_at = next((i for i, line in enumerate(lines) if re.sub(r"\W", "", line).casefold() == "exportid"), None)
+        filename_at = next((i for i, line in enumerate(lines) if line.casefold() == "filename"), None)
+        owners_at = next((i for i, line in enumerate(lines) if line.casefold() == "owner"), None)
+        if ids_at is not None and filename_at is not None and owners_at is not None and ids_at < filename_at < owners_at:
+            ids = [line for line in lines[ids_at + 1:filename_at] if re.fullmatch(r"[^\s]+_[^\s]*\d[^\s]*", line)]
+            # The next column/header terminates the owner column. Never align a
+            # truncated list by a guessed offset or use a footer's repeated row.
+            owners = []
+            started = False
+            for line in lines[owners_at + 1:]:
+                if re.fullmatch(email_pattern, line):
+                    owners.append(line)
+                    started = True
+                elif started:
+                    break
+            if ids and len(ids) == len(owners) and len(ids) == len(set(ids)):
+                rows.extend(("export_service", "USER_EXPORT", resource, {"owner_email": email}, "EXPORT_TABLE_COLUMNS")
+                            for resource, email in zip(ids, owners))
+    for line in lines:
+        tokens = line.split()
+        if origin == "analytics_platform" and len(tokens) == 3 and tokens[0] in known_subjects and re.fullmatch(email_pattern, tokens[2]):
+            rows.append(("analytics_platform", "ANALYTICS_PROFILE", tokens[1],
+                         {"customer_reference": tokens[0], "email": tokens[2]}, "ANALYTICS_SUBJECT_HEADER"))
+        if origin == "marketing_platform" and len(tokens) >= 2 and re.fullmatch(email_pattern, tokens[1]) and tokens[0].casefold() not in {"email", "owner", "contact", "customer", "sender"} and "Live profile fields updated" in text:
+            rows.append(("marketing_platform", "MARKETING_PROFILE", tokens[0], {"email": tokens[1]}, "MARKETING_PROFILE_HEADER"))
+    if origin == "search_index_admin":
+        anchors = [m[1] for line in lines if (m := re.fullmatch(r"Raw document\s*[•:-]\s*(\S+)", line, re.I))]
+        subjects = re.findall(r"\bcustomer_reference[ \t]+(\S+)", text)
+        if len(set(anchors)) == len(set(subjects)) == 1 and subjects[0] in known_subjects:
+            rows.append(("search_service", "SEARCH_INDEX_ENTRY", anchors[0],
+                         {"customer_reference": subjects[0]}, "SELECTED_SEARCH_DOCUMENT"))
+    # Some panels display one opaque resource token without an ID label. Only a
+    # unique visible candidate qualifies; no OCR character correction is used.
+    candidates = {token for line in lines for token in re.findall(r"(?<![\w])([\w-]+_[\w-]*\d[\w-]*)(?![\w])", line)
+                  if token not in known_subjects}
+    if len(candidates) == 1 and origin == "integration_admin":
+        selectors = [i for i, line in enumerate(lines) if line.casefold() == "selector"]
+        if selectors:
+            tail = "\n".join(lines[selectors[-1] + 1:])
+            emails = set(re.findall(email_pattern, tail))
+            if len(emails) == 1 and re.search(r"Continuous\s*S\s*y\s*n\s*c\b", tail, re.I) and re.search(r"\b[1-9]\d* events delivered\b", tail, re.I):
+                rows.append(("integration_service", "DATA_FLOW", next(iter(candidates)),
+                             {"subject_selector": next(iter(emails)), "enabled": True}, "LIVE_CONNECTOR_DELIVERIES"))
+    if len(candidates) == 1 and origin == "support_platform" and all(label in text for label in ("Conversation", "Sender", "Assigned agent")):
+        emails = set(re.findall(email_pattern, text))
+        if len(emails) == 1:
+            rows.append(("support_platform", "SUPPORT_MESSAGE", next(iter(candidates)),
+                         {"requester_email": next(iter(emails))}, "CUSTOMER_AGENT_CONVERSATION_PANEL"))
+    return rows
+
+
+def project_document(result, known_resources, known_subjects=()):
     text_observations = [o for o in result.observations if o.claim_kind == "DOCUMENT_TEXT"]
     if not text_observations or result.status.value != "PARSED":
         return ()
     text = "\n".join(payload(o)["text"] for o in text_observations)
+    lines = [re.sub(r"\s*_\s*", "_", line.strip()) for line in text.splitlines() if line.strip()]
     emails = sorted(set(re.findall(r"[\w.!#$%&'*+/=?^`{|}~-]+@[\w.-]+\.[A-Za-z]{2,}", text)))
     rows = []
+    # Explicit labeled records go through the same field/quote validation as
+    # local extraction. Omitted fields are not inserted as null or false.
+    panel = PANELS.get(result.source.source_kind)
+    labeled_proofs = {}
+    if panel:
+        from .documents import local_records
+        from .models import TextUnit, Transcript
+        units = tuple(TextUnit(o.location, payload(o)["text"], payload(o).get("page", 1), ()) for o in text_observations)
+        transcript = Transcript("business-labeled", "1", max(u.page for u in units), units, ())
+        for record in local_records(transcript, panel[0], panel[1])["records"]:
+            from ..ingest.normalization import strict_json
+            fields = {f["name"]: strict_json(f["value_json"]) for f in record["fields"]}
+            if fields.get("record_type", panel[1]) == panel[1] and (not re.search(r"\b(?:0 hits|no records|not found)\b", text, re.I) or fields.get("result") in {"NOT_FOUND", "MISS"}):
+                rows.append((panel[0], panel[1], record["resource_id"], fields, "EXPLICIT_LABELED_RECORD"))
+                labeled_proofs[(panel[0], record["resource_id"])] = record
     if "DELIVERY ADDRESS CORRECTION REQUEST" in text and re.search(r"\buploader customer\b", text, re.I):
-        anchor = re.search(r"Support reference\s+[^/\n]+/\s*(\S+)", text)
+        # A support ticket reference is not an attachment identifier.
+        anchor = re.search(r"Attachment ID\s*[:=]\s*(\S+)", text, re.I)
         if anchor and len(emails) == 1:
             rows.append(("support_platform", "SUPPORT_ATTACHMENT", anchor[1],
-                         {"email": emails[0], "sole_subject": True}, "SINGLE_CUSTOMER_UPLOAD_FORM"))
+                         {"email": emails[0]}, "SINGLE_CUSTOMER_UPLOAD_FORM"))
     if "SIGNED RECORD EXTRACT" in text:
         anchor = re.search(r"Event reference\s+(\S+)", text)
         subject = re.search(r"subject reference\s+(\S+)", text, re.I)
@@ -57,62 +135,38 @@ def project_document(result, known_resources):
     if panel and re.search(panel[2], text, re.I) and not re.search(r"\b(?:0 hits|no records|not found)\b", text, re.I):
         system, category, _ = panel
         normalized = re.sub(r"\s*_\s*", "_", text)
-        candidates = set(known_resources.get(system, ()))
-        prefix_map = {
-            "account_service": "account_", "search_service": "search_",
-            "analytics_platform": "analytics_", "export_service": "export_",
-            "marketing_platform": "marketing_", "integration_service": "data_flow_",
-            "backup_service": "backup_", "support_platform": "support_",
-            "security_service": "audit_record_", "identity_service": "tombstone_",
-            "object_storage": "object_"
-        }
-        if system in prefix_map:
-            prefix = prefix_map[system]
-            for match in re.finditer(r"\b(" + prefix + r"\w+)\b", normalized):
-                candidates.add(match[1])
-            if system == "export_service":
-                for match in re.finditer(r"\bNST(?:-\d+)+-(\d+)\b", normalized):
-                    candidates.add(f"export_{match[1]}")
-            if system == "identity_service":
-                for match in re.finditer(r"\b(?:tombstone_|user[ _])(\d+)\b", normalized, re.I):
-                    candidates.add(f"tombstone_{match[1]}")
-            if system == "object_storage":
-                for match in re.finditer(r"\b(?:object_|\w+_|delivery_confirmation_)(\d+)(?:\.pdf)?\b", normalized, re.I):
-                    candidates.add(f"object_{match[1]}")
-        user_match = re.search(r"\buser[ _](\d+)\b", normalized, re.I)
-        for resource in sorted(candidates):
-            num = resource.split("_")[-1]
-            match_res = re.search(r"(?<![\w])" + re.escape(resource) + r"(?![\w])", normalized, re.I)
-            match_num = num.isdigit() and (re.search(r"\b\w*[-_]" + re.escape(num) + r"\b", normalized) or re.search(r"\buser[ _]" + re.escape(num) + r"\b", normalized, re.I))
-            if not match_res and not match_num:
+        hits = [r for r in known_resources.get(system, ()) if re.search(r"(?<![\w])" + re.escape(r) + r"(?![\w])", normalized, re.I)]
+        for resource in sorted(hits if len(hits) == 1 else ()):
+            if not re.search(r"(?<![\w])" + re.escape(resource) + r"(?![\w])", normalized, re.I):
                 continue
             fields = {"email": emails[0]} if len(emails) == 1 else {}
-            if user_match:
-                uid = f"user_{user_match[1]}"
-                fields.setdefault("user_id", uid)
-                fields.setdefault("customer_reference", uid)
-                fields.setdefault("subject_reference", uid)
-            if category == "ACCOUNT_TOMBSTONE":
-                fields.setdefault("account_status", "deleted")
-                fields.setdefault("name", None)
-                fields.setdefault("full_name", None)
-                fields.setdefault("email", None)
-                fields.setdefault("phone", None)
-                fields.setdefault("email_hash", None)
-            if category == "SUPPORT_ATTACHMENT":
-                fields.setdefault("sole_subject", True)
-            if category == "DATA_FLOW":
-                is_active = bool(re.search(r"\b(?:Healthy|Continuous|Active|Connected|Running)\b", normalized, re.I))
-                fields.setdefault("enabled", is_active)
-                fields.setdefault("scheduler_registered", is_active)
             # Only positive record presence is inferred from an actual record
             # panel; list/query text cannot prove absence or anonymization.
             rows.append((system, category, resource, fields, "POSITIVE_RESOURCE_PANEL"))
+    if not re.search(r"\b(?:0 hits|no records|not found)\b", text, re.I):
+        rows.extend(_ui_records(lines, text, result.source.source_kind, known_subjects))
+    # Combine compatible views of one displayed row without duplicating its
+    # public resource or silently overwriting contradictory extracted values.
+    combined = {}
+    for system, category, resource, fields, rule in rows:
+        key = system, category, resource
+        old = combined.get(key)
+        if old is None:
+            combined[key] = (dict(fields), {rule})
+        elif all(k not in old[0] or old[0][k] == value for k, value in fields.items()):
+            old[0].update(fields)
+            old[1].add(rule)
+        else:
+            # Conflicting source layouts cannot yield an authoritative row.
+            combined[key] = ({}, {"AMBIGUOUS_PANEL_FIELDS"})
+    rows = [(s, c, r, fields, "+".join(sorted(rules))) for (s, c, r), (fields, rules) in combined.items()
+            if "AMBIGUOUS_PANEL_FIELDS" not in rules]
     observations = []
     for n, (system, category, resource, fields, rule) in enumerate(rows, 1):
         observations.append(make_observation(result.source, result.source_sha256, f"business-schema/{n}",
             {"resource_id": resource, "record_type": category, **fields,
-             "extraction_proof": {"adapter": rule, "observation_ids": [o.observation_id for o in text_observations]}},
+             "extraction_proof": {"adapter": rule, "observation_ids": [o.observation_id for o in text_observations],
+                                  "labeled_record": labeled_proofs.get((system, resource))}},
             system=system, resource=resource, category=category, physical_copy="document:" + result.source.evidence_id,
             observed_at=result.source.available_at, time_basis="document_capture"))
     return tuple(observations)
@@ -127,7 +181,10 @@ def enrich_business_documents(bundle):
             if (observation.resource.resource_id and result.source.available_at is not None
                     and eligible(observation, result.source.available_at) == "ELIGIBLE"):
                 resources.setdefault(observation.resource.system_id, set()).add(observation.resource.resource_id)
-        promoted = project_document(result, resources)
+        subjects = {payload(o).get("user_id") for o in all_observations if o.claim_kind == "IDENTITY_REGISTRY_ENTRY"
+                    and o.evidence.path == "user_identities.csv" and not o.evidence.citeable
+                    and o.observed_at is not None and result.source.available_at is not None and o.observed_at <= result.source.available_at}
+        promoted = project_document(result, resources, subjects)
         if promoted:
             keys = {(o.resource.system_id, o.resource.resource_id) for o in promoted}
             original = tuple(o for o in result.observations if not (o.claim_kind == "RECORD_SNAPSHOT"

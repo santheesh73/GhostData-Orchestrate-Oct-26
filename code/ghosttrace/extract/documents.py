@@ -15,6 +15,7 @@ SYSTEMS = {"account_admin_portal": "account_service", "search_index_admin": "sea
 # not become USER_PROFILE/SUPPORT_ATTACHMENT merely because they mention a user.
 CATEGORIES = {"security_service": "SECURITY_AUDIT_LOG"}
 LABELS = {name.replace("_", " "): name for name in FIELD_NAMES}
+LABELS.update({name: name for name in FIELD_NAMES})
 LABELS.update({"subject reference": "subject_reference", "retain until": "retention_until"})
 
 

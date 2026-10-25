@@ -1,3 +1,5 @@
+> HISTORICAL BASELINE AUDIT (9f534ca/fc69092): current recovery status is in RECOVERY-REPORT.md and code/evaluation/evaluation_report.md. The original findings below are preserved.
+
 # GHOSTTRACE phase-wise engineering audit
 
 Audit date: 25 October 2026. Branch: main. Current baseline:4278de1;
