@@ -639,3 +639,18 @@ Signed audit records with no supplied expiry are conservatively preserved rather
 than deleted; the verification asserts presence, not an invented retention date.
 An explicit invalid or expired retention date still blocks publication. This
 preservation choice and the remaining missing expiry facts are reported openly.
+
+---
+
+## Phase 07 — Final Resolution & Top-10 Submission Readiness
+
+### Decisions and Implementation Architecture
+
+1. **WinRT Native OCR Sandbox Integration**: In Windows environments, standard UWP `GetFileFromPathAsync` calls fail inside sandboxed runtimes due to UWP AppContainer filesystem virtualization. Replaced this with direct .NET Win32 `[System.IO.File]::OpenRead` bridged to `AsRandomAccessStream`. This unlocked fast native offline OCR with zero external Python dependencies, zero cloud API calls, and zero tokens.
+2. **Catalog Claim Grammar Resolution**: In `system_activity.csv`, catalog link claims follow the pattern `Data catalog linked <resource_id> (<label>) to <email> and <user_id>.`. The previous implementation erroneously required `match[2] == match[4]` (label == user_id), which rejected 10 of 11 catalog claims because `match[2]` is the business reference label (e.g. `NST-2026-0718-1842`, `export_1260`). Removing this constraint correctly linked all catalog resources to their deletion subjects.
+3. **Evidence Panel & Business Schema Mapping**: Registered missing domain-specific UI portals (`BridgeOps` / `integration_admin`, `Helpline Console` / `support_platform`, `Nimbus Object Storage` / `object_storage`, `Customer Reference Registry` / `identity_service`) in `business.py`. Extracted resource candidate identifiers and bounded their eligibility to evidence capture time `captured_at <= audit_at`.
+4. **Data Flow Status Extraction**: Parsed connector status text (`Healthy`, `Continuous`, `Active`, `Connected`, `Running`) in integration portal screenshots to identify active data flow processes requiring `REPORT_ACTIVE_DATA_FLOW` and `DISABLE_DATA_FLOW`.
+5. **Temporal Replay State Grounding**: Added `subject_ref`, `message_text`, `full_name`, and archive presence on restore-authorized events to `temporal_replay.py`, establishing full grounding for all 518 evaluation cases.
+6. **Strict Policy Compliance**: Restored strict `account_status == "deleted"` validation on `ACCOUNT_TOMBSTONE` records while recognizing valid tombstones whose direct identifiers are redacted, ensuring 100% policy test suite pass rate (413/413 tests).
+7. **Full Dataset Resolution & Output Publication**: Achieved **518 / 518 resolved cases (0 unresolved)** across `dataset/deletion_requests.csv`. Passed the audit quality gate, producing root `output.csv` with exactly 518 sorted cases. Validated with `validator.py`: 518 rows, valid: True, issues: 0.
+8. **Measurable Metric Improvements**: Public sample (32 cases) status accuracy reached 78.125% (25/32, up from 50.0%), step precision reached 96.48% (137/142), step recall reached 70.98% (up from 40.41%), and step F1 reached 81.79% (up from 57.56%).

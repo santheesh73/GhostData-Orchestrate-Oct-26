@@ -69,8 +69,8 @@ def extract_facts(observation):
         if count is not None:
             presence.append("PRESENT" if count else "ABSENT")
     result = data.get("result")
-    if isinstance(result, str) and result.upper() in {"FOUND", "HIT", "NOT_FOUND", "MISS"}:
-        presence.append("PRESENT" if result.upper() in {"FOUND", "HIT"} else "ABSENT")
+    if isinstance(result, str) and result.upper() in {"FOUND", "HIT", "NOT_FOUND", "MISS", "ACTIVE", "DISABLED", "BLOCKED", "IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
+        presence.append("ABSENT" if result.upper() in {"NOT_FOUND", "MISS"} else "PRESENT")
     if event == "profile_lookup_completed" and str(data.get("http_status")) == "404":
         presence.append("ABSENT")
     if str(data.get("status_code")) == "404" and "profile" in data and data["profile"] is None:
@@ -81,12 +81,16 @@ def extract_facts(observation):
         presence.append("PRESENT")
         add("/archive_present", True)
     category = data.get("record_type", observation.resource.category)
-    if kind == "RECORD_SNAPSHOT" and category == "DATA_FLOW" and result in {"ACTIVE", "DISABLED"}:
+    sys_id = observation.resource.system_id
+    res_id = observation.resource.resource_id or ""
+    is_flow = category == "DATA_FLOW" or sys_id == "integration_service" or res_id.startswith("data_flow_")
+    is_backup = category == "BACKUP_ARCHIVE" or sys_id == "backup_service" or res_id.startswith("backup_")
+    if is_flow and result in {"ACTIVE", "DISABLED"}:
         add("/enabled", result == "ACTIVE")
-    if kind == "RECORD_SNAPSHOT" and category == "BACKUP_ARCHIVE" and result in {"ACTIVE", "BLOCKED"}:
+    if is_backup and result in {"ACTIVE", "BLOCKED"}:
         add("/restore_allowed", result == "ACTIVE")
         add("/archive_present", True)
-    if kind == "RECORD_SNAPSHOT" and result in {"IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
+    if result in {"IDENTIFIABLE", "REDACTED", "ANONYMIZED"}:
         add("/identifier_treatment", result)
     if isinstance(hits, dict) and isinstance(hits.get("documents"), list) and hits["documents"]:
         presence.append("PRESENT")
@@ -94,7 +98,7 @@ def extract_facts(observation):
         presence.append("PRESENT")
     if not presence and not counts and kind == "LOG_EVENT" and event in READ_EVENTS - {
             "restore_authorization_completed", "restore_candidate_evaluated", "export_download_check_completed"}:
-        if any(key in data for key in BOOL_FIELDS | {"email", "customer_email", "requester_email", "subject_reference",
+        if any(key in data for key in BOOL_FIELDS | {"email", "customer_email", "requester_email", "subject_reference", "subject_ref", "message_text",
                                                     "customer_reference", "event_code", "retention_until", "access"}):
             presence.append("PRESENT")
     if event in SCAN_EVENTS and data.get("matched_value"):
@@ -123,11 +127,13 @@ def extract_facts(observation):
                 if boolean is not None:
                     add(path, boolean)
             elif (key.endswith("email_hash") or key.endswith("email") or key.endswith("phone")
-                  or key in {"name", "display_name", "requester_name", "customer_reference", "subject_reference", "user_id"}):
+                  or key in {"name", "full_name", "display_name", "requester_name", "customer_reference", "subject_reference", "subject_ref", "message_text", "user_id"}):
                 add(path, value)
     if event in {"restore_authorization_completed", "restore_candidate_evaluated"}:
         if data.get("decision") in {"allow", "deny"}:
             add("/restore_allowed", data["decision"] == "allow")
+            add("/archive_present", True)
+            add("presence", "PRESENT")
     return tuple(values)
 
 

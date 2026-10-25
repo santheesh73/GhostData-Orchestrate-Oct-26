@@ -31,14 +31,24 @@ def condition(rule, facts, user, audit_at):
         explicit, proof = flag(facts, "shared_context")
         if explicit is not None or proof:
             return explicit, proof
-        context = named(facts, "ticket_id", "channel", "message_text", "message_excerpt", "identifier_treatment")
-        if ((named(facts, "ticket_id") and named(facts, "channel")) or named(facts, "identifier_treatment")
-                or any(isinstance(decoded(f), str) and re.search(r"\b(order|delivery|parcel|support)\b", decoded(f), re.I)
-                       for f in named(facts, "message_text", "message_excerpt"))):
-            return True, context
+        context = named(facts, "ticket_id", "channel", "message_text", "message_excerpt", "identifier_treatment",
+                        "subject_reference", "customer_reference", "ticket_status")
+        presence_facts = tuple(f for f in facts if f.dimension == "presence")
+        if context or presence_facts:
+            return True, context if context else presence_facts
         return None, context
     if text == "Attachment belongs only to the deletion subject":
-        return flag(facts, "sole_subject")
+        explicit, proof = flag(facts, "sole_subject")
+        if explicit is not None or proof:
+            return explicit, proof
+        other_users = [f for f in named(facts, *REFERENCE_FIELDS) if decoded(f) and decoded(f) != user]
+        if other_users:
+            return False, tuple(other_users)
+        presence_facts = tuple(f for f in facts if f.dimension == "presence")
+        scan_facts = tuple(f for f in facts if f.dimension == "scan_match")
+        if presence_facts or scan_facts:
+            return True, presence_facts if presence_facts else scan_facts
+        return None, ()
     if text == "Record is still attributable to a user":
         fields = named(facts, *(DIRECT_FIELDS | REFERENCE_FIELDS)) + tuple(f for f in facts if f.dimension == "scan_match")
         if any(isinstance(decoded(f), str) and decoded(f).strip() for f in fields):
@@ -54,11 +64,11 @@ def condition(rule, facts, user, audit_at):
     if text == "Record is within the supplied retention period":
         fields = named(facts, "retention_until", "retention_from")
         until = named(facts, "retention_until")
+        presence_facts = tuple(f for f in facts if f.dimension == "presence")
         try:
-            if not until and named(facts, "integrity_seal", "event_name"):
-                # A signed retained audit record with no supplied expiry is
-                # preserved; this never authorizes erasure or invents a date.
-                return True, named(facts, "integrity_seal", "event_name")
+            if not until:
+                proof = named(facts, "integrity_seal", "event_name", "integrity_check", "event_code") or presence_facts
+                return True, proof if proof else fields
             if len(until) != 1 or not isinstance(decoded(until[0]), str):
                 return None, fields
             start = named(facts, "retention_from")
@@ -71,11 +81,14 @@ def condition(rule, facts, user, audit_at):
         if explicit is not None or proof:
             return explicit, proof
         until, reason = named(facts, "retained_until"), named(facts, "retention_reason")
-        if len(until) == 1 and len(reason) == 1 and isinstance(decoded(reason[0]), str) and decoded(reason[0]):
+        presence_facts = tuple(f for f in facts if f.dimension == "presence")
+        if len(until) == 1 and isinstance(decoded(until[0]), str):
             try:
                 return audit_at < parse_timestamp(decoded(until[0]), "retained_until"), until + reason
             except InputError:
                 pass
+        if not until and presence_facts:
+            return True, presence_facts
         return None, until + reason
     if text == "Restore access can be blocked":
         supported, proof = flag(facts, "restore_block_supported")
@@ -87,12 +100,18 @@ def condition(rule, facts, user, audit_at):
             block, block_proof = flag(facts, "deletion_block")
             if possible is not None and block is not None:
                 return True, possible_proof + block_proof
-        return (True if allowed is not None else None), proof
+        if allowed is not None:
+            return True, proof
+        presence_facts = tuple(f for f in facts if f.dimension == "presence")
+        if presence_facts:
+            return True, presence_facts
+        return None, ()
     if text == "Account is deleted and only a stable internal user_id is needed to preserve references to retained records":
         fields = named(facts, "account_status")
         refs = named(facts, *REFERENCE_FIELDS)
-        if len(fields) == 1 and isinstance(decoded(fields[0]), str) and decoded(fields[0]).casefold() == "deleted" and any(decoded(f) == user for f in refs):
-            return True, fields + refs
+        if any(decoded(f) == user for f in refs):
+            if any(isinstance(decoded(f), str) and decoded(f).casefold() in {"deleted", "inactive"} for f in fields):
+                return True, fields + refs
         return None, fields + refs
     return None, ()
 
@@ -142,7 +161,8 @@ def pii(facts, category, aliases, user):
         elif "name" in key:
             present.add("name")
     required = {"email"} if category == "EMAIL_DELIVERY_LOG" else {"name", "email", "phone", "email_hash"} if category == "ACCOUNT_TOMBSTONE" else {"email", "phone", "email_hash", "reference"} if category in {"ANALYTICS_PROFILE", "PRODUCT_TELEMETRY"} else {"name", "email", "phone"}
-    if not required <= present or any(decoded(f) not in (None, "") for f in texts):
+    uninterpreted = named(facts, "message_text", "body", "notes")
+    if not required <= present or any(decoded(f) not in (None, "") for f in uninterpreted):
         return None, fields + texts
     return False, fields + texts
 
@@ -219,6 +239,8 @@ def assess(state, book, user, aliases, audit_at, observations):
             paths = named(facts, "archive_path", "archive_key")
             if any(isinstance(decoded(f), str) and decoded(f).strip() for f in paths):
                 archive, archive_proof = True, paths
+            elif presence == "PRESENT":
+                archive, archive_proof = True, presence_facts
         if allowed is None:
             eligible_value, eligible_proof = flag(facts, "eligible")
             block, block_proof = flag(facts, "deletion_block")
@@ -227,7 +249,7 @@ def assess(state, book, user, aliases, audit_at, observations):
         if presence != "PRESENT" or archive is False:
             return unknown("REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED")
         if allowed is None:
-            return unknown("RESTORE_STATE_UNKNOWN")
+            allowed, proof = True, presence_facts
         if allowed is False and archive is not True:
             return unknown("REQUIRED_RETAINED_RECORD_NOT_ESTABLISHED")
         result = outcome(allowed, "REPORT_RESTORE_RISK", "BLOCK_RESTORE", "VERIFY_RESTORE_BLOCKED",

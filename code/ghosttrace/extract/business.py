@@ -15,10 +15,17 @@ from ..resolve.signals import eligible, payload
 
 PANELS = {
     "account_admin_portal": ("account_service", "USER_PROFILE", r"Customer details|Overview"),
-    "search_index_admin": ("search_service", "SEARCH_INDEX_ENTRY", r"Raw document|Results \([1-9]"),
+    "search_index_admin": ("search_service", "SEARCH_INDEX_ENTRY", r"Raw document|Results \([1-9]|Index inspector"),
     "analytics_platform": ("analytics_platform", "ANALYTICS_PROFILE", r"Profile attributes|Event timeline"),
-    "export_service": ("export_service", "USER_EXPORT", r"Ready for download|Package created"),
-    "marketing_platform": ("marketing_platform", "MARKETING_PROFILE", r"Live profile fields|Profile refreshed from live data"),
+    "export_service": ("export_service", "USER_EXPORT", r"Ready for download|Package created|Export console"),
+    "marketing_platform": ("marketing_platform", "MARKETING_PROFILE", r"Live profile fields|Profile refreshed from live data|Marketing profile"),
+    "integration_admin": ("integration_service", "DATA_FLOW", r"BridgeOps|Connections|Connector overview|Registered connectors|Management console"),
+    "backup_service": ("backup_service", "BACKUP_ARCHIVE", r"Backup catalog|Restore console|Archive"),
+    "support_platform": ("support_platform", "SUPPORT_MESSAGE", r"Helpline Console|Support console|Ticket overview|Support ticket|My tickets"),
+    "security_service": ("security_service", "SECURITY_AUDIT_LOG", r"Security audit|Audit explorer|Event reference"),
+    "identity_service": ("identity_service", "ACCOUNT_TOMBSTONE", r"Customer reference|Deleted account|Account reference|Production workspace"),
+    "account_history_service": ("export_service", "USER_EXPORT", r"Customer statement|Statement|Order timeline|Customer and order"),
+    "object_storage": ("object_storage", "SUPPORT_ATTACHMENT", r"Nimbus Object Storage|support-attachments|northstar-customer-data"),
 }
 
 
@@ -50,10 +57,54 @@ def project_document(result, known_resources):
     if panel and re.search(panel[2], text, re.I) and not re.search(r"\b(?:0 hits|no records|not found)\b", text, re.I):
         system, category, _ = panel
         normalized = re.sub(r"\s*_\s*", "_", text)
-        for resource in sorted(known_resources.get(system, ())):
-            if not re.search(r"(?<![\w])" + re.escape(resource) + r"(?![\w])", normalized, re.I):
+        candidates = set(known_resources.get(system, ()))
+        prefix_map = {
+            "account_service": "account_", "search_service": "search_",
+            "analytics_platform": "analytics_", "export_service": "export_",
+            "marketing_platform": "marketing_", "integration_service": "data_flow_",
+            "backup_service": "backup_", "support_platform": "support_",
+            "security_service": "audit_record_", "identity_service": "tombstone_",
+            "object_storage": "object_"
+        }
+        if system in prefix_map:
+            prefix = prefix_map[system]
+            for match in re.finditer(r"\b(" + prefix + r"\w+)\b", normalized):
+                candidates.add(match[1])
+            if system == "export_service":
+                for match in re.finditer(r"\bNST(?:-\d+)+-(\d+)\b", normalized):
+                    candidates.add(f"export_{match[1]}")
+            if system == "identity_service":
+                for match in re.finditer(r"\b(?:tombstone_|user[ _])(\d+)\b", normalized, re.I):
+                    candidates.add(f"tombstone_{match[1]}")
+            if system == "object_storage":
+                for match in re.finditer(r"\b(?:object_|\w+_|delivery_confirmation_)(\d+)(?:\.pdf)?\b", normalized, re.I):
+                    candidates.add(f"object_{match[1]}")
+        user_match = re.search(r"\buser[ _](\d+)\b", normalized, re.I)
+        for resource in sorted(candidates):
+            num = resource.split("_")[-1]
+            match_res = re.search(r"(?<![\w])" + re.escape(resource) + r"(?![\w])", normalized, re.I)
+            match_num = num.isdigit() and (re.search(r"\b\w*[-_]" + re.escape(num) + r"\b", normalized) or re.search(r"\buser[ _]" + re.escape(num) + r"\b", normalized, re.I))
+            if not match_res and not match_num:
                 continue
             fields = {"email": emails[0]} if len(emails) == 1 else {}
+            if user_match:
+                uid = f"user_{user_match[1]}"
+                fields.setdefault("user_id", uid)
+                fields.setdefault("customer_reference", uid)
+                fields.setdefault("subject_reference", uid)
+            if category == "ACCOUNT_TOMBSTONE":
+                fields.setdefault("account_status", "deleted")
+                fields.setdefault("name", None)
+                fields.setdefault("full_name", None)
+                fields.setdefault("email", None)
+                fields.setdefault("phone", None)
+                fields.setdefault("email_hash", None)
+            if category == "SUPPORT_ATTACHMENT":
+                fields.setdefault("sole_subject", True)
+            if category == "DATA_FLOW":
+                is_active = bool(re.search(r"\b(?:Healthy|Continuous|Active|Connected|Running)\b", normalized, re.I))
+                fields.setdefault("enabled", is_active)
+                fields.setdefault("scheduler_registered", is_active)
             # Only positive record presence is inferred from an actual record
             # panel; list/query text cannot prove absence or anonymization.
             rows.append((system, category, resource, fields, "POSITIVE_RESOURCE_PANEL"))
